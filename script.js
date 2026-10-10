@@ -6,7 +6,7 @@ var totalPages = 1;
 
 var dasarHukumList = [
     "Undang-Undang Nomor 17 Tahun 2023 tentang Kesehatan",
-    "Peraturan Menteri Kesehatan Nomor 43 Tahun 2019 tentang Pusat Kesehatan Masyarakat"
+    "Peraturan Menteri Kesehatan Nomor 19 Tahun 2024 tentang Penyelenggaraan Pusat Kesehatan Masyarakat"
 ];
 var keterkaitanList = [
     "SOP Pendaftaran Pasien Rawat Jalan",
@@ -136,9 +136,11 @@ function renderStepsBuilder() {
     for (var i = 0; i < stepsList.length; i++) {
         var s = stepsList[i];
         
-        // Paksa langkah pertama dan langkah terakhir menjadi terminator
+        // Otomatis update baris pertama dan terakhir menjadi terminator (start)
         if (i === 0 || i === stepsList.length - 1) {
             s.jenis = 'start';
+        } else if (s.jenis === 'start') {
+            s.jenis = 'process';
         }
 
         var options = '';
@@ -184,7 +186,7 @@ function renderStepsBuilder() {
     document.getElementById('stepsBuilderContainer').innerHTML = html;
 }
 
-// Smart Pagination: Memastikan halaman terakhir minimal berisi 2 langkah (tidak pernah sisa 1 langkah)
+// Smart Pagination: Memastikan halaman terakhir minimal berisi 2 langkah
 function getPageRanges(totalSteps) {
     if (totalSteps <= 10) return [{ start: 0, count: totalSteps }];
     var ranges = [];
@@ -347,7 +349,7 @@ function updatePreview() {
                         shapeHtml = '<div class="flow-shape shape-decision" id="shape-' + globalIdx + '"></div>';
                     }
 
-                    // Segi lima off-page connector
+                    // Render segi lima off-page connector pada batas halaman
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
                         shapeHtml = '<div style="display:flex; justify-content:center; align-items:center; margin:2px auto;" id="shape-' + globalIdx + '">' +
                             '<svg width="18" height="13" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
@@ -484,20 +486,21 @@ function drawConnectors() {
         for (var i = startIdx; i < endIdx; i++) {
             var s = stepsList[i];
 
-            if (i + 1 < endIdx) {
+            // Hubungkan langkah berurutan, termasuk ke/dari segi lima (off-page connector)
+            if (i + 1 < stepsList.length) {
                 drawSinglePath(i, i + 1, null);
             }
 
             if (s.jenis === 'decision') {
                 var t1 = (s.target1 !== undefined && s.target1 !== '' && !isNaN(s.target1)) ? parseInt(s.target1) - 1 : i + 1;
                 var lbl1 = (s.q1 ? s.q1 : 'Ya').trim();
-                if (t1 >= startIdx && t1 < endIdx) {
+                if (t1 >= 0 && t1 < stepsList.length) {
                     drawSinglePath(i, t1, lbl1);
                 }
 
                 var t2 = (s.target2 !== undefined && s.target2 !== '' && !isNaN(s.target2)) ? parseInt(s.target2) - 1 : Math.max(0, i - 1);
                 var lbl2 = (s.q2 ? s.q2 : 'Tidak').trim();
-                if (t2 >= startIdx && t2 < endIdx) {
+                if (t2 >= 0 && t2 < stepsList.length) {
                     drawSinglePath(i, t2, lbl2);
                 }
             }

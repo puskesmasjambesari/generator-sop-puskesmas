@@ -118,6 +118,7 @@ function removeStep(i) {
     updatePreview();
 }
 
+// Fungsi Bersihkan Langkah
 function clearSteps() {
     if (confirm("Apakah Anda yakin ingin menghapus semua langkah SOP?")) {
         stepsList = [];
@@ -240,20 +241,19 @@ function updatePreview() {
                 if (sItem.jenis === 'start') shapeClass = 'shape-start';
                 else if (sItem.jenis === 'decision') shapeClass = 'shape-decision';
 
+                // Shape bersih tanpa tulisan teks di dalamnya
+                shapeHtml = '<div class="flow-shape ' + shapeClass + '"></div>';
                 if (sItem.jenis === 'decision') {
-                    shapeHtml = '<div class="flow-shape ' + shapeClass + '"></div>';
-                    shapeHtml += '<div style="font-size:7px; margin-top:2px; font-weight:bold;">' + (sItem.q || '') + '</div>';
-                } else {
-                    shapeHtml = '<div class="flow-shape ' + shapeClass + '"></div>';
+                    shapeHtml += '<div style="font-size:6.5px; margin-top:2px; font-weight:bold;">' + (sItem.q || '') + '</div>';
                 }
 
-                // Render panah penghubung jika bukan langkah terakhir
+                // Render panah penghubung antar shape jika bukan langkah terakhir
                 if (st < stepsList.length - 1) {
                     var arrowType = sItem.panah || 'one-way';
                     shapeHtml += '<div class="shape-connector ' + arrowType + '"></div>';
                 }
 
-                pelaksanaCells += '<td style="text-align: center; vertical-align: middle; padding:6px 2px;">' + shapeHtml + '</td>';
+                pelaksanaCells += '<td style="text-align: center; vertical-align: middle; padding:4px 2px;">' + shapeHtml + '</td>';
             } else {
                 pelaksanaCells += '<td></td>';
             }

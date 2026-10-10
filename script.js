@@ -2,6 +2,8 @@
 // SCRIPT LOGIKA APLIKASI SOP AP GENERATOR - UPTD PUSKESMAS JAMBESARI
 // ==========================================================================
 
+var totalPages = 1;
+
 var dasarHukumList = [
     "Undang-Undang Nomor 17 Tahun 2023 tentang Kesehatan",
     "Peraturan Menteri Kesehatan Nomor 43 Tahun 2019 tentang Pusat Kesehatan Masyarakat"
@@ -133,6 +135,12 @@ function renderStepsBuilder() {
     var html = '';
     for (var i = 0; i < stepsList.length; i++) {
         var s = stepsList[i];
+        
+        // Paksa langkah pertama dan langkah terakhir menjadi terminator (start)
+        if (i === 0 || i === stepsList.length - 1) {
+            s.jenis = 'start';
+        }
+
         var options = '';
         for (var p = 0; p < pelaksanaList.length; p++) {
             var selected = (s.pelaksana === pelaksanaList[p]) ? 'selected' : '';
@@ -144,11 +152,15 @@ function renderStepsBuilder() {
         html += '<div class="form-group" style="margin-bottom:5px;"><label>Uraian Kegiatan</label><input type="text" value="' + s.kegiatan + '" oninput="stepsList[' + i + '].kegiatan=this.value; updatePreview()"></div>';
         html += '<div class="form-row" style="margin-bottom:5px;">';
         html += '<div><label>Pelaksana</label><select onchange="stepsList[' + i + '].pelaksana=this.value; updatePreview()">' + options + '</select></div>';
-        html += '<div><label>Simbol</label><select onchange="stepsList[' + i + '].jenis=this.value; renderStepsBuilder(); updatePreview()">';
-        html += '<option value="start" ' + (s.jenis === 'start' ? 'selected' : '') + '>Terminator (Mulai/Selesai)</option>';
-        html += '<option value="process" ' + (s.jenis === 'process' ? 'selected' : '') + '>Proses (Kotak)</option>';
-        html += '<option value="decision" ' + (s.jenis === 'decision' ? 'selected' : '') + '>Keputusan (Belah Ketupat)</option>';
-        html += '</select></div>';
+        
+        if (i === 0 || i === stepsList.length - 1) {
+            html += '<div><label>Simbol</label><input type="text" value="Terminator (Otomatis)" disabled style="background:#f1f5f9; color:#64748b; font-size:12px;"></div>';
+        } else {
+            html += '<div><label>Simbol</label><select onchange="stepsList[' + i + '].jenis=this.value; renderStepsBuilder(); updatePreview()">';
+            html += '<option value="process" ' + (s.jenis === 'process' ? 'selected' : '') + '>Proses (Kotak)</option>';
+            html += '<option value="decision" ' + (s.decision || s.jenis === 'decision' ? 'selected' : '') + '>Keputusan (Belah Ketupat)</option>';
+            html += '</select></div>';
+        }
         html += '</div>';
         
         html += '<div class="form-row" style="margin-bottom:5px;">';
@@ -170,6 +182,23 @@ function renderStepsBuilder() {
         html += '</div>';
     }
     document.getElementById('stepsBuilderContainer').innerHTML = html;
+}
+
+// Algoritma Smart Pagination: Memastikan halaman terakhir tidak hanya berisi 1 langkah (minimal 2 langkah)
+function getPageRanges(totalSteps) {
+    if (totalSteps <= 10) return [{ start: 0, count: totalSteps }];
+    var numPages = Math.ceil(totalSteps / 10);
+    var baseCount = Math.floor(totalSteps / numPages);
+    var remainder = totalSteps % numPages;
+    
+    var ranges = [];
+    var currentIndex = 0;
+    for (var p = 0; p < numPages; p++) {
+        var count = baseCount + (p < remainder ? 1 : 0);
+        ranges.push({ start: currentIndex, count: count });
+        currentIndex += count;
+    }
+    return ranges;
 }
 
 function updatePreview() {
@@ -195,14 +224,16 @@ function updatePreview() {
     var htmlDasarList = dasarHukumList.map(function(d){return '<li>'+d+'</li>'}).join('');
     var htmlKetList = keterkaitanList.map(function(k){return '<li>'+k+'</li>'}).join('');
 
-    var stepsPerPage = 10;
-    var totalPages = Math.ceil(stepsList.length / stepsPerPage) || 1;
+    var pageRanges = getPageRanges(stepsList.length);
+    totalPages = pageRanges.length;
+
     var container = document.getElementById('previewAreaContainer');
     container.innerHTML = '';
 
-    for (var pageIdx = 0; pageIdx < totalPages; pageIdx++) {
-        var startIdx = pageIdx * stepsPerPage;
-        var endIdx = Math.min(startIdx + stepsPerPage, stepsList.length);
+    for (var pageIdx = 0; pageIdx < pageRanges.length; pageIdx++) {
+        var range = pageRanges[pageIdx];
+        var startIdx = range.start;
+        var endIdx = startIdx + range.count;
         var pageSteps = stepsList.slice(startIdx, endIdx);
 
         var pageDiv = document.createElement('div');
@@ -295,6 +326,11 @@ function updatePreview() {
             var sItem = pageSteps[st];
             var pelaksanaCells = '';
             
+            // Otomatis set indeks 0 dan terakhir jadi start
+            if (globalIdx === 0 || globalIdx === stepsList.length - 1) {
+                sItem.jenis = 'start';
+            }
+
             for (var pc = 0; pc < pelaksanaList.length; pc++) {
                 if (sItem.pelaksana === pelaksanaList[pc]) {
                     var shapeHtml = '<div class="flow-shape shape-process" id="shape-' + globalIdx + '"></div>';
@@ -304,6 +340,7 @@ function updatePreview() {
                         shapeHtml = '<div class="flow-shape shape-decision" id="shape-' + globalIdx + '"></div>';
                     }
 
+                    // Segi lima off-page connector murni tanpa anak panah
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
                         shapeHtml = '<div style="display:flex; justify-content:center; align-items:center; margin:2px auto;" id="shape-' + globalIdx + '">' +
                             '<svg width="18" height="13" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
@@ -354,6 +391,7 @@ function drawConnectors() {
         oldSvgs[o].remove();
     }
 
+    var pageRanges = getPageRanges(stepsList.length);
     var pages = document.querySelectorAll('.a4-page');
     for (var p = 0; p < pages.length; p++) {
         var pageDiv = pages[p];
@@ -434,8 +472,9 @@ function drawConnectors() {
             }
         }
 
-        var startIdx = p * 10;
-        var endIdx = Math.min(startIdx + 10, stepsList.length);
+        var range = pageRanges[p];
+        var startIdx = range.start;
+        var endIdx = startIdx + range.count;
 
         for (var i = startIdx; i < endIdx; i++) {
             var s = stepsList[i];

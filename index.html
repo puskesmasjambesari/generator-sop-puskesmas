@@ -3,148 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOP Puskesmas Pro - PermenPANRB No. 35/2012</title>
+    <title>SOP Generator - UPTD Puskesmas Jambesari</title>
+    <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #0f172a;
-            --brand: #2563eb;
-            --brand-hover: #1d4ed8;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --border: #e2e8f0;
-            --text: #334155;
-            --muted: #64748b;
-            --success: #10b981;
-            --danger: #ef4444;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; min-height: 100vh; }
-
-        /* MODAL LOGIN */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.7); display: flex; justify-content: center; align-items: center; z-index: 9999;
-        }
-        .modal-box {
-            background: white; padding: 2rem; border-radius: 12px; width: 400px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
-        }
-        .modal-box h3 { margin-bottom: 1rem; color: var(--primary); font-size: 1.25rem; }
-
-        /* NAVBAR */
-        .navbar {
-            background: #fff; border-bottom: 1px solid var(--border); padding: 0.75rem 2rem;
-            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        .brand { display: flex; align-items: center; gap: 12px; }
-        .brand i { font-size: 1.8rem; color: var(--brand); }
-        .brand-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
-        .brand-sub { font-size: 0.75rem; color: var(--muted); display: block; }
-        .user-info { display: flex; align-items: center; gap: 12px; }
-
-        /* LAYOUT UTAMA */
-        .main-container { display: grid; grid-template-columns: 460px 1fr; gap: 2rem; padding: 2rem; max-width: 1700px; margin: 0 auto; width: 100%; }
-        
-        /* SIDEBAR / FORM */
-        .sidebar { display: flex; flex-direction: column; gap: 1.5rem; max-height: calc(100vh - 100px); overflow-y: auto; padding-right: 5px; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .card-header { background: #f1f5f9; padding: 0.85rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.95rem; color: var(--primary); }
-        .card-body { padding: 1.25rem; }
-
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem; color: var(--text); }
-        input, select, textarea { width: 100%; padding: 0.55rem 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--brand); }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .divider { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-
-        .btn { padding: 0.65rem 1rem; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; font-size: 0.85rem; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-        .btn-primary { background: var(--brand); color: white; width: 100%; }
-        .btn-primary:hover { background: var(--brand-hover); }
-        .btn-success { background: var(--success); color: white; width: 100%; margin-top: 1rem; font-size: 1rem; }
-        .btn-sm { padding: 0.35rem 0.6rem; font-size: 0.75rem; }
-        .btn-danger { background: var(--danger); color: white; }
-
-        /* TAGS & LIST */
-        .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
-        .tag-badge { background: #e2e8f0; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; }
-        .tag-badge i { cursor: pointer; color: var(--danger); }
-        .inline-add { display: flex; gap: 6px; }
-
-        /* STEP ITEM BUILDER */
-        .step-builder-item { background: #f8fafc; border: 1px solid var(--border); padding: 10px; border-radius: 6px; margin-bottom: 10px; }
-        .step-builder-item h5 { font-size: 0.85rem; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-
-        /* PREVIEW AREA (A4 PAPER FORMAT PERMENPAN RB 35/2012) */
-        .preview-area { display: flex; flex-direction: column; align-items: center; overflow-x: auto; background: #e2e8f0; padding: 2rem; border-radius: 12px; }
-        
-        .a4-page {
-            background: white; width: 297mm; min-height: 210mm; padding: 15mm; margin-bottom: 2rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15); position: relative; color: black; page-break-after: always;
-        }
-        .a4-page.portrait { width: 210mm; min-height: 297mm; }
-
-        /* COVER STYLE */
-        .cover-page { display: flex; flex-direction: column; align-items: center; justify-content: space-between; height: 100%; text-align: center; padding: 40mm 20mm; }
-        .cover-logo { width: 90px; height: 90px; border: 2px dashed #000; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 20px; }
-        .cover-title { font-size: 24px; font-weight: bold; text-transform: uppercase; line-height: 1.4; margin-bottom: 15px; }
-        .cover-sub { font-size: 16px; font-weight: 600; margin-bottom: 40px; }
-        .cover-year { font-size: 20px; font-weight: bold; margin-bottom: 60px; }
-        .cover-footer { font-size: 14px; font-weight: bold; line-height: 1.5; }
-
-        /* KEPUTUSAN PIMPINAN / SK STYLE */
-        .sk-page h3 { text-align: center; font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
-        .sk-page h4 { text-align: center; font-size: 13px; font-weight: bold; margin-bottom: 15px; }
-        .sk-number { text-align: center; font-size: 12px; font-weight: bold; margin-bottom: 20px; text-decoration: underline; }
-        .sk-about { text-align: center; font-size: 12px; font-weight: bold; margin-bottom: 25px; }
-        .sk-content { font-size: 11px; text-align: justify; line-height: 1.6; margin-bottom: 15px; }
-        .sk-dictum { text-align: center; font-weight: bold; font-size: 12px; margin: 15px 0; }
-        .sk-signature-area { display: flex; justify-content: flex-end; margin-top: 30px; }
-        .sk-sig-box { text-align: center; font-size: 11px; width: 250px; }
-
-        /* TABEL SOP AP STANDAR */
-        .sop-table, .sop-header-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-family: Arial, sans-serif; }
-        .sop-header-table td, .sop-table th, .sop-table td { border: 1px solid #000; padding: 5px; font-size: 10px; vertical-align: middle; }
-        
-        .logo-cell { width: 70px; text-align: center; font-size: 10px; font-weight: bold; }
-        .instansi-cell { text-align: center; font-weight: bold; font-size: 11px; }
-        .meta-lbl { background: #f0f0f0; font-weight: bold; width: 110px; font-size: 9px; }
-        .meta-val { font-size: 9px; }
-        .sop-title-box { text-align: center; background: #fafafa; font-weight: bold; font-size: 12px; padding: 8px; }
-        .sig-cell { text-align: center; vertical-align: top; font-size: 10px; }
-        
-        .section-box { border: 1px solid #000; padding: 8px; margin-bottom: 10px; font-size: 10px; font-family: Arial, sans-serif; }
-        .section-box-title { font-weight: bold; margin-bottom: 4px; text-transform: uppercase; font-size: 10px; background: #f0f0f0; padding: 2px 5px; border-bottom: 1px solid #000; }
-
-        .sop-table th { background: #e6e6e6; text-align: center; font-weight: bold; font-size: 10px; }
-        
-        /* SHAPES DALAM TABEL */
-        .flow-shape { display: inline-block; padding: 3px 6px; border: 1.5px solid #000; background: #fff; font-size: 9px; font-weight: bold; text-align: center; }
-        .shape-start { border-radius: 10px; background: #f0fdf4; }
-        .shape-process { border-radius: 0; background: #fff; }
-        .shape-decision { clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); background: #fefce8; padding: 8px 10px; font-size: 8px; }
-
-        /* PRINT MEDIA */
-        @media print {
-            .no-print, .navbar, .sidebar, .modal-overlay { display: none !important; }
-            body { background: white; }
-            .main-container { display: block; padding: 0; margin: 0; }
-            .preview-area { background: white; padding: 0; border-radius: 0; }
-            .a4-page { box-shadow: none; margin: 0; width: 100% !important; min-height: 100vh; padding: 10mm; page-break-after: always; }
-            @page { size: auto; margin: 10mm; }
-        }
-    </style>
+    <!-- Hubungkan ke File CSS Eksternal -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- MODAL AUTENTIKASI (ADMIN / USER) -->
+    <!-- MODAL LOGIN AKSES (ADMIN / USER) -->
     <div class="modal-overlay" id="authModal">
         <div class="modal-box">
             <h3><i class="fa-solid fa-lock"></i> Login Akses SOP Builder</h3>
-            <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem;">Pilih hak akses Anda untuk masuk ke aplikasi generator SOP.</p>
+            <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem;">Pilih hak akses untuk masuk ke aplikasi generator SOP.</p>
             <div class="form-group">
                 <label>Pilih Peran (Role)</label>
                 <select id="loginRole" onchange="switchLoginForm()">
@@ -152,9 +24,9 @@
                     <option value="admin">Admin Instansi (Puskesmas)</option>
                 </select>
             </div>
-            <div class="form-group" id="userPassGroup">
-                <label id="passLabel">Password / Kode Akses</label>
-                <input type="password" id="loginPass" placeholder="Masukkan password...">
+            <div class="form-group" id="userPassGroup" style="display:none;">
+                <label>Password Admin</label>
+                <input type="password" id="loginPass" placeholder="Default: admin123">
             </div>
             <button class="btn btn-primary" onclick="processLogin()"><i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi</button>
         </div>
@@ -166,7 +38,7 @@
             <i class="fa-solid fa-notes-medical"></i>
             <div>
                 <span class="brand-title">SOP Puskesmas Pro</span>
-                <span class="brand-sub">Sistem Penyusunan Sesuai PermenPANRB No. 35/2012</span>
+                <span class="brand-sub">PermenPANRB No. 35/2012 - UPTD Puskesmas Jambesari</span>
             </div>
         </div>
         <div class="user-info">
@@ -177,30 +49,30 @@
 
     <!-- KONTEN UTAMA -->
     <main class="main-container">
-        <!-- SIDEBAR PANEL INPUT -->
+        <!-- SIDEBAR FORM INPUT -->
         <aside class="sidebar no-print">
             
-            <!-- PENGATURAN ADMIN (Statis) -->
+            <!-- PANEL ADMIN (Statis) -->
             <div class="card" id="adminCard" style="display:none;">
                 <div class="card-header"><i class="fa-solid fa-shield-halved"></i> Pengaturan Statis Admin</div>
                 <div class="card-body">
                     <div class="form-group"><label>Pemerintah Daerah</label><input type="text" id="cfgPemda" value="PEMERINTAH KABUPATEN BONDOWOSO" oninput="updatePreview()"></div>
                     <div class="form-group"><label>Dinas Kesehatan</label><input type="text" id="cfgDinas" value="DINAS KESEHATAN KABUPATEN BONDOWOSO" oninput="updatePreview()"></div>
                     <div class="form-group"><label>Nama Puskesmas</label><input type="text" id="cfgPuskesmas" value="UPTD PUSKESMAS JAMBESARI" oninput="updatePreview()"></div>
-                    <div class="form-group"><label>Alamat Puskesmas</label><input type="text" id="cfgAlamat" value="Desa Jambesari Kec. Jambesari DS. Telp. (0332) 3525211" oninput="updatePreview()"></div>
-                    <div class="form-group"><label>Nama Kepala Puskesmas</label><input type="text" id="cfgKaPuskesmas" value="drg. Noeri Rustianti" oninput="updatePreview()"></div>
+                    <div class="form-group"><label>Alamat Puskesmas</label><input type="text" id="cfgAlamat" value="Jl. Raya Jambesari No. 01 Telp. (0332) 551100" oninput="updatePreview()"></div>
+                    <div class="form-group"><label>Nama Kepala Puskesmas</label><input type="text" id="cfgKaPuskesmas" value="drg.Noeri Rustianti" oninput="updatePreview()"></div>
                     <div class="form-group"><label>NIP Kepala Puskesmas</label><input type="text" id="cfgNipKa" value="19761018 200604 2 015" oninput="updatePreview()"></div>
                 </div>
             </div>
 
-            <!-- INPUT DATA DINAMIS SOP (User) -->
+            <!-- PANEL USER (Dinamis SOP) -->
             <div class="card">
-                <div class="card-header"><i class="fa-solid fa-pen-nib"></i> Penyusunan Dokumen SOP (Dinamis)</div>
+                <div class="card-header"><i class="fa-solid fa-pen-nib"></i> Penyusunan Data SOP (Dinamis)</div>
                 <div class="card-body">
                     <div class="form-group"><label>Judul SOP</label><input type="text" id="inpJudul" value="Pendaftaran Pasien Rawat Inap" oninput="updatePreview()"></div>
                     
                     <div class="form-row">
-                        <div class="form-group"><label>Nomor Urut SOP</label><input type="text" id="inpNoSOP" value="045" oninput="updatePreview()"></div>
+                        <div class="form-group"><label>Nomor Urut SOP</label><input type="text" id="inpNoSOP" value="001" oninput="updatePreview()"></div>
                         <div class="form-group"><label>Tahun Pembuatan</label><input type="text" id="inpTahun" value="2026" oninput="updatePreview()"></div>
                     </div>
 
@@ -217,32 +89,32 @@
                     </div>
 
                     <hr class="divider">
-                    <label style="font-weight:700; margin-bottom:5px; display:block;">1. Dasar Hukum (Undang-undang / Permenkes / Perbup)</label>
+                    <label style="font-weight:700; margin-bottom:5px; display:block;">1. Dasar Hukum</label>
                     <div class="tag-list" id="listDasarHukum"></div>
-                    <div class="inline-add"><input type="text" id="inpDasarHukum" placeholder="Contoh: UU No. 36 Tahun 2009 tentang Kesehatan"><button class="btn btn-sm btn-primary" onclick="addDasarHukum()"><i class="fa-solid fa-plus"></i></button></div>
+                    <div class="inline-add"><input type="text" id="inpDasarHukum" placeholder="Contoh: UU No. 36 Tahun 2009"><button class="btn btn-sm btn-primary" onclick="addDasarHukum()"><i class="fa-solid fa-plus"></i></button></div>
 
                     <hr class="divider">
-                    <label style="font-weight:700; margin-bottom:5px; display:block;">2. Keterkaitan dengan SOP Lain</label>
+                    <label style="font-weight:700; margin-bottom:5px; display:block;">2. Keterkaitan</label>
                     <div class="tag-list" id="listKeterkaitan"></div>
-                    <div class="inline-add"><input type="text" id="inpKeterkaitan" placeholder="Contoh: SOP Pendaftaran Pasien Rawat Jalan"><button class="btn btn-sm btn-primary" onclick="addKeterkaitan()"><i class="fa-solid fa-plus"></i></button></div>
+                    <div class="inline-add"><input type="text" id="inpKeterkaitan" placeholder="Contoh: SOP Pendaftaran Rawat Jalan"><button class="btn btn-sm btn-primary" onclick="addKeterkaitan()"><i class="fa-solid fa-plus"></i></button></div>
 
                     <hr class="divider">
-                    <div class="form-group"><label>3. Peringatan (Jika prosedur tidak dilaksanakan)</label><textarea id="inpPeringatan" rows="2" oninput="updatePreview()">Apabila prosedur pendaftaran tidak dilakukan dengan teliti, maka data rekam medis pasien tertukar dan pelayanan rawat inap terhambat.</textarea></div>
+                    <div class="form-group"><label>3. Peringatan</label><textarea id="inpPeringatan" rows="2" oninput="updatePreview()">Apabila prosedur pendaftaran tidak dilakukan dengan teliti, maka rekam medis pasien tertukar dan pelayanan terhambat.</textarea></div>
                     
-                    <div class="form-group"><label>4. Kualifikasi Pelaksana</label><textarea id="inpKualifikasi" rows="2" oninput="updatePreview()">1. Memiliki kemampuan komunikasi yang baik&#10;2. Menguasai sistem pendaftaran pasien dan SOP rekam medis&#10;3. Teliti dan cekatan dalam administrasi</textarea></div>
+                    <div class="form-group"><label>4. Kualifikasi Pelaksana</label><textarea id="inpKualifikasi" rows="2" oninput="updatePreview()">1. Memiliki kemampuan komunikasi yang baik&#10;2. Menguasai sistem pendaftaran rekam medis</textarea></div>
 
-                    <div class="form-group"><label>5. Peralatan dan Perlengkapan</label><textarea id="inpPeralatan" rows="2" oninput="updatePreview()">1. Komputer / PC & Jaringan internet&#10;2. Printer & Barcode Scanner&#10;3. Kartu Identitas Pasien & Berkas Rekam Medis</textarea></div>
+                    <div class="form-group"><label>5. Peralatan dan Perlengkapan</label><textarea id="inpPeralatan" rows="2" oninput="updatePreview()">1. Komputer & Printer&#10;2. Kartu Berobat & Berkas Rekam Medis</textarea></div>
 
-                    <div class="form-group"><label>6. Pencatatan dan Pendataan</label><textarea id="InpPencatatan" rows="2" oninput="updatePreview()">Dicatat dalam buku register pendaftaran rawat nilap dan diinput ke dalam sistem database SIMPUS secara elektronik.</textarea></div>
+                    <div class="form-group"><label>6. Pencatatan dan Pendataan</label><textarea id="InpPencatatan" rows="2" oninput="updatePreview()">Dicatat dalam buku register pendaftaran dan diinput ke dalam database SIMPUS.</textarea></div>
 
                     <hr class="divider">
                     <label style="font-weight:700; margin-bottom:5px; display:block;">7. Pelaksana / Subjek Terlibat (Aktor)</label>
                     <div class="tag-list" id="listPelaksana"></div>
-                    <div class="inline-add"><input type="text" id="inpNamaPelaksana" placeholder="Misal: Pasien, Petugas Pendaftaran, Perawat"><button class="btn btn-sm btn-primary" onclick="addPelaksana()"><i class="fa-solid fa-plus"></i></button></div>
+                    <div class="inline-add"><input type="text" id="inpNamaPelaksana" placeholder="Misal: Perawat, Dokter"><button class="btn btn-sm btn-primary" onclick="addPelaksana()"><i class="fa-solid fa-plus"></i></button></div>
 
                     <hr class="divider">
-                    <label style="font-weight:700; margin-bottom:5px; display:block;">8. Langkah-Langkah & Bagan Alir (Flowchart)</label>
-                    <button class="btn btn-sm btn-primary" style="width:100%; margin-bottom:10px;" onclick="addStepRow()"><i class="fa-solid fa-plus-circle"></i> Tambah Langkah Baru</button>
+                    <label style="font-weight:700; margin-bottom:5px; display:block;">8. Langkah-Langkah & Flowchart</label>
+                    <button class="btn btn-sm btn-primary" style="width:100%; margin-bottom:10px;" onclick="addStepRow()"><i class="fa-solid fa-plus-circle"></i> Tambah Langkah</button>
                     <div id="stepsBuilderContainer"></div>
 
                     <button class="btn btn-success" onclick="window.print()"><i class="fa-solid fa-print"></i> Cetak / Ekspor PDF A4</button>
@@ -250,14 +122,14 @@
             </div>
         </aside>
 
-        <!-- AREA PREVIEW DOKUMEN LENGKAP PERMENPAN RB -->
+        <!-- AREA PREVIEW DOKUMEN A4 -->
         <section class="preview-area" id="previewArea">
-            <!-- Halaman 1: Cover / Halaman Judul -->
+            <!-- Halaman 1: Cover -->
             <div class="a4-page landscape" id="coverSheet">
                 <div class="cover-page">
                     <div>
-                        <div style="font-weight:bold; font-size:16px; margin-bottom:10px;" id="cvrPemda">PEMERINTAH KABUPATEN BONDOWOSO</div>
-                        <div style="font-weight:bold; font-size:14px; margin-bottom:40px;" id="cvrDinas">DINAS KESEHATAN KABUPATEN BONDOWOSO</div>
+                        <div style="font-weight:bold; font-size:15px; margin-bottom:8px;" id="cvrPemda">PEMERINTAH KABUPATEN BONDOWOSO</div>
+                        <div style="font-weight:bold; font-size:13px; margin-bottom:30px;" id="cvrDinas">DINAS KESEHATAN KABUPATEN BONDOWOSO</div>
                     </div>
                     <div>
                         <div class="cover-logo" style="margin: 0 auto;">LOGO</div>
@@ -267,61 +139,58 @@
                     <div>
                         <div class="cover-year" id="cvrTahun">2026</div>
                         <div class="cover-footer" id="cvrAlamat">
-                            Desa Jambesari Kec. Jambesari DS. Telp. (0332) 3525211<br>BONDOWOSO
+                            Jl. Raya Jambesari No. 01 Telp. (0332) 551100<br>BONDOWOSO
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Halaman 2: Lembar Keputusan Pimpinan & Penjelasan Singkat -->
+            <!-- Halaman 2: Keputusan Pimpinan / SK -->
             <div class="a4-page landscape" id="skSheet">
                 <div class="sk-page">
                     <h3 id="skPemda">PEMERINTAH KABUPATEN BONDOWOSO</h3>
                     <h4 id="skPuskesmasTitle">KEPALA UPTD PUSKESMAS JAMBESARI</h4>
-                    <div class="sk-number">KEPUTUSAN KEPALA UPTD PUSKESMAS JAMBESARI<br>Nomor : 400.7 / 045 / SK / 430.9.3.15 / 2026</div>
+                    <div class="sk-number">KEPUTUSAN KEPALA UPTD PUSKESMAS JAMBESARI<br>Nomor : 400.7 / 001 / SK / 430.9.3.15 / 2026</div>
                     <div class="sk-about">TENTANG<br>PENETAPAN STANDAR OPERASIONAL PROSEDUR (SOP) <span id="skJudulText">Pendaftaran Pasien Rawat Inap</span><br>DI LINGKUNGAN UPTD PUSKESMAS JAMBESARI</div>
                     
                     <div class="sk-content">
                         <b>MENIMBANG:</b><br>
-                        a. Bahwa dalam rangka meningkatkan mutu pelayanan publik dan kelancaran penyelenggaraan tugas serta fungsi di lingkungan UPTD PUSKESMAS JAMBESARI, perlu ditetapkan Standar Operasional Prosedur (SOP);<br>
-                        b. Bahwa berdasarkan pertimbangan sebagaimana dimaksud dalam huruf a, perlu menetapkan Keputusan Kepala Puskesmas tentang Standar Operasional Prosedur <span id="skJudulText2">Pendaftaran Pasien Rawat Inap</span>.
+                        a. Bahwa dalam rangka meningkatkan mutu pelayanan publik dan kelancaran penyelenggaraan tugas serta fungsi di lingkungan UPTD Puskesmas Jambesari, perlu ditetapkan Standar Operasional Prosedur (SOP);<br>
+                        b. Bahwa berdasarkan pertimbangan sebagaimana dimaksud dalam huruf a, perlu menetapkan Keputusan Kepala UPTD Puskesmas Jambesari tentang Standar Operasional Prosedur <span id="skJudulText2">Pendaftaran Pasien Rawat Inap</span>.
                     </div>
                     <div class="sk-content">
                         <b>MEMUTUSKAN:</b><br>
                         <b>MENETAPKAN:</b><br>
-                        KESATU : Memberlakukan Standar Operasional Prosedur (SOP) <span id="skJudulText3">Pendaftaran Pasien Rawat Inap</span> di lingkungan UPTD PUSKESMAS JAMBESARI sebagaimana tercantum dalam lampiran keputusan ini.<br>
+                        KESATU : Memberlakukan Standar Operasional Prosedur (SOP) <span id="skJudulText3">Pendaftaran Pasien Rawat Inap</span> di lingkungan UPTD Puskesmas Jambesari sebagaimana tercantum dalam lampiran keputusan ini.<br>
                         KEDUA : SOP ini wajib dipedomani dan dilaksanakan oleh seluruh pegawai/petugas terkait dalam menjalankan tugas operasional sehari-hari.<br>
                         KETIGA : Keputusan ini mulai berlaku sejak tanggal ditetapkan.
                     </div>
 
                     <div class="sk-signature-area">
                         <div class="sk-sig-box">
-                            Ditetapkan di : JAMBESARI<br>
+                            Ditetapkan di : Jambesari<br>
                             Pada tanggal : <span id="skTglDitetapkan">01 Oktober 2026</span><br>
-                            <b>Kepala UPTD PUSKESMAS JAMBESARI,</b>
-                            <div style="height: 40px;"></div>
-                            <u id="skNamaKa">drg. Noeri Rustianti</u><br>
+                            <b>Kepala UPTD Puskesmas Jambesari,</b>
+                            <div style="height: 35px;"></div>
+                            <u id="skNamaKa">drg.Noeri Rustianti</u><br>
                             NIP. <span id="skNipKa">19761018 200604 2 015</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Halaman 3: Dokumen Utama SOP AP (Identitas & Bagan Alir Bercabang) -->
+            <!-- Halaman 3: Dokumen Utama SOP AP -->
             <div class="a4-page landscape" id="mainSopSheet">
-                <!-- KOP TABEL IDENTITAS -->
                 <table class="sop-header-table">
                     <tr>
-                        <td rowspan="4" class="logo-cell">
-                            <div style="border:1px solid #000; height:60px; display:flex; align-items:center; justify-content:center;">LOGO</div>
-                        </td>
+                        <td rowspan="4" class="logo-cell"><div style="border:1px solid #000; height:55px; display:flex; align-items:center; justify-content:center; font-size:9px;">LOGO</div></td>
                         <td rowspan="4" class="instansi-cell">
                             <div id="vPemda">PEMERINTAH KABUPATEN BONDOWOSO</div>
                             <div id="vDinas">DINAS KESEHATAN KABUPATEN BONDOWOSO</div>
-                            <div id="vPuskesmas" style="font-size: 12px; margin-top:2px;">UPTD PUSKESMAS JAMBESARI</div>
+                            <div id="vPuskesmas" style="font-size: 11px; margin-top:2px;">UPTD PUSKESMAS JAMBESARI</div>
                         </td>
                         <td class="meta-lbl">NOMOR SOP</td>
-                        <td class="meta-val" id="vNoSOP">400.7/045/SOP/430.9.3.15/2026</td>
+                        <td class="meta-val" id="vNoSOP">400.7/001/SOP/430.9.3.15/2026</td>
                     </tr>
                     <tr>
                         <td class="meta-lbl">TGL. PEMBUATAN</td>
@@ -337,285 +206,70 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="sop-title-box">
-                            <div style="font-size: 9px; color: #555;">STANDAR OPERASIONAL PROSEDUR</div>
-                            <div id="vJudulSOP" style="font-size: 12px; font-weight: bold; margin-top: 2px;">PENDAFTARAN PASIEN RAWAT INAP</div>
+                            <div style="font-size: 8px; color: #555;">STANDAR OPERASIONAL PROSEDUR</div>
+                            <div id="vJudulSOP" style="font-size: 11px; font-weight: bold; margin-top: 2px;">PENDAFTARAN PASIEN RAWAT INAP</div>
                         </td>
                         <td class="meta-lbl">DISAHKAN OLEH</td>
                         <td class="sig-cell">
-                            <div style="font-size: 9px;" id="vJabatanPengesah">Kepala UPTD PUSKESMAS JAMBESARI</div>
-                            <div style="height: 25px;"></div>
-                            <div style="font-weight: bold; text-decoration: underline;" id="vNamaKa">drg. Noeri Rustianti</div>
+                            <div style="font-size: 8px;" id="vJabatanPengesah">Kepala UPTD Puskesmas Jambesari</div>
+                            <div style="height: 20px;"></div>
+                            <div style="font-weight: bold; text-decoration: underline; font-size: 9px;" id="vNamaKa">drg.Noeri Rustianti</div>
                             <div style="font-size: 8px;" id="vNipKa">NIP. 19761018 200604 2 015</div>
                         </td>
                     </tr>
                 </table>
 
-                <!-- KOTAK INFORMASI PENDUKUNG (DASAR HUKUM, KETERKAITAN, DLL) -->
-                <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">
                     <tr>
-                        <td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 5px;">
+                        <td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">
                             <div class="section-box-title">DASAR HUKUM</div>
-                            <ol id="vListDasar" style="padding-left: 15px; font-size: 9px; line-height: 1.4;"></ol>
+                            <ol id="vListDasar" style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;"></ol>
                         </td>
-                        <td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 5px;">
+                        <td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">
                             <div class="section-box-title">KUALIFIKASI PELAKSANA</div>
-                            <div id="vKualifikasi" style="font-size: 9px; white-space: pre-line; line-height: 1.4;"></div>
+                            <div id="vKualifikasi" style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;"></div>
                         </td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top; border: 1px solid #000; padding: 5px;">
+                        <td style="vertical-align: top; border: 1px solid #000; padding: 4px;">
                             <div class="section-box-title">KETERKAITAN</div>
-                            <ul id="vListKeterkaitan" style="padding-left: 15px; font-size: 9px; line-height: 1.4;"></ul>
+                            <ul id="vListKeterkaitan" style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;"></ul>
                         </td>
-                        <td style="vertical-align: top; border: 1px solid #000; padding: 5px;">
+                        <td style="vertical-align: top; border: 1px solid #000; padding: 4px;">
                             <div class="section-box-title">PERALATAN / PERLENGKAPAN</div>
-                            <div id="vPeralatan" style="font-size: 9px; white-space: pre-line; line-height: 1.4;"></div>
+                            <div id="vPeralatan" style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;"></div>
                         </td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top; border: 1px solid #000; padding: 5px;">
+                        <td style="vertical-align: top; border: 1px solid #000; padding: 4px;">
                             <div class="section-box-title">PERINGATAN</div>
-                            <div id="vPeringatan" style="font-size: 9px; line-height: 1.4;"></div>
+                            <div id="vPeringatan" style="font-size: 8.5px; line-height: 1.3;"></div>
                         </td>
-                        <td style="vertical-align: top; border: 1px solid #000; padding: 5px;">
+                        <td style="vertical-align: top; border: 1px solid #000; padding: 4px;">
                             <div class="section-box-title">PENCATATAN DAN PENDATAAN</div>
-                            <div id="vPencatatan" style="font-size: 9px; line-height: 1.4;"></div>
+                            <div id="vPencatatan" style="font-size: 8.5px; line-height: 1.3;"></div>
                         </td>
                     </tr>
                 </table>
 
-                <!-- TABEL UTAMA BAGAN ALIR (BRANCHING FLOWCHART DENGAN 5 SIMBOL BAKU) -->
                 <table class="sop-table" id="mainFlowTable">
                     <thead>
                         <tr id="trHeadRow1">
-                            <th rowspan="2" style="width: 30px;">No</th>
-                            <th rowspan="2" style="width: 220px;">Uraian Kegiatan</th>
-                            <!-- Kolom Pelaksana Dinamis -->
+                            <th rowspan="2" style="width: 25px;">No</th>
+                            <th rowspan="2" style="width: 200px;">Uraian Kegiatan</th>
                             <th id="thPelaksanaGroup" colspan="1">Pelaksana</th>
                             <th colspan="3">Mutu Baku</th>
-                            <th rowspan="2" style="width: 90px;">Keterangan</th>
+                            <th rowspan="2" style="width: 80px;">Keterangan</th>
                         </tr>
-                        <tr id="trHeadRow2">
-                            <!-- Sub kolom aktor -->
-                        </tr>
+                        <tr id="trHeadRow2"></tr>
                     </thead>
-                    <tbody id="tbodySteps">
-                        <!-- Baris langkah dinamis -->
-                    </tbody>
+                    <tbody id="tbodySteps"></tbody>
                 </table>
             </div>
         </section>
     </main>
 
-    <!-- SCRIPT LOGIKA APLIKASI -->
-    <script>
-        // State Data
-        let dasarHukumList = ["Undang-Undang Nomor 36 Tahun 2009 tentang Kesehatan", "Peraturan Menteri Kesehatan Nomor 43 Tahun 2019 tentang Puskesmas"];
-        let keterkaitanList = ["SOP Pendaftaran Pasien Rawat Jalan", "SOP Rekam Medis Pasien"];
-        let pelaksanaList = ["Pasien", "Petugas Pendaftaran", "Perawat Rawat Inap", "Dokter Jaga"];
-        let stepsList = [
-            { kegiatan: "Pasien datang membawa kartu identitas dan rujukan internal/eksternal", pelaksana: "Pasien", jenis: "start", waktu: "2 Menit", kelengkapan: "KTP / Kartu Berobat", output: "Pasien tiba di loket" },
-            { kegiatan: "Menerima berkas persyaratan dan meneliti kelengkapan identitas pasien", pelaksana: "Petugas Pendaftaran", jenis: "process", waktu: "3 Menit", kelengkapan: "KTP / Rujukan", output: "Berkas diteliti" },
-            { kegiatan: "Apakah kelengkapan persyaratan dan data rekam medis lengkap?", pelaksana: "Petugas Pendaftaran", jenis: "decision", q: "Apakah berkas lengkap?", ya: "Lanjut input data", tidak: "Minta pasien melengkapi", waktu: "1 Menit", kelengkapan: "Berkas Pasien", output: "Keputusan Validasi" },
-            { kegiatan: "Menginput data pasien ke sistem SIMPUS dan membuat SEP/Kartu Rawat Inap", pelaksana: "Petugas Pendaftaran", jenis: "process", waktu: "5 Menit", kelengkapan: "Komputer / SIMPUS", output: "Surat Masuk Rawat Inap" },
-            { kegiatan: "Menyerahkan pasien beserta berkas rekam medis kepada Perawat Rawat Inap untuk orientasi ruangan", pelaksana: "Perawat Rawat Inap", jenis: "start", waktu: "5 Menit", kelengkapan: "Berkas & Pasien", output: "Pasien diterima di bangsal" }
-        ];
-
-        // Autentikasi Role
-        let currentRole = 'user';
-        function openLoginModal() { document.getElementById('authModal').style.display = 'flex'; }
-        function switchLoginForm() {
-            let role = document.getElementById('loginRole').value;
-            let group = document.getElementById('userPassGroup');
-            group.style.display = (role === 'admin') ? 'block' : 'none';
-        }
-        function processLogin() {
-            let role = document.getElementById('loginRole').value;
-            if (role === 'admin') {
-                let pass = document.getElementById('loginPass').value;
-                if (pass !== 'admin123') { alert('Password Admin salah! (Gunakan: admin123)'); return; }
-            }
-            currentRole = role;
-            document.getElementById('authModal').style.display = 'none';
-            document.getElementById('adminCard').style.display = (currentRole === 'admin') ? 'block' : 'none';
-            document.getElementById('activeRoleBadge').innerText = (currentRole === 'admin') ? 'Mode: Admin Instansi' : 'Mode: User Pembuat';
-            document.getElementById('activeRoleBadge').style.background = (currentRole === 'admin') ? '#fee2e2' : '#dbeafe';
-            document.getElementById('activeRoleBadge').style.color = (currentRole === 'admin') ? '#991b1b' : '#1e40af';
-        }
-
-        // Init App
-        window.onload = function() {
-            renderTags();
-            renderStepsBuilder();
-            updatePreview();
-        }
-
-        // Tag Functions
-        function addDasarHukum() {
-            let val = document.getElementById('inpDasarHukum').value.trim();
-            if(val) { dasarHukumList.push(val); document.getElementById('inpDasarHukum').value=''; renderTags(); updatePreview(); }
-        }
-        function removeDasar(i) { dasarHukumList.splice(i,1); renderTags(); updatePreview(); }
-
-        function addKeterkaitan() {
-            let val = document.getElementById('inpKeterkaitan').value.trim();
-            if(val) { keterkaitanList.push(val); document.getElementById('inpKeterkaitan').value=''; renderTags(); updatePreview(); }
-        }
-        function removeKeterkaitan(i) { keterkaitanList.splice(i,1); renderTags(); updatePreview(); }
-
-        function addPelaksana() {
-            let val = document.getElementById('inpNamaPelaksana').value.trim();
-            if(val) { pelaksanaList.push(val); document.getElementById('inpNamaPelaksana').value=''; renderTags(); renderStepsBuilder(); updatePreview(); }
-        }
-        function removePelaksana(i) { pelaksanaList.splice(i,1); renderTags(); renderStepsBuilder(); updatePreview(); }
-
-        function renderTags() {
-            document.getElementById('listDasarHukum').innerHTML = dasarHukumList.map((x,i)=>`<div class="tag-badge">${x} <i class="fa-solid fa-xmark" onclick="removeDasar(${i})"></i></div>`).join('');
-            document.getElementById('listKeterkaitan').innerHTML = keterkaitanList.map((x,i)=>`<div class="tag-badge">${x} <i class="fa-solid fa-xmark" onclick="removeKeterkaitan(${i})"></i></div>`).join('');
-            document.getElementById('listPelaksana').innerHTML = pelaksanaList.map((x,i)=>`<div class="tag-badge">${x} <i class="fa-solid fa-xmark" onclick="removePelaksana(${i})"></i></div>`).join('');
-        }
-
-        // Steps Builder
-        function addStepRow() {
-            stepsList.push({ kegiatan: "Kegiatan baru...", pelaksana: pelaksanaList[0] || "Petugas", jenis: "process", waktu: "5 Menit", kelengkapan: "Dokumen", output: "Hasil" });
-            renderStepsBuilder();
-            updatePreview();
-        }
-        function removeStep(i) { stepsList.splice(i,1); renderStepsBuilder(); updatePreview(); }
-
-        function renderStepsBuilder() {
-            let html = '';
-            stepsList.forEach((s, i) => {
-                let options = pelaksanaList.map(p => `<option value="${p}" ${s.pelaksana===p?'selected':''}>${p}</option>`).join('');
-                html += `<div class="step-builder-item">
-                    <h5>Langkah #${i+1} <button class="btn btn-sm btn-danger" onclick="removeStep(${i})"><i class="fa-solid fa-trash"></i></button></h5>
-                    <div class="form-group" style="margin-bottom:5px;"><label>Uraian Kegiatan (Kata Kerja Aktif)</label><input type="text" value="${s.kegiatan}" oninput="stepsList[${i}].kegiatan=this.value; updatePreview()"></div>
-                    <div class="form-row" style="margin-bottom:5px;">
-                        <div><label>Pelaksana</label><select onchange="stepsList[${i}].pelaksana=this.value; updatePreview()">${options}</select></div>
-                        <div><label>Bentuk Simbol</label><select onchange="stepsList[${i}].jenis=this.value; renderStepsBuilder(); updatePreview()">
-                            <option value="start" ${s.jenis==='start'?'selected':''}>Terminator (Mulai/Selesai)</option>
-                            <option value="process" ${s.jenis==='process'?'selected':''}>Proses (Kotak Eksekusi)</option>
-                            <option value="decision" ${s.jenis==='decision'?'selected':''}>Keputusan (Belah Ketupat)</option>
-                        </select></div>
-                    </div>
-                    ${s.jenis==='decision'? `<div class="form-row" style="margin-bottom:5px;">
-                        <div><label>Pertanyaan Keputusan</label><input type="text" value="${s.q\vert{}\vert{}''}" oninput="stepsList[${i}].q=this.value; updatePreview()" placeholder="Misal: Apakah lengkap?"></div>
-                        <div><label>Cabang Ya / Tidak</label><input type="text" value="${s.ya\vert{}\vert{}''}" oninput="stepsList[${i}].ya=this.value; updatePreview()" placeholder="Target/Keterangan"></div>
-                    </div>`:''}
-                    <div class="form-row">
-                        <div><label>Waktu</label><input type="text" value="${s.waktu}" oninput="stepsList[${i}].waktu=this.value; updatePreview()"></div>
-                        <div><label>Output</label><input type="text" value="${s.output}" oninput="stepsList[${i}].output=this.value; updatePreview()"></div>
-                    </div>
-                </div>`;
-            });
-            document.getElementById('stepsBuilderContainer').innerHTML = html;
-        }
-
-        // Live Preview Renderer
-        function updatePreview() {
-            let pemda = document.getElementById('cfgPemda').value;
-            let dinas = document.getElementById('cfgDinas').value;
-            let puskesmas = document.getElementById('cfgPuskesmas').value;
-            let alamat = document.getElementById('cfgAlamat').value;
-            let kaPuskesmas = document.getElementById('cfgKaPuskesmas').value;
-            let nipKa = document.getElementById('cfgNipKa').value;
-
-            let judul = document.getElementById('inpJudul').value;
-            let noSOP = document.getElementById('inpNoSOP').value;
-            let tahun = document.getElementById('inpTahun').value;
-            let tglBuat = document.getElementById('inpTglBuat').value;
-            let tglEfektif = document.getElementById('inpTglEfektif').value;
-            let orientasi = document.getElementById('inpOrientasi').value;
-
-            let formatNoSOP = `400.7/${noSOP}/SOP/430.9.3.15/${tahun}`;
-
-            // Update Cover
-            document.getElementById('cvrPemda').innerText = pemda;
-            document.getElementById('cvrDinas').innerText = dinas;
-            document.getElementById('cvrJudulSOP').innerText = judul;
-            document.getElementById('cvrPuskesmas').innerText = puskesmas;
-            document.getElementById('cvrTahun').innerText = tahun;
-            document.getElementById('cvrAlamat').innerHTML = `${alamat}<br>BONDOWOSO`;
-
-            // Update SK
-            document.getElementById('skPemda').innerText = pemda;
-            document.getElementById('skPuskesmasTitle').innerText = `KEPALA ${puskesmas}`;
-            document.getElementById('skJudulText').innerText = judul;
-            document.getElementById('skJudulText2').innerText = judul;
-            document.getElementById('skJudulText3').innerText = judul;
-            document.getElementById('skTglDitetapkan').innerText = tglBuat;
-            document.getElementById('skNamaKa').innerText = kaPuskesmas;
-            document.getElementById('skNipKa').innerText = nipKa;
-
-            // Update Header SOP
-            document.getElementById('vPemda').innerText = pemda;
-            document.getElementById('vDinas').innerText = dinas;
-            document.getElementById('vPuskesmas').innerText = puskesmas;
-            document.getElementById('vNoSOP').innerText = formatNoSOP;
-            document.getElementById('vTglBuat').innerText = tglBuat;
-            document.getElementById('vTglEfektif').innerText = tglEfektif;
-            document.getElementById('vJudulSOP').innerText = judul.toUpperCase();
-            document.getElementById('vJabatanPengesah').innerText = `Kepala ${puskesmas}`;
-            document.getElementById('vNamaKa').innerText = kaPuskesmas;
-            document.getElementById('vNipKa').innerText = `NIP. ${nipKa}`;
-
-            // Update Kotak Info Pendukung
-            document.getElementById('vListDasar').innerHTML = dasarHukumList.map(d => `<li>${d}</li>`).join('');
-            document.getElementById('vListKeterkaitan').innerHTML = keterkaitanList.map(k => `<li>${k}</li>`).join('');
-            document.getElementById('vPeringatan').innerText = document.getElementById('inpPeringatan').value;
-            document.getElementById('vKualifikasi').innerText = document.getElementById('inpKualifikasi').value;
-            document.getElementById('vPeralatan').innerText = document.getElementById('inpPeralatan').value;
-            document.getElementById('vPencatatan').innerText = document.getElementById('InpPencatatan').value;
-
-            // Update Halaman Orientasi A4
-            let pages = document.querySelectorAll('.a4-page');
-            pages.forEach(p => {
-                p.className = `a4-page ${orientasi}`;
-            });
-
-            // Update Tabel Flowchart Pelaksana Header
-            let thGroup = document.getElementById('thPelaksanaGroup');
-            thGroup.setAttribute('colspan', pelaksanaList.length || 1);
-            
-            let subHead = '';
-            pelaksanaList.forEach(p => {
-                subHead += `<th style="min-width: 90px; font-size:9px;">${p}</th>`;
-            });
-            document.getElementById('trHeadRow2').innerHTML = subHead;
-
-            // Render Rows Flowchart
-            let bodyHtml = '';
-            stepsList.forEach((s, idx) => {
-                let pelaksanaCells = '';
-                pelaksanaList.forEach(p => {
-                    if (s.pelaksana === p) {
-                        let shapeHtml = '';
-                        if (s.jenis === 'start') {
-                            shapeHtml = `<div class="flow-shape shape-start"><i class="fa-solid fa-circle-stop"></i> Mulai/Selesai</div>`;
-                        } else if (s.jenis === 'process') {
-                            shapeHtml = `<div class="flow-shape shape-process"><i class="fa-solid fa-square"></i> Proses</div>`;
-                        } else if (s.jenis === 'decision') {
-                            shapeHtml = `<div class="flow-shape shape-decision">?<br><b>${s.q || 'Keputusan'}</b><br><span style="font-size:7px; color:#444;">[Ya / Tidak]</span></div>`;
-                        }
-                        pelaksanaCells += `<td style="text-align: center; vertical-align: middle;">${shapeHtml}</td>`;
-                    } else {
-                        pelaksanaCells += `<td></td>`;
-                    }
-                });
-
-                bodyHtml += `<tr>
-                    <td style="text-align: center;">${idx+1}</td>
-                    <td>${s.kegiatan}</td>
-                    ${pelaksanaCells}
-                    <td style="font-size: 8px;">${s.kelengkapan || '-'}</td>
-                    <td style="font-size: 8px; text-align: center;">${s.waktu || '-'}</td>
-                    <td style="font-size: 8px;">${s.output || '-'}</td>
-                    <td style="font-size: 8px;">${s.jenis==='decision' ? 'Ya: '+(s.ya||'-') : '-'}</td>
-                </tr>`;
-            });
-            document.getElementById('tbodySteps').innerHTML = bodyHtml;
-        }
-    </script>
+    <!-- Hubungkan ke File JavaScript Eksternal -->
     <script src="script.js"></script>
 </body>
 </html>

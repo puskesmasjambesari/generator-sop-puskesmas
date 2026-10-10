@@ -1,1 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP Generator - Standar PermenPANRB</title>
+    <!-- Font Google & Icon FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+    <!-- NAVIGASI HEADER ELEGAN (ASTRA STYLE) -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <i class="fa-solid fa-file-signature logo-icon"></i>
+                <div class="brand-text">
+                    <span class="brand-title">SOP Builder Pro</span>
+                    <span class="brand-sub">Standar PermenPANRB</span>
+                </div>
+            </div>
+            <div class="user-status" id="userStatusArea">
+                <span class="badge" id="roleBadge"><i class="fa-solid fa-user-shield"></i> Mode: Admin</span>
+                <button class="btn-secondary-sm" onclick="toggleAuthModal()"><i class="fa-solid fa-right-from-bracket"></i> Ganti Akses</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- KONTEN UTAMA (PANEL & PREVIEW) -->
+    <main class="main-layout">
+        
+        <!-- SIDEBAR FORM INPUT -->
+        <aside class="sidebar-panel no-print">
+            
+            <!-- PANEL SETTING ADMIN (Hanya Tampil Jika Mode Admin) -->
+            <div class="card-box" id="adminPanel">
+                <div class="card-header">
+                    <i class="fa-solid fa-sliders"></i>
+                    <h3>Pengaturan Statis (Admin)</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Nama Pemerintah Daerah</label>
+                        <input type="text" id="cfgPemda" value="PEMERINTAH KABUPATEN BONDOWOSO">
+                    </div>
+                    <div class="form-group">
+                        <label>Dinas Kesehatan</label>
+                        <input type="text" id="cfgDinas" value="DINAS KESEHATAN">
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Puskesmas</label>
+                        <input type="text" id="cfgPuskesmas" value="UPTD PUSKESMAS JAMBESARI">
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Kepala Puskesmas</label>
+                        <input type="text" id="cfgKepala" value="drg. Noeri Rustianti">
+                    </div>
+                    <div class="form-group">
+                        <label>NIP Kepala Puskesmas</label>
+                        <input type="text" id="cfgNip" value="19761018 200604 2 015">
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL INPUT SOP DINAMIS (USER) -->
+            <div class="card-box">
+                <div class="card-header">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <h3>Data SOP (User)</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Judul SOP</label>
+                        <input type="text" id="inpJudul" placeholder="Contoh: SOP Pendaftaran Pasien Rawat Inap">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nomor SOP (Urut)</label>
+                            <input type="text" id="inpNoUrut" value="001" oninput="updateDocumentHeader()">
+                        </div>
+                        <div class="form-group">
+                            <label>Orientasi Cetak</label>
+                            <select id="inpOrientasi" onchange="changeOrientation()">
+                                <option value="portrait">Portrait A4</option>
+                                <option value="landscape" selected>Landscape A4</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <hr class="divider">
+                    
+                    <h4>Daftar Pelaksana / Subjek Terlibat</h4>
+                    <div class="tags-input-container">
+                        <div id="pelaksanaTags" class="tags-area"></div>
+                        <div class="input-inline">
+                            <input type="text" id="inpPelaksanaBaru" placeholder="Misal: Perawat, PJ Klaster">
+                            <button type="button" class="btn-add" onclick="addPelaksana()"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                    </div>
+
+                    <hr class="divider">
+
+                    <h4>Langkah & Flowchart</h4>
+                    <button class="btn-primary-full" onclick="addStepRow()"><i class="fa-solid fa-plus-circle"></i> Tambah Langkah SOP</button>
+                    
+                    <div id="stepsInputContainer" class="steps-builder-area">
+                        <!-- Item langkah akan dirender dinamis di sini oleh JavaScript -->
+                    </div>
+
+                    <div class="action-bar">
+                        <button class="btn-success" onclick="window.print()"><i class="fa-solid fa-print"></i> Cetak / Ekspor PDF A4</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- AREA PREVIEW DOKUMEN CETAK A4 -->
+        <section class="preview-panel">
+            <div class="paper-container landscape" id="paperA4">
+                
+                <!-- KOP PERMENPAN RB -->
+                <table class="sop-header-table">
+                    <tr>
+                        <td rowspan="4" class="logo-cell">
+                            <div class="logo-placeholder">[LOGO]</div>
+                        </td>
+                        <td rowspan="4" class="title-cell">
+                            <h4 id="viewPemda">PEMERINTAH KABUPATEN BONDOWOSO</h4>
+                            <h4 id="viewDinas">DINAS KESEHATAN</h4>
+                            <h3 id="viewPuskesmas">UPTD PUSKESMAS JAMBESARI</h3>
+                        </td>
+                        <td class="meta-label">NOMOR SOP</td>
+                        <td class="meta-val" id="viewNoSOP">400.7/001/SOP/430.9.3.15/2026</td>
+                    </tr>
+                    <tr>
+                        <td class="meta-label">TGL. PEMBUATAN</td>
+                        <td class="meta-val" id="viewTglBuat">10 Oktober 2026</td>
+                    </tr>
+                    <tr>
+                        <td class="meta-label">TGL. EFEKTIF</td>
+                        <td class="meta-val">12 Oktober 2026</td>
+                    </tr>
+                    <tr>
+                        <td class="meta-label">DISAHKAN OLEH</td>
+                        <td class="meta-val" id="viewPengesah">Kepala Puskesmas Jambesari</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="sop-title-box">
+                            <h2>JUDUL SOP: <span id="viewJudulSOP">PENDAFTARAN PASIEN RAWAT INAP</span></h2>
+                        </td>
+                        <td colspan="2" class="signature-cell">
+                            <div class="sig-title">Kepala Puskesmas</div>
+                            <div class="sig-space"></div>
+                            <div class="sig-name" id="viewNamaKepala">drg. Noeri Rustianti</div>
+                            <div class="sig-nip" id="viewNipKepala">NIP. 19761018 200604 2 015</div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- TABEL UTAMA SOP PERMENPAN RB -->
+                <table class="sop-body-table" id="sopMainTable">
+                    <thead>
+                        <tr id="headerPelaksanaRow">
+                            <th rowspan="2" style="width: 40px;">NO</th>
+                            <th rowspan="2" style="width: 250px;">URAIAN KEGIATAN</th>
+                            <!-- Kolom Pelaksana Dirender Dinamis di sini -->
+                            <th colspan="1" id="pelaksanaHeaderGroup">PELAKSANA</th>
+                            <th colspan="3">MUTU BAKU</th>
+                            <th rowspan="2" style="width: 100px;">KETERANGAN</th>
+                        </tr>
+                        <tr id="subHeaderPelaksanaRow">
+                            <!-- Nama-nama pelaksana dirender di sini -->
+                        </tr>
+                    </thead>
+                    <tbody id="sopTableBody">
+                        <!-- Baris langkah dirender oleh JavaScript -->
+                    </tbody>
+                </table>
+
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

@@ -209,67 +209,73 @@ function updatePreview() {
         var pageDiv = document.createElement('div');
         pageDiv.className = 'a4-page ' + orientasi;
         
-        // Header dan kotak informasi pendukung (posisi di atas tabel flowchart sesuai standar)
-        var headerHtml = '<table class="sop-header-table">' +
-            '<tr>' +
-                '<td rowspan="4" class="logo-cell"><img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 55px; height: auto; display: block; margin: 0 auto;" /></td>' +
-                '<td rowspan="4" class="instansi-cell">' +
-                    '<div>' + pemda + '</div>' +
-                    '<div>' + dinas + '</div>' +
-                    '<div style="font-size: 11px; margin-top:2px;">' + puskesmas + '</div>' +
-                '</td>' +
-                '<td class="meta-lbl">NOMOR SOP</td>' +
-                '<td class="meta-val">' + formatNoSOP + '</td>' +
-            '</tr>' +
-            '<tr><td class="meta-lbl">TGL. PEMBUATAN</td><td class="meta-val">' + tglBuat + '</td></tr>' +
-            '<tr><td class="meta-lbl">TGL. REVISI</td><td class="meta-val">' + (tglRevisi ? tglRevisi : '-') + '</td></tr>' +
-            '<tr><td class="meta-lbl">TGL. EFEKTIF</td><td class="meta-val">' + tglEfektif + '</td></tr>' +
-            '<tr>' +
-                '<td colspan="2" class="sop-title-box">' +
-                    '<div style="font-size: 8px; color: #555;">STANDAR OPERASIONAL PROSEDUR</div>' +
-                    '<div style="font-size: 11px; font-weight: bold; margin-top: 2px;">SOP ' + judul.toUpperCase() + '</div>' +
-                '</td>' +
-                '<td class="meta-lbl">DISAHKAN OLEH</td>' +
-                '<td class="sig-cell">' +
-                    '<div style="font-size: 8px;">KEPALA ' + puskesmas.toUpperCase() + '</div>' +
-                    '<div style="height: 45px;"></div>' +
-                    '<div style="font-weight: bold; text-decoration: underline; font-size: 9px;">' + kaPuskesmas + '</div>' +
-                    '<div style="font-size: 8px;">NIP. ' + nipKa + '</div>' +
-                '</td>' +
-            '</tr>' +
-        '</table>' +
-        '<table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">' +
-            '<tr>' +
-                '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
-                    '<div class="section-box-title">DASAR HUKUM</div>' +
-                    '<ol style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + htmlDasarList + '</ol>' +
-                '</td>' +
-                '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
-                    '<div class="section-box-title">KUALIFIKASI PELAKSANA</div>' +
-                    '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + kualifikasi + '</div>' +
-                '</td>' +
-            '</tr>' +
-            '<tr>' +
-                '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
-                    '<div class="section-box-title">KETERKAITAN</div>' +
-                    '<ul style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + htmlKetList + '</ul>' +
-                '</td>' +
-                '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
-                    '<div class="section-box-title">PERALATAN / PERLENGKAPAN</div>' +
-                    '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + peralatan + '</div>' +
-                '</td>' +
-            '</tr>' +
-            '<tr>' +
-                '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
-                    '<div class="section-box-title">PERINGATAN</div>' +
-                    '<div style="font-size: 8.5px; line-height: 1.3;">' + peringatan + '</div>' +
-                '</td>' +
-                '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
-                    '<div class="section-box-title">PENCATATAN DAN PENDATAAN</div>' +
-                    '<div style="font-size: 8.5px; line-height: 1.3;">' + pencatatan + '</div>' +
-                '</td>' +
-            '</tr>' +
-        '</table>';
+        var headerHtml = '';
+        if (pageIdx === 0) {
+            // Halaman 1: Memuat Header Instansi & Kotak Informasi Lengkap
+            headerHtml = '<table class="sop-header-table">' +
+                '<tr>' +
+                    '<td rowspan="4" class="logo-cell"><img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 55px; height: auto; display: block; margin: 0 auto;" /></td>' +
+                    '<td rowspan="4" class="instansi-cell">' +
+                        '<div>' + pemda + '</div>' +
+                        '<div>' + dinas + '</div>' +
+                        '<div style="font-size: 11px; margin-top:2px;">' + puskesmas + '</div>' +
+                    '</td>' +
+                    '<td class="meta-lbl">NOMOR SOP</td>' +
+                    '<td class="meta-val">' + formatNoSOP + '</td>' +
+                '</tr>' +
+                '<tr><td class="meta-lbl">TGL. PEMBUATAN</td><td class="meta-val">' + tglBuat + '</td></tr>' +
+                '<tr><td class="meta-lbl">TGL. REVISI</td><td class="meta-val">' + (tglRevisi ? tglRevisi : '-') + '</td></tr>' +
+                '<tr><td class="meta-lbl">TGL. EFEKTIF</td><td class="meta-val">' + tglEfektif + '</td></tr>' +
+                '<tr>' +
+                    '<td colspan="2" class="sop-title-box">' +
+                        '<div style="font-size: 8px; color: #555;">STANDAR OPERASIONAL PROSEDUR</div>' +
+                        '<div style="font-size: 11px; font-weight: bold; margin-top: 2px;">SOP ' + judul.toUpperCase() + '</div>' +
+                    '</td>' +
+                    '<td class="meta-lbl">DISAHKAN OLEH</td>' +
+                    '<td class="sig-cell">' +
+                        '<div style="font-size: 8px;">KEPALA ' + puskesmas.toUpperCase() + '</div>' +
+                        '<div style="height: 45px;"></div>' +
+                        '<div style="font-weight: bold; text-decoration: underline; font-size: 9px;">' + kaPuskesmas + '</div>' +
+                        '<div style="font-size: 8px;">NIP. ' + nipKa + '</div>' +
+                    '</td>' +
+                '</tr>' +
+            '</table>' +
+            '<table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">' +
+                '<tr>' +
+                    '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                        '<div class="section-box-title">DASAR HUKUM</div>' +
+                        '<ol style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + htmlDasarList + '</ol>' +
+                    '</td>' +
+                    '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                        '<div class="section-box-title">KUALIFIKASI PELAKSANA</div>' +
+                        '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + kualifikasi + '</div>' +
+                    '</td>' +
+                '</tr>' +
+                '<tr>' +
+                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                        '<div class="section-box-title">KETERKAITAN</div>' +
+                        '<ul style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + htmlKetList + '</ul>' +
+                    '</td>' +
+                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                        '<div class="section-box-title">PERALATAN / PERLENGKAPAN</div>' +
+                        '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + peralatan + '</div>' +
+                    '</td>' +
+                '</tr>' +
+                '<tr>' +
+                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                        '<div class="section-box-title">PERINGATAN</div>' +
+                        '<div style="font-size: 8.5px; line-height: 1.3;">' + peringatan + '</div>' +
+                    '</td>' +
+                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                        '<div class="section-box-title">PENCATATAN DAN PENDATAAN</div>' +
+                        '<div style="font-size: 8.5px; line-height: 1.3;">' + pencatatan + '</div>' +
+                    '</td>' +
+                '</tr>' +
+            '</table>';
+        } else {
+            // Halaman Selanjutnya (Page 2+): Tanpa header instansi & tanpa kotak informasi, langsung ke tabel langkah berikutnya
+            headerHtml = '<div style="font-size:9.5px; font-weight:bold; margin-bottom:8px; text-align:right;">SOP ' + judul.toUpperCase() + ' (Lanjutan Halaman ' + (pageIdx + 1) + ')</div>';
+        }
 
         var pelaksanaTh = '';
         for (var h = 0; h < pelaksanaList.length; h++) {
@@ -301,11 +307,9 @@ function updatePreview() {
                     if (sItem.jenis === 'start') shapeClass = 'shape-start';
                     else if (sItem.jenis === 'decision') shapeClass = 'shape-decision';
 
-                    // Off-page connector segilima otomatis di akhir / awal halaman
-                    if (st === pageSteps.length - 1 && pageIdx < totalPages - 1) {
-                        shapeClass = 'shape-offpage-end';
-                    } else if (st === 0 && pageIdx > 0) {
-                        shapeClass = 'shape-offpage-start';
+                    // Off-page connector segilima menghadap ke bawah untuk perpindahan halaman
+                    if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
+                        shapeClass = 'shape-offpage-down';
                     }
 
                     pelaksanaCells += '<td style="text-align: center; vertical-align: middle; padding:6px 2px;" data-step-idx="' + globalIdx + '" data-pelaksana-idx="' + pc + '">' +
@@ -394,7 +398,7 @@ function drawConnectors() {
                 var rect1 = currShape.getBoundingClientRect();
                 var rect2 = nextShape.getBoundingClientRect();
 
-                // Presisi titik sambung tepat dari ujung bawah shape ke ujung atas shape berikutnya
+                // Presisi titik sambung panah tepat dari ujung bawah shape ke ujung atas shape berikutnya
                 var x1 = rect1.left + rect1.width / 2 - tableRect.left;
                 var y1 = rect1.bottom - tableRect.top;
                 var x2 = rect2.left + rect2.width / 2 - tableRect.left;

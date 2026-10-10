@@ -273,7 +273,7 @@ function updatePreview() {
                 '</tr>' +
             '</table>';
         } else {
-            // Halaman Selanjutnya (Page 2+): Tanpa header, tanpa kotak informasi, langsung ke tabel langkah lanjutan
+            // Halaman Selanjutnya (Page 2+): TANPA header, TANPA kotak informasi, langsung ke tabel langkah lanjutan
             headerHtml = '<div style="font-size:9.5px; font-weight:bold; margin-bottom:8px; text-align:right;">SOP ' + judul.toUpperCase() + ' (Lanjutan Halaman ' + (pageIdx + 1) + ')</div>';
         }
 
@@ -307,9 +307,9 @@ function updatePreview() {
                     if (sItem.jenis === 'start') shapeClass = 'shape-start';
                     else if (sItem.jenis === 'decision') shapeClass = 'shape-decision';
 
-                    // Off-page connector segilima menghadap ke bawah otomatis di batas halaman
+                    // Otomatis ubah shape menjadi off-page connector segilima menghadap ke bawah pada batas halaman
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
-                        shapeClass = 'shape-offpage-down';
+                        shapeClass = 'shape-offpage';
                     }
 
                     pelaksanaCells += '<td style="text-align: center; vertical-align: middle; padding:6px 2px;" data-step-idx="' + globalIdx + '" data-pelaksana-idx="' + pc + '">' +

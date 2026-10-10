@@ -36,21 +36,22 @@ body { background: var(--bg); color: var(--text); display: flex; flex-direction:
     align-items: start; 
 }
 
-/* SIDEBAR FORM (Dibuat Sticky & Bisa Di-scroll) */
+/* SIDEBAR FORM (Diperbarui agar kontainer dinamis bisa di-scroll dengan sempurna) */
 .sidebar { 
     display: flex; 
     flex-direction: column; 
     gap: 1.5rem; 
-    height: calc(100vh - 120px); 
+    max-height: calc(100vh - 100px); 
     position: sticky;
-    top: 1.5rem;
+    top: 1rem;
     overflow-y: auto; 
-    padding-right: 6px; 
+    padding-right: 8px; 
+    scroll-behavior: smooth;
 }
 
-/* Custom Scrollbar untuk Sidebar */
+/* Custom Scrollbar agar terlihat rapi dan profesional */
 .sidebar::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
 }
 .sidebar::-webkit-scrollbar-track {
     background: #f1f5f9;

@@ -110,15 +110,15 @@ function removePelaksana(i) {
 
 function renderTags() {
     document.getElementById('listDasarHukum').innerHTML = dasarHukumList.map((x,i)=>
-        `<div class="tag-badge">${x} <i class="fa-solid fa-xmark" onclick="removeDasar(${i})"></i></div>`
+        '<div class="tag-badge">' + x + ' <i class="fa-solid fa-xmark" onclick="removeDasar(' + i + ')"></i></div>'
     ).join('');
     
     document.getElementById('listKeterkaitan').innerHTML = keterkaitanList.map((x,i)=>
-        `<div class="tag-badge">${x} <i class="fa-solid fa-xmark" onclick="removeKeterkaitan(${i})"></i></div>`
+        '<div class="tag-badge">' + x + ' <i class="fa-solid fa-xmark" onclick="removeKeterkaitan(' + i + ')"></i></div>'
     ).join('');
     
     document.getElementById('listPelaksana').innerHTML = pelaksanaList.map((x,i)=>
-        `<div class="tag-badge">${x} <i class="fa-solid fa-xmark" onclick="removePelaksana(${i})"></i></div>`
+        '<div class="tag-badge">' + x + ' <i class="fa-solid fa-xmark" onclick="removePelaksana(' + i + ')"></i></div>'
     ).join('');
 }
 
@@ -144,27 +144,29 @@ function removeStep(i) {
 function renderStepsBuilder() {
     let html = '';
     stepsList.forEach((s, i) => {
-        let options = pelaksanaList.map(p => `<option value="${p}" ${s.pelaksana===p?'selected':''}>${p}</option>`).join('');
-        html += `<div class="step-builder-item">
-            <h5>Langkah #${i+1} <button class="btn btn-sm btn-danger" onclick="removeStep(${i})"><i class="fa-solid fa-trash"></i></button></h5>
-            <div class="form-group" style="margin-bottom:5px;"><label>Uraian Kegiatan (Kata Kerja Aktif)</label><input type="text" value="${s.kegiatan}" oninput="stepsList[${i}].kegiatan=this.value; updatePreview()"></div>
-            <div class="form-row" style="margin-bottom:5px;">
-                <div><label>Pelaksana</label><select onchange="stepsList[${i}].pelaksana=this.value; updatePreview()">${options}</select></div>
-                <div><label>Bentuk Simbol</label><select onchange="stepsList[${i}].jenis=this.value; renderStepsBuilder(); updatePreview()">
-                    <option value="start" ${s.jenis==='start'?'selected':''}>Terminator (Mulai/Selesai)</option>
-                    <option value="process" ${s.jenis==='process'?'selected':''}>Proses (Kotak Eksekusi)</option>
-                    <option value="decision" ${s.jenis==='decision'?'selected':''}>Keputusan (Belah Ketupat)</option>
-                </select></div>
-            </div>
-            ${s.jenis==='decision'? `<div class="form-row" style="margin-bottom:5px;">
-                <div><label>Pertanyaan Keputusan</label><input type="text" value="${s.q\vert{}\vert{}''}" oninput="stepsList[${i}].q=this.value; updatePreview()" placeholder="Misal: Apakah lengkap?"></div>
-                <div><label>Cabang Ya / Tidak</label><input type="text" value="${s.ya\vert{}\vert{}''}" oninput="stepsList[${i}].ya=this.value; updatePreview()" placeholder="Target/Keterangan"></div>
-            </div>`:''}
-            <div class="form-row">
-                <div><label>Waktu</label><input type="text" value="${s.waktu}" oninput="stepsList[${i}].waktu=this.value; updatePreview()"></div>
-                <div><label>Output</label><input type="text" value="${s.output}" oninput="stepsList[${i}].output=this.value; updatePreview()"></div>
-            </div>
-        </div>`;
+        let options = pelaksanaList.map(p => '<option value="' + p + '" ' + (s.pelaksana===p?'selected':'') + '>' + p + '</option>').join('');
+        html += '<div class="step-builder-item">' +
+            '<h5>Langkah #' + (i+1) + ' <button class="btn btn-sm btn-danger" onclick="removeStep(' + i + ')"><i class="fa-solid fa-trash"></i></button></h5>' +
+            '<div class="form-group" style="margin-bottom:5px;"><label>Uraian Kegiatan (Kata Kerja Aktif)</label><input type="text" value="' + s.kegiatan + '" oninput="stepsList[' + i + '].kegiatan=this.value; updatePreview()"></div>' +
+            '<div class="form-row" style="margin-bottom:5px;">' +
+                '<div><label>Pelaksana</label><select onchange="stepsList[' + i + '].pelaksana=this.value; updatePreview()">' + options + '</select></div>' +
+                '<div><label>Bentuk Simbol</label><select onchange="stepsList[' + i + '].jenis=this.value; renderStepsBuilder(); updatePreview()">' +
+                    '<option value="start" ' + (s.jenis==='start'?'selected':'') + '>Terminator (Mulai/Selesai)</option>' +
+                    '<option value="process" ' + (s.jenis==='process'?'selected':'') + '>Proses (Kotak Eksekusi)</option>' +
+                    '<option value="decision" ' + (s.jenis==='decision'?'selected':'') + '>Keputusan (Belah Ketupat)</option>' +
+                '</select></div>' +
+            '</div>';
+        if(s.jenis === 'decision') {
+            html += '<div class="form-row" style="margin-bottom:5px;">' +
+                '<div><label>Pertanyaan Keputusan</label><input type="text" value="' + (s.q||'') + '" oninput="stepsList[' + i + '].q=this.value; updatePreview()" placeholder="Misal: Apakah lengkap?"></div>' +
+                '<div><label>Cabang Ya / Tidak</label><input type="text" value="' + (s.ya||'') + '" oninput="stepsList[' + i + '].ya=this.value; updatePreview()" placeholder="Target/Keterangan"></div>' +
+            '</div>';
+        }
+        html += '<div class="form-row">' +
+                '<div><label>Waktu</label><input type="text" value="' + s.waktu + '" oninput="stepsList[' + i + '].waktu=this.value; updatePreview()"></div>' +
+                '<div><label>Output</label><input type="text" value="' + s.output + '" oninput="stepsList[' + i + '].output=this.value; updatePreview()"></div>' +
+            '</div>' +
+        '</div>';
     });
     document.getElementById('stepsBuilderContainer').innerHTML = html;
 }
@@ -184,19 +186,17 @@ function updatePreview() {
     let tglEfektif = document.getElementById('inpTglEfektif').value;
     let orientasi = document.getElementById('inpOrientasi').value;
 
-    let formatNoSOP = `400.7/${noSOP}/SOP/430.9.3.15/${tahun}`;
+    let formatNoSOP = '400.7/' + noSOP + '/SOP/430.9.3.15/' + tahun;
 
-    // Update Cover
     document.getElementById('cvrPemda').innerText = pemda;
     document.getElementById('cvrDinas').innerText = dinas;
     document.getElementById('cvrJudulSOP').innerText = judul;
     document.getElementById('cvrPuskesmas').innerText = puskesmas;
     document.getElementById('cvrTahun').innerText = tahun;
-    document.getElementById('cvrAlamat').innerHTML = `${alamat}<br>BONDOWOSO`;
+    document.getElementById('cvrAlamat').innerHTML = alamat + '<br>BONDOWOSO';
 
-    // Update SK
     document.getElementById('skPemda').innerText = pemda;
-    document.getElementById('skPuskesmasTitle').innerText = `KEPALA ${puskesmas}`;
+    document.getElementById('skPuskesmasTitle').innerText = 'KEPALA ' + puskesmas;
     document.getElementById('skJudulText').innerText = judul;
     document.getElementById('skJudulText2').innerText = judul;
     document.getElementById('skJudulText3').innerText = judul;
@@ -204,7 +204,6 @@ function updatePreview() {
     document.getElementById('skNamaKa').innerText = kaPuskesmas;
     document.getElementById('skNipKa').innerText = nipKa;
 
-    // Update Header SOP
     document.getElementById('vPemda').innerText = pemda;
     document.getElementById('vDinas').innerText = dinas;
     document.getElementById('vPuskesmas').innerText = puskesmas;
@@ -212,31 +211,28 @@ function updatePreview() {
     document.getElementById('vTglBuat').innerText = tglBuat;
     document.getElementById('vTglEfektif').innerText = tglEfektif;
     document.getElementById('vJudulSOP').innerText = judul.toUpperCase();
-    document.getElementById('vJabatanPengesah').innerText = `Kepala ${puskesmas}`;
+    document.getElementById('vJabatanPengesah').innerText = 'Kepala ' + puskesmas;
     document.getElementById('vNamaKa').innerText = kaPuskesmas;
-    document.getElementById('vNipKa').innerText = `NIP. ${nipKa}`;
+    document.getElementById('vNipKa').innerText = 'NIP. ' + nipKa;
 
-    // Update Kotak Pendukung
-    document.getElementById('vListDasar').innerHTML = dasarHukumList.map(d => `<li>${d}</li>`).join('');
-    document.getElementById('vListKeterkaitan').innerHTML = keterkaitanList.map(k => `<li>${k}</li>`).join('');
+    document.getElementById('vListDasar').innerHTML = dasarHukumList.map(d => '<li>' + d + '</li>').join('');
+    document.getElementById('vListKeterkaitan').innerHTML = keterkaitanList.map(k => '<li>' + k + '</li>').join('');
     document.getElementById('vPeringatan').innerText = document.getElementById('inpPeringatan').value;
     document.getElementById('vKualifikasi').innerText = document.getElementById('inpKualifikasi').value;
     document.getElementById('vPeralatan').innerText = document.getElementById('inpPeralatan').value;
     document.getElementById('vPencatatan').innerText = document.getElementById('InpPencatatan').value;
 
-    // Orientasi A4
     let pages = document.querySelectorAll('.a4-page');
     pages.forEach(p => {
-        p.className = `a4-page ${orientasi}`;
+        p.className = 'a4-page ' + orientasi;
     });
 
-    // Tabel Flowchart Pelaksana
     let thGroup = document.getElementById('thPelaksanaGroup');
     thGroup.setAttribute('colspan', pelaksanaList.length || 1);
     
     let subHead = '';
     pelaksanaList.forEach(p => {
-        subHead += `<th style="min-width: 85px; font-size:8.5px;">${p}</th>`;
+        subHead += '<th style="min-width: 85px; font-size:8.5px;">' + p + '</th>';
     });
     document.getElementById('trHeadRow2').innerHTML = subHead;
 
@@ -247,27 +243,27 @@ function updatePreview() {
             if (s.pelaksana === p) {
                 let shapeHtml = '';
                 if (s.jenis === 'start') {
-                    shapeHtml = `<div class="flow-shape shape-start"><i class="fa-solid fa-circle-stop"></i> Mulai/Selesai</div>`;
+                    shapeHtml = '<div class="flow-shape shape-start"><i class="fa-solid fa-circle-stop"></i> Mulai/Selesai</div>';
                 } else if (s.jenis === 'process') {
-                    shapeHtml = `<div class="flow-shape shape-process"><i class="fa-solid fa-square"></i> Proses</div>`;
+                    shapeHtml = '<div class="flow-shape shape-process"><i class="fa-solid fa-square"></i> Proses</div>';
                 } else if (s.jenis === 'decision') {
-                    shapeHtml = `<div class="flow-shape shape-decision">?<br><b>${s.q || 'Keputusan'}</b><br><span style="font-size:6.5px; color:#444;">[Ya / Tidak]</span></div>`;
+                    shapeHtml = '<div class="flow-shape shape-decision">?<br><b>' + (s.q || 'Keputusan') + '</b><br><span style="font-size:6.5px; color:#444;">[Ya / Tidak]</span></div>';
                 }
-                pelaksanaCells += `<td style="text-align: center; vertical-align: middle;">${shapeHtml}</td>`;
+                pelaksanaCells += '<td style="text-align: center; vertical-align: middle;">' + shapeHtml + '</td>';
             } else {
-                pelaksanaCells += `<td></td>`;
+                pelaksanaCells += '<td></td>';
             }
         });
 
-        bodyHtml += `<tr>
-            <td style="text-align: center;">${idx+1}</td>
-            <td>${s.kegiatan}</td>
-            ${pelaksanaCells}
-            <td style="font-size: 8px;">${s.kelengkapan || '-'}</td>
-            <td style="font-size: 8px; text-align: center;">${s.waktu || '-'}</td>
-            <td style="font-size: 8px;">${s.output || '-'}</td>
-            <td style="font-size: 8px;">${s.jenis==='decision' ? 'Ya: '+(s.ya||'-') : '-'}</td>
-        </tr>`;
+        bodyHtml += '<tr>' +
+            '<td style="text-align: center;">' + (idx+1) + '</td>' +
+            '<td>' + s.kegiatan + '</td>' +
+            pelaksanaCells +
+            '<td style="font-size: 8px;">' + (s.kelengkapan || '-') + '</td>' +
+            '<td style="font-size: 8px; text-align: center;">' + (s.waktu || '-') + '</td>' +
+            '<td style="font-size: 8px;">' + (s.output || '-') + '</td>' +
+            '<td style="font-size: 8px;">' + (s.jenis==='decision' ? 'Ya: '+(s.ya||'-') : '-') + '</td>' +
+        '</tr>';
     });
     document.getElementById('tbodySteps').innerHTML = bodyHtml;
 }

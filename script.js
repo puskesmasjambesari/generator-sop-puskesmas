@@ -16,10 +16,10 @@ var pelaksanaList = [
     "Dokter Jaga"
 ];
 var stepsList = [
-    { kegiatan: "Menerima berkas persyaratan dan meneliti kelengkapan identitas dari pemohon", pelaksana: "Petugas Pendaftaran", jenis: "start", panah: "one-way", waktu: "3 Menit", kelengkapan: "KTP / Rujukan", output: "Berkas diteliti", yaTarget: "", tdkTarget: "" },
-    { kegiatan: "Apakah kelengkapan persyaratan dan data rekam medis lengkap?", pelaksana: "Petugas Pendaftaran", jenis: "decision", panah: "two-way", waktu: "1 Menit", kelengkapan: "Berkas", output: "Keputusan", yaTarget: "6", tdkTarget: "2" },
-    { kegiatan: "Menginput data rekam medis ke dalam sistem SIMPUS dan membuat kartu rawat inap", pelaksana: "Petugas Pendaftaran", jenis: "process", panah: "one-way", waktu: "5 Menit", kelengkapan: "SIMPUS", output: "Surat Masuk", yaTarget: "", tdkTarget: "" },
-    { kegiatan: "Melakukan serah terima pasien dan berkas rekam medis ke ruang perawatan", pelaksana: "Perawat Rawat Inap", jenis: "start", panah: "one-way", waktu: "5 Menit", kelengkapan: "Berkas", output: "Pasien diterima", yaTarget: "", tdkTarget: "" }
+    { kegiatan: "Menerima berkas persyaratan dan meneliti kelengkapan identitas dari pemohon", pelaksana: "Petugas Pendaftaran", jenis: "start", panah: "one-way", waktu: "3 Menit", kelengkapan: "KTP / Rujukan", output: "Berkas diteliti", q1: "", target1: "", q2: "", target2: "" },
+    { kegiatan: "Apakah kelengkapan persyaratan dan data rekam medis lengkap?", pelaksana: "Petugas Pendaftaran", jenis: "decision", panah: "two-way", waktu: "1 Menit", kelengkapan: "Berkas", output: "Keputusan", q1: "Lengkap?", target1: "6", q2: "Belum?", target2: "2" },
+    { kegiatan: "Menginput data rekam medis ke dalam sistem SIMPUS dan membuat kartu rawat inap", pelaksana: "Petugas Pendaftaran", jenis: "process", panah: "one-way", waktu: "5 Menit", kelengkapan: "SIMPUS", output: "Surat Masuk", q1: "", target1: "", q2: "", target2: "" },
+    { kegiatan: "Melakukan serah terima pasien dan berkas rekam medis ke ruang perawatan", pelaksana: "Perawat Rawat Inap", jenis: "start", panah: "one-way", waktu: "5 Menit", kelengkapan: "Berkas", output: "Pasien diterima", q1: "", target1: "", q2: "", target2: "" }
 ];
 
 window.onload = function() {
@@ -107,8 +107,10 @@ function addStepRow() {
         waktu: "5 Menit", 
         kelengkapan: "Dokumen", 
         output: "Hasil",
-        yaTarget: "",
-        tdkTarget: ""
+        q1: "",
+        target1: "",
+        q2: "",
+        target2: ""
     });
     renderStepsBuilder();
     updatePreview();
@@ -151,17 +153,21 @@ function renderStepsBuilder() {
         html += '</div>';
         
         html += '<div class="form-row" style="margin-bottom:5px;">';
-        html += '<div><label>Konektor Panah</label><select onchange="stepsList[' + i + '].panah=this.value; updatePreview()">';
-        html += '<option value="one-way" ' + (s.panah === 'one-way' ? 'selected' : '') + '>Panah 1 Arah (Kebawah)</option>';
-        html += '<option value="two-way" ' + (s.panah === 'two-way' ? 'selected' : '') + '>Panah 2 Arah (Timbal Balik)</option>';
+        html += '<div><label>Konektor Panah Lurus</label><select onchange="stepsList[' + i + '].panah=this.value; updatePreview()">';
+        html += '<option value="one-way" ' + (s.panah === 'one-way' ? 'selected' : '') + '>Panah 1 Arah</option>';
+        html += '<option value="two-way" ' + (s.panah === 'two-way' ? 'selected' : '') + '>Panah 2 Arah</option>';
         html += '</select></div>';
         html += '<div><label>Waktu</label><input type="text" value="' + s.waktu + '" oninput="stepsList[' + i + '].waktu=this.value; updatePreview()"></div>';
         html += '</div>';
 
         if(s.jenis === 'decision') {
             html += '<div class="form-row" style="margin-bottom:5px;">';
-            html += '<div><label>Target Jika Ya (Ke Langkah No)</label><input type="text" value="' + (s.yaTarget || '') + '" oninput="stepsList[' + i + '].yaTarget=this.value; updatePreview()" placeholder="Misal: 6"></div>';
-            html += '<div><label>Target Jika Tidak (Ke Langkah No)</label><input type="text" value="' + (s.tdkTarget || '') + '" oninput="stepsList[' + i + '].tdkTarget=this.value; updatePreview()" placeholder="Misal: 2"></div>';
+            html += '<div><label>Pertanyaan 1 (Cabang A)</label><input type="text" value="' + (s.q1 || '') + '" oninput="stepsList[' + i + '].q1=this.value; updatePreview()" placeholder="Cth: Lengkap?"></div>';
+            html += '<div><label>Target Langkah 1 (Cth: 6 / Maju)</label><input type="text" value="' + (s.target1 || '') + '" oninput="stepsList[' + i + '].target1=this.value; updatePreview()" placeholder="No Langkah"></div>';
+            html += '</div>';
+            html += '<div class="form-row" style="margin-bottom:5px;">';
+            html += '<div><label>Pertanyaan 2 (Cabang B)</label><input type="text" value="' + (s.q2 || '') + '" oninput="stepsList[' + i + '].q2=this.value; updatePreview()" placeholder="Cth: Belum?"></div>';
+            html += '<div><label>Target Langkah 2 (Cth: 2 / Kembali)</label><input type="text" value="' + (s.target2 || '') + '" oninput="stepsList[' + i + '].target2=this.value; updatePreview()" placeholder="No Langkah"></div>';
             html += '</div>';
         }
         
@@ -184,6 +190,7 @@ function updatePreview() {
     var noSOP = document.getElementById('inpNoSOP').value;
     var tahun = document.getElementById('inpTahun').value;
     var tglBuat = document.getElementById('inpTglBuat').value;
+    var tglRevisi = document.getElementById('inpTglRevisi').value;
     var tglEfektif = document.getElementById('inpTglEfektif').value;
     var orientasi = document.getElementById('inpOrientasi').value;
 
@@ -194,9 +201,10 @@ function updatePreview() {
     document.getElementById('vPuskesmas').innerText = puskesmas;
     document.getElementById('vNoSOP').innerText = formatNoSOP;
     document.getElementById('vTglBuat').innerText = tglBuat;
+    document.getElementById('vTglRevisi').innerText = tglRevisi ? tglRevisi : '-';
     document.getElementById('vTglEfektif').innerText = tglEfektif;
     document.getElementById('vJudulSOP').innerText = judul.toUpperCase();
-    document.getElementById('vJabatanPengesah').innerText = 'Kepala ' + puskesmas;
+    document.getElementById('vJabatanPengesah').innerText = 'KEPALA ' + puskesmas.toUpperCase();
     document.getElementById('vNamaKa').innerText = kaPuskesmas;
     document.getElementById('vNipKa').innerText = 'NIP. ' + nipKa;
 
@@ -243,9 +251,29 @@ function updatePreview() {
 
                 var shapeHtml = '<div class="flow-shape ' + shapeClass + '"></div>';
 
+                // Logika Panah: Cek apakah pindah kolom (petugas lain) atau tetap di kolom yang sama
                 if (st < stepsList.length - 1) {
-                    var arrowType = sItem.panah || 'one-way';
-                    shapeHtml += '<div class="shape-connector ' + arrowType + '"></div>';
+                    var currIdx = pelaksanaList.indexOf(sItem.pelaksana);
+                    var nextItem = stepsList[st + 1];
+                    var nextIdx = pelaksanaList.indexOf(nextItem.pelaksana);
+
+                    if (nextIdx === currIdx) {
+                        var arrowType = sItem.panah || 'one-way';
+                        shapeHtml += '<div class="shape-connector ' + arrowType + '"></div>';
+                    } else {
+                        // Siku panah otomatis ke petugas lain (turun, horizontal, turun)
+                        var svgDir = (nextIdx > currIdx) ? 'right' : 'left';
+                        shapeHtml += '<div style="width:100%; height:20px; position:relative;">' +
+                            '<svg width="100%" height="20" style="position:absolute; top:0; left:0; overflow:visible;">' +
+                            '<defs><marker id="arrow-' + st + '" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#000"/></marker></defs>';
+                        
+                        if (svgDir === 'right') {
+                            shapeHtml += '<path d="M 50% 0 L 50% 8 L 100% 8 L 100% 20" stroke="#000" stroke-width="1.5" fill="none" marker-end="url(#arrow-' + st + ')"/>';
+                        } else {
+                            shapeHtml += '<path d="M 50% 0 L 50% 8 L 0 8 L 0 20" stroke="#000" stroke-width="1.5" fill="none" marker-end="url(#arrow-' + st + ')"/>';
+                        }
+                        shapeHtml += '</svg></div>';
+                    }
                 }
 
                 pelaksanaCells += '<td style="text-align: center; vertical-align: middle; padding:4px 2px;">' + shapeHtml + '</td>';
@@ -256,9 +284,9 @@ function updatePreview() {
 
         var ketText = '-';
         if (sItem.jenis === 'decision') {
-            var yaT = sItem.yaTarget ? 'Ya->Lgkh ' + sItem.yaTarget : '';
-            var tdkT = sItem.tdkTarget ? 'Tdak->Lgkh ' + sItem.tdkTarget : '';
-            ketText = [yaT, tdkT].filter(Boolean).join(', ') || 'Keputusan';
+            var q1Str = sItem.q1 ? (sItem.q1 + ' -> Lgkh ' + (sItem.target1 || '-')) : '';
+            var q2Str = sItem.q2 ? (sItem.q2 + ' -> Lgkh ' + (sItem.target2 || '-')) : '';
+            ketText = [q1Str, q2Str].filter(Boolean).join('; ') || 'Keputusan';
         }
 
         bodyHtml += '<tr>';

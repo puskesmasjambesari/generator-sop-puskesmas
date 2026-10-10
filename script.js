@@ -1,8 +1,7 @@
 // ==========================================================================
-// SCRIPT LOGIKA APLIKASI SOP GENERATOR - PERMENPANRB NO. 35/2012
+// SCRIPT LOGIKA APLIKASI SOP GENERATOR - UPTD PUSKESMAS JAMBESARI
 // ==========================================================================
 
-// State Data Utama
 let dasarHukumList = [
     "Undang-Undang Nomor 36 Tahun 2009 tentang Kesehatan",
     "Peraturan Menteri Kesehatan Nomor 43 Tahun 2019 tentang Puskesmas"
@@ -27,16 +26,12 @@ let stepsList = [
 
 let currentRole = 'user';
 
-// Inisialisasi saat halaman pertama kali dimuat
 window.onload = function() {
     renderTags();
     renderStepsBuilder();
     updatePreview();
 };
 
-// ==========================================
-// SISTEM AUTENTIKASI ADMIN / USER
-// ==========================================
 function openLoginModal() {
     document.getElementById('authModal').style.display = 'flex';
 }
@@ -66,9 +61,6 @@ function processLogin() {
     badge.style.color = (currentRole === 'admin') ? '#991b1b' : '#1e40af';
 }
 
-// ==========================================
-// MANAJEMEN TAGS (Dasar Hukum, Keterkaitan, Pelaksana)
-// ==========================================
 function addDasarHukum() {
     let val = document.getElementById('inpDasarHukum').value.trim();
     if(val) {
@@ -130,9 +122,6 @@ function renderTags() {
     ).join('');
 }
 
-// ==========================================
-// MANAJEMEN LANGKAH & FLOWCHART (5 Simbol Baku)
-// ==========================================
 function addStepRow() {
     stepsList.push({ 
         kegiatan: "Uraian kegiatan baru...", 
@@ -180,9 +169,6 @@ function renderStepsBuilder() {
     document.getElementById('stepsBuilderContainer').innerHTML = html;
 }
 
-// ==========================================
-// SINKRONISASI LIVE PREVIEW & RENDER TABEL A4
-// ==========================================
 function updatePreview() {
     let pemda = document.getElementById('cfgPemda').value;
     let dinas = document.getElementById('cfgDinas').value;
@@ -208,7 +194,7 @@ function updatePreview() {
     document.getElementById('cvrTahun').innerText = tahun;
     document.getElementById('cvrAlamat').innerHTML = `${alamat}<br>BONDOWOSO`;
 
-    // Update SK Pimpinan
+    // Update SK
     document.getElementById('skPemda').innerText = pemda;
     document.getElementById('skPuskesmasTitle').innerText = `KEPALA ${puskesmas}`;
     document.getElementById('skJudulText').innerText = judul;
@@ -218,7 +204,7 @@ function updatePreview() {
     document.getElementById('skNamaKa').innerText = kaPuskesmas;
     document.getElementById('skNipKa').innerText = nipKa;
 
-    // Update Header SOP Utama
+    // Update Header SOP
     document.getElementById('vPemda').innerText = pemda;
     document.getElementById('vDinas').innerText = dinas;
     document.getElementById('vPuskesmas').innerText = puskesmas;
@@ -238,23 +224,22 @@ function updatePreview() {
     document.getElementById('vPeralatan').innerText = document.getElementById('inpPeralatan').value;
     document.getElementById('vPencatatan').innerText = document.getElementById('InpPencatatan').value;
 
-    // Update Orientasi A4
+    // Orientasi A4
     let pages = document.querySelectorAll('.a4-page');
     pages.forEach(p => {
         p.className = `a4-page ${orientasi}`;
     });
 
-    // Update Tabel Flowchart Header Pelaksana
+    // Tabel Flowchart Pelaksana
     let thGroup = document.getElementById('thPelaksanaGroup');
     thGroup.setAttribute('colspan', pelaksanaList.length || 1);
     
     let subHead = '';
     pelaksanaList.forEach(p => {
-        subHead += `<th style="min-width: 90px; font-size:9px;">${p}</th>`;
+        subHead += `<th style="min-width: 85px; font-size:8.5px;">${p}</th>`;
     });
     document.getElementById('trHeadRow2').innerHTML = subHead;
 
-    // Render Baris Flowchart & Simbol Baku
     let bodyHtml = '';
     stepsList.forEach((s, idx) => {
         let pelaksanaCells = '';
@@ -266,7 +251,7 @@ function updatePreview() {
                 } else if (s.jenis === 'process') {
                     shapeHtml = `<div class="flow-shape shape-process"><i class="fa-solid fa-square"></i> Proses</div>`;
                 } else if (s.jenis === 'decision') {
-                    shapeHtml = `<div class="flow-shape shape-decision">?<br><b>${s.q || 'Keputusan'}</b><br><span style="font-size:7px; color:#444;">[Ya / Tidak]</span></div>`;
+                    shapeHtml = `<div class="flow-shape shape-decision">?<br><b>${s.q || 'Keputusan'}</b><br><span style="font-size:6.5px; color:#444;">[Ya / Tidak]</span></div>`;
                 }
                 pelaksanaCells += `<td style="text-align: center; vertical-align: middle;">${shapeHtml}</td>`;
             } else {

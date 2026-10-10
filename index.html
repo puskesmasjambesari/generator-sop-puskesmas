@@ -50,8 +50,10 @@
 
                     <div class="form-row">
                         <div class="form-group"><label>Tanggal Pembuatan</label><input type="date" id="inpTglBuat" value="2026-10-01" oninput="updatePreview()"></div>
-                        <div class="form-group"><label>Tanggal Efektif</label><input type="date" id="inpTglEfektif" value="2026-10-05" oninput="updatePreview()"></div>
+                        <div class="form-group"><label>Tanggal Revisi</label><input type="date" id="inpTglRevisi" value="" oninput="updatePreview()"></div>
                     </div>
+
+                    <div class="form-group"><label>Tanggal Efektif</label><input type="date" id="inpTglEfektif" value="2026-10-05" oninput="updatePreview()"></div>
 
                     <div class="form-group"><label>Orientasi Halaman Cetak</label>
                         <select id="inpOrientasi" onchange="updatePreview()">
@@ -119,7 +121,7 @@
                     </tr>
                     <tr>
                         <td class="meta-lbl">TGL. REVISI</td>
-                        <td class="meta-val">-</td>
+                        <td class="meta-val" id="vTglRevisi">-</td>
                     </tr>
                     <tr>
                         <td class="meta-lbl">TGL. EFEKTIF</td>
@@ -132,8 +134,8 @@
                         </td>
                         <td class="meta-lbl">DISAHKAN OLEH</td>
                         <td class="sig-cell">
-                            <div style="font-size: 8px;" id="vJabatanPengesah">Kepala UPTD Puskesmas Jambesari</div>
-                            <div style="height: 20px;"></div>
+                            <div style="font-size: 8px;" id="vJabatanPengesah">KEPALA UPTD PUSKESMAS JAMBESARI</div>
+                            <div style="height: 35px;"></div>
                             <div style="font-weight: bold; text-decoration: underline; font-size: 9px;" id="vNamaKa">drg.Noeri Rustianti</div>
                             <div style="font-size: 8px;" id="vNipKa">NIP. 19761018 200604 2 015</div>
                         </td>

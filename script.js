@@ -211,7 +211,7 @@ function updatePreview() {
         
         var headerHtml = '';
         if (pageIdx === 0) {
-            // Halaman 1: Memuat Header Instansi & Kotak Informasi Lengkap
+            // Halaman 1: Header Instansi lengkap + Kotak Informasi (Dasar Hukum, Kualifikasi, dll)
             headerHtml = '<table class="sop-header-table">' +
                 '<tr>' +
                     '<td rowspan="4" class="logo-cell"><img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 55px; height: auto; display: block; margin: 0 auto;" /></td>' +
@@ -273,7 +273,7 @@ function updatePreview() {
                 '</tr>' +
             '</table>';
         } else {
-            // Halaman Selanjutnya (Page 2+): Tanpa header instansi & tanpa kotak informasi, langsung ke tabel langkah berikutnya
+            // Halaman Selanjutnya (Page 2+): Tanpa header, tanpa kotak informasi, langsung ke tabel langkah lanjutan
             headerHtml = '<div style="font-size:9.5px; font-weight:bold; margin-bottom:8px; text-align:right;">SOP ' + judul.toUpperCase() + ' (Lanjutan Halaman ' + (pageIdx + 1) + ')</div>';
         }
 
@@ -307,7 +307,7 @@ function updatePreview() {
                     if (sItem.jenis === 'start') shapeClass = 'shape-start';
                     else if (sItem.jenis === 'decision') shapeClass = 'shape-decision';
 
-                    // Off-page connector segilima menghadap ke bawah untuk perpindahan halaman
+                    // Off-page connector segilima menghadap ke bawah otomatis di batas halaman
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
                         shapeClass = 'shape-offpage-down';
                     }
@@ -398,7 +398,7 @@ function drawConnectors() {
                 var rect1 = currShape.getBoundingClientRect();
                 var rect2 = nextShape.getBoundingClientRect();
 
-                // Presisi titik sambung panah tepat dari ujung bawah shape ke ujung atas shape berikutnya
+                // Koordinat SVG persis dari titik bawah shape ke titik atas shape berikutnya
                 var x1 = rect1.left + rect1.width / 2 - tableRect.left;
                 var y1 = rect1.bottom - tableRect.top;
                 var x2 = rect2.left + rect2.width / 2 - tableRect.left;

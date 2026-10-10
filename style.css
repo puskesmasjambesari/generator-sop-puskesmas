@@ -77,10 +77,11 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 
 .preview-area { display: flex; flex-direction: column; align-items: center; overflow-x: auto; background: #e2e8f0; padding: 2rem; border-radius: 12px; gap: 2rem; }
 
-/* KUNCI UKURAN KERTAS A4 PORTRAIT MUTLAK */
+/* KUNCI UKURAN KERTAS A4 PORTRAIT */
 .a4-page {
     background: white; 
     width: 210mm; 
+    min-height: 297mm; 
     height: 297mm; 
     max-height: 297mm;
     padding: 10mm; 
@@ -95,10 +96,17 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
     box-sizing: border-box;
 }
 
-.sop-header-table { width: 100%; border-collapse: collapse; margin-bottom: 0; font-family: Arial, sans-serif; table-layout: fixed; }
-.sop-header-table td { border: 1px solid #000; padding: 3px 4px; font-size: 8.5px; vertical-align: middle; }
+/* Halaman dengan langkah sedikit (2-3 langkah) mengambil tinggi setengah halaman */
+.a4-page.short-page {
+    height: auto !important;
+    min-height: 140mm !important;
+    max-height: 297mm !important;
+}
 
-/* Tabel tinggi adaptif (tidak memaksa stretch penuh jika langkah sedikit) */
+.sop-header-table { width: 100%; border-collapse: collapse; margin-bottom: 0; font-family: Arial, sans-serif; table-layout: fixed; }
+.sop-header-table td { border: 1px solid #000; padding: 3px 4px; font-size: 8.5px; vertical-align: middle; word-wrap: break-word; overflow-wrap: break-word; white-space: normal; }
+
+/* Tabel dengan Text Wrapping penuh agar tidak keluar batas */
 .sop-table { 
     flex: 0 1 auto; 
     width: 100%; 
@@ -107,7 +115,16 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
     font-family: Arial, sans-serif; 
     table-layout: fixed; 
 }
-.sop-table th, .sop-table td { border: 1px solid #000; padding: 3px 4px; font-size: 8.5px; vertical-align: middle; }
+.sop-table th, .sop-table td { 
+    border: 1px solid #000; 
+    padding: 3px 4px; 
+    font-size: 8.5px; 
+    vertical-align: middle; 
+    word-wrap: break-word; 
+    word-break: break-word; 
+    overflow-wrap: break-word; 
+    white-space: normal; 
+}
 
 .meta-lbl { background: #f0f0f0; font-weight: bold; width: 90px; font-size: 7.5px; }
 .meta-val { font-size: 7.5px; }
@@ -135,6 +152,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
     body { background: white; }
     .main-container { display: block; padding: 0; margin: 0; }
     .preview-area { background: white; padding: 0; border-radius: 0; gap: 0; }
-    .a4-page { box-shadow: none; margin: 0; width: 100% !important; height: 100vh; max-height: none; padding: 8mm; page-break-after: always; display: flex; flex-direction: column; position: relative !important; overflow: visible; }
-    @page { size: portrait; margin: 5mm; }
+    .a4-page { box-shadow: none; margin: 0; width: 100% !important; min-height: 297mm; height: 297mm; max-height: none; padding: 10mm; page-break-after: always; display: flex; flex-direction: column; position: relative !important; overflow: visible; }
+    .a4-page.short-page { height: auto !important; min-height: 140mm !important; }
+    @page { size: portrait; margin: 0; }
 }

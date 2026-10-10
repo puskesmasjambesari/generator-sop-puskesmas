@@ -17,7 +17,7 @@ var pelaksanaList = [
 ];
 var stepsList = [
     { kegiatan: "Menerima berkas persyaratan dan meneliti kelengkapan identitas dari pemohon", pelaksana: "Petugas Pendaftaran", jenis: "start", waktu: "3 Menit", kelengkapan: "KTP / Rujukan", output: "Berkas diteliti", q1: "", target1: "", q2: "", target2: "" },
-    { kegiatan: "Apakah kelengkapan persyaratan dan data rekam medis lengkap?", pelaksana: "Petugas Pendaftaran", jenis: "decision", waktu: "1 Menit", kelengkapan: "Berkas", output: "Keputusan", q1: "Ya", target1: "6", q2: "Tidak", target2: "2" },
+    { kegiatan: "Apakah kelengkapan persyaratan dan data rekam medis lengkap?", pelaksana: "Petugas Pendaftaran", jenis: "decision", waktu: "1 Menit", kelengkapan: "Berkas", output: "Keputusan", q1: "Ya", target1: "", q2: "Tidak", target2: "" },
     { kegiatan: "Menginput data rekam medis ke dalam sistem SIMPUS dan membuat kartu rawat inap", pelaksana: "Petugas Pendaftaran", jenis: "process", waktu: "5 Menit", kelengkapan: "SIMPUS", output: "Surat Masuk", q1: "", target1: "", q2: "", target2: "" },
     { kegiatan: "Melakukan serah terima pasien dan berkas rekam medis ke ruang perawatan", pelaksana: "Perawat Rawat Inap", jenis: "start", waktu: "5 Menit", kelengkapan: "Berkas", output: "Pasien diterima", q1: "", target1: "", q2: "", target2: "" }
 ];
@@ -159,11 +159,11 @@ function renderStepsBuilder() {
         if(s.jenis === 'decision') {
             html += '<div class="form-row" style="margin-bottom:5px;">';
             html += '<div><label>Label Pilihan 1 (Cth: Ya)</label><input type="text" value="' + (s.q1 || '') + '" oninput="stepsList[' + i + '].q1=this.value; updatePreview()" placeholder="Cth: Ya"></div>';
-            html += '<div><label>Target Langkah Pilihan 1 (No. Urut)</label><input type="text" value="' + (s.target1 || '') + '" oninput="stepsList[' + i + '].target1=this.value; updatePreview()" placeholder="Cth: 6"></div>';
+            html += '<div><label>Target Pilihan 1 (Kosong = Langkah Selanjutnya)</label><input type="text" value="' + (s.target1 || '') + '" oninput="stepsList[' + i + '].target1=this.value; updatePreview()" placeholder="Default: Langkah + 1"></div>';
             html += '</div>';
             html += '<div class="form-row" style="margin-bottom:5px;">';
             html += '<div><label>Label Pilihan 2 (Cth: Tidak)</label><input type="text" value="' + (s.q2 || '') + '" oninput="stepsList[' + i + '].q2=this.value; updatePreview()" placeholder="Cth: Tidak"></div>';
-            html += '<div><label>Target Langkah Pilihan 2 (No. Urut)</label><input type="text" value="' + (s.target2 || '') + '" oninput="stepsList[' + i + '].target2=this.value; updatePreview()" placeholder="Cth: 2"></div>';
+            html += '<div><label>Target Pilihan 2 (Kosong = Langkah Sebelumnya)</label><input type="text" value="' + (s.target2 || '') + '" oninput="stepsList[' + i + '].target2=this.value; updatePreview()" placeholder="Default: Langkah - 1"></div>';
             html += '</div>';
         }
         
@@ -211,10 +211,10 @@ function updatePreview() {
         
         var headerHtml = '';
         if (pageIdx === 0) {
-            // Kotak header menyatu tanpa garis pemisah vertikal maupun horizontal antara logo dan teks instansi
+            // Kotak header instansi menggunakan rowspan="5" tanpa garis pemisah internal sama sekali
             headerHtml = '<table class="sop-header-table">' +
                 '<tr>' +
-                    '<td rowspan="4" style="border: 1px solid #000; text-align: center; vertical-align: middle; padding: 6px;">' +
+                    '<td rowspan="5" style="border: 1px solid #000; text-align: center; vertical-align: middle; padding: 6px;">' +
                         '<img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 42px; height: auto; display: block; margin: 0 auto 3px auto;" />' +
                         '<div style="font-weight: bold; font-size: 9px; line-height: 1.2;">' + pemda + '<br>' + dinas + '<br>' + puskesmas + '</div>' +
                     '</td>' +
@@ -225,7 +225,6 @@ function updatePreview() {
                 '<tr><td class="meta-lbl">TGL. REVISI</td><td class="meta-val">' + (tglRevisi ? tglRevisi : '-') + '</td></tr>' +
                 '<tr><td class="meta-lbl">TGL. EFEKTIF</td><td class="meta-val">' + tglEfektif + '</td></tr>' +
                 '<tr>' +
-                    '<td style="border: 1px solid #000; padding: 0;"></td>' +
                     '<td class="meta-lbl">DISAHKAN OLEH</td>' +
                     '<td class="sig-cell">' +
                         '<div style="font-size: 7.5px;">KEPALA ' + puskesmas.toUpperCase() + '</div>' +
@@ -307,7 +306,7 @@ function updatePreview() {
                         shapeHtml = '<div class="flow-shape shape-decision" id="shape-' + globalIdx + '"></div>';
                     }
 
-                    // Jika di batas halaman, gunakan segi lima off-page connector
+                    // Segi lima off-page connector murni tanpa anak panah
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
                         shapeHtml = '<div style="display:flex; justify-content:center; align-items:center; margin:2px auto;" id="shape-' + globalIdx + '">' +
                             '<svg width="20" height="15" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
@@ -326,9 +325,11 @@ function updatePreview() {
 
             var ketText = '-';
             if (sItem.jenis === 'decision') {
-                var q1Str = sItem.q1 ? (sItem.q1 + ' → Lgkh ' + (sItem.target1 || '-')) : '';
-                var q2Str = sItem.q2 ? (sItem.q2 + ' → Lgkh ' + (sItem.target2 || '-')) : '';
-                ketText = [q1Str, q2Str].filter(Boolean).join('; ') || 'Keputusan';
+                var target1Val = (sItem.target1 !== undefined && sItem.target1 !== '' && !isNaN(sItem.target1)) ? parseInt(sItem.target1) : (globalIdx + 2);
+                var target2Val = (sItem.target2 !== undefined && sItem.target2 !== '' && !isNaN(sItem.target2)) ? parseInt(sItem.target2) : (globalIdx);
+                var q1Str = (sItem.q1 ? sItem.q1 : 'Ya') + ' → Lgkh ' + target1Val;
+                var q2Str = (sItem.q2 ? sItem.q2 : 'Tidak') + ' → Lgkh ' + target2Val;
+                ketText = q1Str + '; ' + q2Str;
             }
 
             tableHtml += '<tr>' +
@@ -392,6 +393,9 @@ function drawConnectors() {
             var el2 = document.getElementById('shape-' + toIdx);
             if (!el1 || !el2) return;
 
+            // Jangan gambar panah jika elemen adalah off-page connector (segi lima)
+            if (el1.querySelector('polygon') || el2.querySelector('polygon')) return;
+
             var r1 = el1.getBoundingClientRect();
             var r2 = el2.getBoundingClientRect();
 
@@ -440,31 +444,21 @@ function drawConnectors() {
         for (var i = startIdx; i < endIdx; i++) {
             var s = stepsList[i];
             
-            // Hentikan penarikan panah dari langkah terakhir halaman jika menyeberang ke halaman berikutnya (off-page connector)
-            if (i === endIdx - 1 && p < totalPages - 1) {
-                continue;
-            }
-            // Hentikan penarikan panah ke langkah pertama halaman jika berasal dari halaman sebelumnya
-            if (i === startIdx && p > 0) {
-                continue;
-            }
+            if (i === endIdx - 1 && p < totalPages - 1) continue;
+            if (i === startIdx && p > 0) continue;
 
             if (s.jenis === 'decision') {
-                var hasExplicitTarget = false;
-                if (s.target1 !== undefined && s.target1 !== '' && !isNaN(s.target1)) {
-                    var t1 = parseInt(s.target1) - 1;
-                    var lbl1 = s.q1 ? s.q1.trim() : 'Ya';
+                // Default logika: Ya -> langkah selanjutnya (i + 1), Tidak -> langkah sebelumnya (i - 1)
+                var t1 = (s.target1 !== undefined && s.target1 !== '' && !isNaN(s.target1)) ? parseInt(s.target1) - 1 : i + 1;
+                var lbl1 = (s.q1 ? s.q1 : 'Ya').trim();
+                if (t1 >= 0 && t1 < stepsList.length) {
                     drawSinglePath(i, t1, lbl1);
-                    hasExplicitTarget = true;
                 }
-                if (s.target2 !== undefined && s.target2 !== '' && !isNaN(s.target2)) {
-                    var t2 = parseInt(s.target2) - 1;
-                    var lbl2 = s.q2 ? s.q2.trim() : 'Tidak';
+
+                var t2 = (s.target2 !== undefined && s.target2 !== '' && !isNaN(s.target2)) ? parseInt(s.target2) - 1 : Math.max(0, i - 1);
+                var lbl2 = (s.q2 ? s.q2 : 'Tidak').trim();
+                if (t2 >= 0 && t2 < stepsList.length) {
                     drawSinglePath(i, t2, lbl2);
-                    hasExplicitTarget = true;
-                }
-                if (!hasExplicitTarget && i + 1 < stepsList.length) {
-                    drawSinglePath(i, i + 1, null);
                 }
             } else {
                 if (i + 1 < stepsList.length) {

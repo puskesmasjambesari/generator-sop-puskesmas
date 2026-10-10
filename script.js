@@ -209,71 +209,67 @@ function updatePreview() {
         var pageDiv = document.createElement('div');
         pageDiv.className = 'a4-page ' + orientasi;
         
-        var headerHtml = '';
-        if (pageIdx === 0) {
-            headerHtml = '<table class="sop-header-table">' +
-                '<tr>' +
-                    '<td rowspan="4" class="logo-cell"><img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 55px; height: auto; display: block; margin: 0 auto;" /></td>' +
-                    '<td rowspan="4" class="instansi-cell">' +
-                        '<div>' + pemda + '</div>' +
-                        '<div>' + dinas + '</div>' +
-                        '<div style="font-size: 11px; margin-top:2px;">' + puskesmas + '</div>' +
-                    '</td>' +
-                    '<td class="meta-lbl">NOMOR SOP</td>' +
-                    '<td class="meta-val">' + formatNoSOP + '</td>' +
-                '</tr>' +
-                '<tr><td class="meta-lbl">TGL. PEMBUATAN</td><td class="meta-val">' + tglBuat + '</td></tr>' +
-                '<tr><td class="meta-lbl">TGL. REVISI</td><td class="meta-val">' + (tglRevisi ? tglRevisi : '-') + '</td></tr>' +
-                '<tr><td class="meta-lbl">TGL. EFEKTIF</td><td class="meta-val">' + tglEfektif + '</td></tr>' +
-                '<tr>' +
-                    '<td colspan="2" class="sop-title-box">' +
-                        '<div style="font-size: 8px; color: #555;">STANDAR OPERASIONAL PROSEDUR (SOP)</div>' +
-                        '<div style="font-size: 11px; font-weight: bold; margin-top: 2px;">' + judul.toUpperCase() + '</div>' +
-                    '</td>' +
-                    '<td class="meta-lbl">DISAHKAN OLEH</td>' +
-                    '<td class="sig-cell">' +
-                        '<div style="font-size: 8px;">KEPALA ' + puskesmas.toUpperCase() + '</div>' +
-                        '<div style="height: 35px;"></div>' +
-                        '<div style="font-weight: bold; text-decoration: underline; font-size: 9px;">' + kaPuskesmas + '</div>' +
-                        '<div style="font-size: 8px;">NIP. ' + nipKa + '</div>' +
-                    '</td>' +
-                '</tr>' +
-            '</table>' +
-            '<table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">' +
-                '<tr>' +
-                    '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
-                        '<div class="section-box-title">DASAR HUKUM</div>' +
-                        '<ol style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + htmlDasarList + '</ol>' +
-                    '</td>' +
-                    '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
-                        '<div class="section-box-title">KUALIFIKASI PELAKSANA</div>' +
-                        '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + kualifikasi + '</div>' +
-                    '</td>' +
-                '</tr>' +
-                '<tr>' +
-                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
-                        '<div class="section-box-title">KETERKAITAN</div>' +
-                        '<ul style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + htmlKetList + '</ul>' +
-                    '</td>' +
-                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
-                        '<div class="section-box-title">PERALATAN / PERLENGKAPAN</div>' +
-                        '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + peralatan + '</div>' +
-                    '</td>' +
-                '</tr>' +
-                '<tr>' +
-                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
-                        '<div class="section-box-title">PERINGATAN</div>' +
-                        '<div style="font-size: 8.5px; line-height: 1.3;">' + peringatan + '</div>' +
-                    '</td>' +
-                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
-                        '<div class="section-box-title">PENCATATAN DAN PENDATAAN</div>' +
-                        '<div style="font-size: 8.5px; line-height: 1.3;">' + pencatatan + '</div>' +
-                    '</td>' +
-                '</tr>' +
-            '</table>';
-        } else {
-            headerHtml = '<div style="font-size:10px; font-weight:bold; margin-bottom:5px; text-align:right;">(Lanjutan Halaman ' + (pageIdx + 1) + ' — ' + judul.toUpperCase() + ')</div>';
-        }
+        // Tabel Header & Kolom Informasi Pendukung (Disusun melintang di atas tabel flowchart)
+        var headerHtml = '<table class="sop-header-table">' +
+            '<tr>' +
+                '<td rowspan="4" class="logo-cell"><img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 55px; height: auto; display: block; margin: 0 auto;" /></td>' +
+                '<td rowspan="4" class="instansi-cell">' +
+                    '<div>' + pemda + '</div>' +
+                    '<div>' + dinas + '</div>' +
+                    '<div style="font-size: 11px; margin-top:2px;">' + puskesmas + '</div>' +
+                '</td>' +
+                '<td class="meta-lbl">NOMOR SOP</td>' +
+                '<td class="meta-val">' + formatNoSOP + '</td>' +
+            '</tr>' +
+            '<tr><td class="meta-lbl">TGL. PEMBUATAN</td><td class="meta-val">' + tglBuat + '</td></tr>' +
+            '<tr><td class="meta-lbl">TGL. REVISI</td><td class="meta-val">' + (tglRevisi ? tglRevisi : '-') + '</td></tr>' +
+            '<tr><td class="meta-lbl">TGL. EFEKTIF</td><td class="meta-val">' + tglEfektif + '</td></tr>' +
+            '<tr>' +
+                '<td colspan="2" class="sop-title-box">' +
+                    '<div style="font-size: 8px; color: #555;">STANDAR OPERASIONAL PROSEDUR (SOP)</div>' +
+                    '<div style="font-size: 11px; font-weight: bold; margin-top: 2px;">SOP ' + judul.toUpperCase() + '</div>' +
+                '</td>' +
+                '<td class="meta-lbl">DISAHKAN OLEH</td>' +
+                '<td class="sig-cell">' +
+                    '<div style="font-size: 8px;">KEPALA ' + puskesmas.toUpperCase() + '</div>' +
+                    '<div style="height: 35px;"></div>' +
+                    '<div style="font-weight: bold; text-decoration: underline; font-size: 9px;">' + kaPuskesmas + '</div>' +
+                    '<div style="font-size: 8px;">NIP. ' + nipKa + '</div>' +
+                '</td>' +
+            '</tr>' +
+        '</table>' +
+        '<table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">' +
+            '<tr>' +
+                '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                    '<div class="section-box-title">DASAR HUKUM</div>' +
+                    '<ol style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + htmlDasarList + '</ol>' +
+                '</td>' +
+                '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                    '<div class="section-box-title">KUALIFIKASI PELAKSANA</div>' +
+                    '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + kualifikasi + '</div>' +
+                '</td>' +
+            '</tr>' +
+            '<tr>' +
+                '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                    '<div class="section-box-title">KETERKAITAN</div>' +
+                    '<ul style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + htmlKetList + '</ul>' +
+                '</td>' +
+                '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                    '<div class="section-box-title">PERALATAN / PERLENGKAPAN</div>' +
+                    '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + peralatan + '</div>' +
+                '</td>' +
+            '</tr>' +
+            '<tr>' +
+                '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                    '<div class="section-box-title">PERINGATAN</div>' +
+                    '<div style="font-size: 8.5px; line-height: 1.3;">' + peringatan + '</div>' +
+                '</td>' +
+                '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                    '<div class="section-box-title">PENCATATAN DAN PENDATAAN</div>' +
+                    '<div style="font-size: 8.5px; line-height: 1.3;">' + pencatatan + '</div>' +
+                '</td>' +
+            '</tr>' +
+        '</table>';
 
         var pelaksanaTh = '';
         for (var h = 0; h < pelaksanaList.length; h++) {
@@ -281,7 +277,7 @@ function updatePreview() {
         }
 
         var tableHtml = headerHtml +
-            '<table class="sop-table" style="position:relative;">' +
+            '<table class="sop-table" style="position:relative;" id="table-page-' + pageIdx + '">' +
             '<thead>' +
                 '<tr>' +
                     '<th rowspan="2" style="width: 25px;">No</th>' +
@@ -304,6 +300,15 @@ function updatePreview() {
                     var shapeClass = 'shape-process';
                     if (sItem.jenis === 'start') shapeClass = 'shape-start';
                     else if (sItem.jenis === 'decision') shapeClass = 'shape-decision';
+
+                    // Jika ini langkah terakhir di halaman dan ada halaman berikutnya, gunakan off-page connector segilima menghadap ke bawah
+                    if (st === pageSteps.length - 1 && pageIdx < totalPages - 1) {
+                        shapeClass = 'shape-offpage-end';
+                    }
+                    // Jika ini langkah pertama di halaman bukan halaman pertama, gunakan off-page connector segilima menghadap ke atas
+                    else if (st === 0 && pageIdx > 0) {
+                        shapeClass = 'shape-offpage-start';
+                    }
 
                     pelaksanaCells += '<td style="text-align: center; vertical-align: middle; padding:6px 2px;" data-step-idx="' + globalIdx + '" data-pelaksana-idx="' + pc + '">' +
                         '<div class="flow-shape ' + shapeClass + '" id="shape-' + globalIdx + '"></div>' +
@@ -332,13 +337,6 @@ function updatePreview() {
         }
 
         tableHtml += '</tbody></table>';
-
-        if (pageIdx < totalPages - 1) {
-            tableHtml += '<div style="text-align:center; font-size:9px; font-weight:bold; margin-top:5px; border:1px dashed #000; padding:3px; background:#fafafa;">' +
-                '<i class="fa-solid fa-arrow-down"></i> BERSAMBUNG KE HALAMAN ' + (pageIdx + 2) + ' (OFF-PAGE CONNECTOR) <i class="fa-solid fa-arrow-down"></i>' +
-            '</div>';
-        }
-
         pageDiv.innerHTML = tableHtml;
         container.appendChild(pageDiv);
     }
@@ -347,73 +345,83 @@ function updatePreview() {
 }
 
 function drawConnectors() {
-    var oldSvg = document.getElementById('connectorSvgOverlay');
-    if (oldSvg) oldSvg.remove();
-
-    var firstTable = document.querySelector('.sop-table');
-    if (!firstTable) return;
-
-    var svgNS = "http://www.w3.org/2000/svg";
-    var svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute('id', 'connectorSvgOverlay');
-    svg.style.position = 'absolute';
-    svg.style.top = '0';
-    svg.style.left = '0';
-    svg.style.width = '100%';
-    svg.style.height = '100%';
-    svg.style.pointerEvents = 'none';
-    svg.style.zIndex = '10';
-
-    var defs = document.createElementNS(svgNS, "defs");
-    var marker = document.createElementNS(svgNS, "marker");
-    marker.setAttribute('id', 'arrowhead');
-    marker.setAttribute('markerWidth', '6');
-    marker.setAttribute('markerHeight', '6');
-    marker.setAttribute('refX', '5');
-    marker.setAttribute('refY', '3');
-    marker.setAttribute('orient', 'auto');
-    var markerPath = document.createElementNS(svgNS, "path");
-    markerPath.setAttribute('d', 'M0,0 L6,3 L0,6 Z');
-    markerPath.setAttribute('fill', '#000');
-    marker.appendChild(markerPath);
-    defs.appendChild(marker);
-    svg.appendChild(defs);
-
-    for (var i = 0; i < stepsList.length - 1; i++) {
-        var currShape = document.getElementById('shape-' + i);
-        var nextShape = document.getElementById('shape-' + (i + 1));
-
-        if (currShape && nextShape) {
-            var rect1 = currShape.getBoundingClientRect();
-            var rect2 = nextShape.getBoundingClientRect();
-            var tableRect = firstTable.getBoundingClientRect();
-
-            var x1 = rect1.left + rect1.width / 2 - tableRect.left;
-            var y1 = rect1.bottom - tableRect.top;
-            var x2 = rect2.left + rect2.width / 2 - tableRect.left;
-            var y2 = rect2.top - tableRect.top;
-
-            var path = document.createElementNS(svgNS, "path");
-            var dAttr = "";
-
-            if (Math.abs(x1 - x2) < 3) {
-                dAttr = "M " + x1 + " " + y1 + " L " + x2 + " " + y2;
-            } else {
-                var midY = y1 + (y2 - y1) / 2;
-                dAttr = "M " + x1 + " " + y1 + " L " + x1 + " " + midY + " L " + x2 + " " + midY + " L " + x2 + " " + y2;
-            }
-
-            path.setAttribute('d', dAttr);
-            path.setAttribute('stroke', '#000');
-            path.setAttribute('stroke-width', '1.5');
-            path.setAttribute('fill', 'none');
-            path.setAttribute('marker-end', 'url(#arrowhead)');
-            svg.appendChild(path);
-        }
+    var oldSvgs = document.querySelectorAll('.connectorSvgOverlay');
+    for (var o = 0; o < oldSvgs.length; o++) {
+        oldSvgs[o].remove();
     }
 
-    if (firstTable.parentElement) {
-        firstTable.parentElement.style.position = 'relative';
-        firstTable.parentElement.appendChild(svg);
+    var tables = document.querySelectorAll('.sop-table');
+    for (var t = 0; t < tables.length; t++) {
+        var table = tables[t];
+        var pageDiv = table.closest('.a4-page');
+        if (!pageDiv) continue;
+
+        var svgNS = "http://www.w3.org/2000/svg";
+        var svg = document.createElementNS(svgNS, "svg");
+        svg.className.baseVal = 'connectorSvgOverlay';
+        svg.style.position = 'absolute';
+        svg.style.top = '0';
+        svg.style.left = '0';
+        svg.style.width = '100%';
+        svg.style.height = '100%';
+        svg.style.pointerEvents = 'none';
+        svg.style.zIndex = '10';
+
+        var defs = document.createElementNS(svgNS, "defs");
+        var marker = document.createElementNS(svgNS, "marker");
+        marker.setAttribute('id', 'arrowhead-' + t);
+        marker.setAttribute('markerWidth', '6');
+        marker.setAttribute('markerHeight', '6');
+        marker.setAttribute('refX', '5');
+        marker.setAttribute('refY', '3');
+        marker.setAttribute('orient', 'auto');
+        var markerPath = document.createElementNS(svgNS, "path");
+        markerPath.setAttribute('d', 'M0,0 L6,3 L0,6 Z');
+        markerPath.setAttribute('fill', '#000');
+        marker.appendChild(markerPath);
+        defs.appendChild(marker);
+        svg.appendChild(defs);
+
+        var tableRect = table.getBoundingClientRect();
+        var rows = table.querySelectorAll('tbody tr');
+
+        for (var r = 0; r < rows.length - 1; r++) {
+            // Menghubungkan baris r ke baris r+1 dalam halaman yang sama
+            var currTr = rows[r];
+            var nextTr = rows[r + 1];
+
+            var currShape = currTr.querySelector('.flow-shape');
+            var nextShape = nextTr.querySelector('.flow-shape');
+
+            if (currShape && nextShape) {
+                var rect1 = currShape.getBoundingClientRect();
+                var rect2 = nextShape.getBoundingClientRect();
+
+                var x1 = rect1.left + rect1.width / 2 - tableRect.left;
+                var y1 = rect1.bottom - tableRect.top;
+                var x2 = rect2.left + rect2.width / 2 - tableRect.left;
+                var y2 = rect2.top - tableRect.top;
+
+                var path = document.createElementNS(svgNS, "path");
+                var dAttr = "";
+
+                if (Math.abs(x1 - x2) < 3) {
+                    dAttr = "M " + x1 + " " + y1 + " L " + x2 + " " + y2;
+                } else {
+                    var midY = y1 + (y2 - y1) / 2;
+                    dAttr = "M " + x1 + " " + y1 + " L " + x1 + " " + midY + " L " + x2 + " " + midY + " L " + x2 + " " + y2;
+                }
+
+                path.setAttribute('d', dAttr);
+                path.setAttribute('stroke', '#000');
+                path.setAttribute('stroke-width', '1.5');
+                path.setAttribute('fill', 'none');
+                path.setAttribute('marker-end', 'url(#arrowhead-' + t + ')');
+                svg.appendChild(path);
+            }
+        }
+
+        pageDiv.style.position = 'relative';
+        pageDiv.appendChild(svg);
     }
 }

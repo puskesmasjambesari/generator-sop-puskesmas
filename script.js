@@ -185,7 +185,6 @@ function updatePreview() {
     var tglBuat = document.getElementById('inpTglBuat').value;
     var tglRevisi = document.getElementById('inpTglRevisi').value;
     var tglEfektif = document.getElementById('inpTglEfektif').value;
-    var orientasi = document.getElementById('inpOrientasi').value;
 
     var formatNoSOP = '400.7/' + noSOP + '/SOP/430.9.3.15/' + tahun;
     var peringatan = document.getElementById('inpPeringatan').value;
@@ -207,16 +206,16 @@ function updatePreview() {
         var pageSteps = stepsList.slice(startIdx, endIdx);
 
         var pageDiv = document.createElement('div');
-        pageDiv.className = 'a4-page ' + orientasi;
+        pageDiv.className = 'a4-page';
         
         var headerHtml = '';
         if (pageIdx === 0) {
             // Kotak header instansi menggunakan rowspan="5" tanpa garis pemisah internal sama sekali
             headerHtml = '<table class="sop-header-table">' +
                 '<tr>' +
-                    '<td rowspan="5" style="border: 1px solid #000; text-align: center; vertical-align: middle; padding: 6px;">' +
-                        '<img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 42px; height: auto; display: block; margin: 0 auto 3px auto;" />' +
-                        '<div style="font-weight: bold; font-size: 9px; line-height: 1.2;">' + pemda + '<br>' + dinas + '<br>' + puskesmas + '</div>' +
+                    '<td rowspan="5" style="border: 1px solid #000; text-align: center; vertical-align: middle; padding: 6px; width: 42%;"> ' +
+                        '<img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 38px; height: auto; display: block; margin: 0 auto 3px auto;" />' +
+                        '<div style="font-weight: bold; font-size: 8.5px; line-height: 1.2;">' + pemda + '<br>' + dinas + '<br>' + puskesmas + '</div>' +
                     '</td>' +
                     '<td class="meta-lbl">NOMOR SOP</td>' +
                     '<td class="meta-val">' + formatNoSOP + '</td>' +
@@ -227,45 +226,45 @@ function updatePreview() {
                 '<tr>' +
                     '<td class="meta-lbl">DISAHKAN OLEH</td>' +
                     '<td class="sig-cell">' +
-                        '<div style="font-size: 7.5px;">KEPALA ' + puskesmas.toUpperCase() + '</div>' +
-                        '<div style="height: 25px;"></div>' +
-                        '<div style="font-weight: bold; text-decoration: underline; font-size: 8.5px;">' + kaPuskesmas + '</div>' +
-                        '<div style="font-size: 7.5px;">NIP. ' + nipKa + '</div>' +
+                        '<div style="font-size: 7px;">KEPALA ' + puskesmas.toUpperCase() + '</div>' +
+                        '<div style="height: 20px;"></div>' +
+                        '<div style="font-weight: bold; text-decoration: underline; font-size: 8px;">' + kaPuskesmas + '</div>' +
+                        '<div style="font-size: 7px;">NIP. ' + nipKa + '</div>' +
                     '</td>' +
                 '</tr>' +
             '</table>' +
             '<div class="sop-title-box" style="margin-top: -1px;">' +
                 'SOP ' + judul.toUpperCase() +
             '</div>' +
-            '<table style="width: 100%; border-collapse: collapse; margin-bottom: 6px; margin-top: -1px;">' +
+            '<table style="width: 100%; border-collapse: collapse; margin-bottom: 4px; margin-top: -1px;">' +
                 '<tr>' +
                     '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 3px 4px;">' +
                         '<div class="section-box-title">DASAR HUKUM</div>' +
-                        '<ol style="padding-left: 12px; font-size: 8px; line-height: 1.2; margin: 0;">' + htmlDasarList + '</ol>' +
+                        '<ol style="padding-left: 12px; font-size: 7.5px; line-height: 1.2; margin: 0;">' + htmlDasarList + '</ol>' +
                     '</td>' +
                     '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 3px 4px;">' +
                         '<div class="section-box-title">KUALIFIKASI PELAKSANA</div>' +
-                        '<div style="font-size: 8px; white-space: pre-line; line-height: 1.2;">' + kualifikasi + '</div>' +
+                        '<div style="font-size: 7.5px; white-space: pre-line; line-height: 1.2;">' + kualifikasi + '</div>' +
                     '</td>' +
                 '</tr>' +
                 '<tr>' +
                     '<td style="vertical-align: top; border: 1px solid #000; padding: 3px 4px;">' +
                         '<div class="section-box-title">KETERKAITAN</div>' +
-                        '<ul style="padding-left: 12px; font-size: 8px; line-height: 1.2; margin: 0;">' + htmlKetList + '</ul>' +
+                        '<ul style="padding-left: 12px; font-size: 7.5px; line-height: 1.2; margin: 0;">' + htmlKetList + '</ul>' +
                     '</td>' +
                     '<td style="vertical-align: top; border: 1px solid #000; padding: 3px 4px;">' +
                         '<div class="section-box-title">PERALATAN / PERLENGKAPAN</div>' +
-                        '<div style="font-size: 8px; white-space: pre-line; line-height: 1.2;">' + peralatan + '</div>' +
+                        '<div style="font-size: 7.5px; white-space: pre-line; line-height: 1.2;">' + peralatan + '</div>' +
                     '</td>' +
                 '</tr>' +
                 '<tr>' +
                     '<td style="vertical-align: top; border: 1px solid #000; padding: 3px 4px;">' +
                         '<div class="section-box-title">PERINGATAN</div>' +
-                        '<div style="font-size: 8px; line-height: 1.2;">' + peringatan + '</div>' +
+                        '<div style="font-size: 7.5px; line-height: 1.2;">' + peringatan + '</div>' +
                     '</td>' +
                     '<td style="vertical-align: top; border: 1px solid #000; padding: 3px 4px;">' +
                         '<div class="section-box-title">PENCATATAN DAN PENDATAAN</div>' +
-                        '<div style="font-size: 8px; line-height: 1.2;">' + pencatatan + '</div>' +
+                        '<div style="font-size: 7.5px; line-height: 1.2;">' + pencatatan + '</div>' +
                     '</td>' +
                 '</tr>' +
             '</table>';
@@ -275,7 +274,7 @@ function updatePreview() {
 
         var pelaksanaTh = '';
         for (var h = 0; h < pelaksanaList.length; h++) {
-            pelaksanaTh += '<th style="min-width: 75px; font-size:8px;">' + pelaksanaList[h] + '</th>';
+            pelaksanaTh += '<th style="min-width: 55px; font-size:8px;">' + pelaksanaList[h] + '</th>';
         }
 
         var tableHtml = headerHtml +
@@ -283,12 +282,12 @@ function updatePreview() {
             '<thead>' +
                 '<tr>' +
                     '<th rowspan="2" style="width: 22px;">No</th>' +
-                    '<th rowspan="2" style="width: 160px;">Uraian Kegiatan</th>' +
+                    '<th rowspan="2" style="width: 140px;">Uraian Kegiatan</th>' +
                     '<th colspan="' + (pelaksanaList.length || 1) + '">Pelaksana</th>' +
                     '<th colspan="3">Mutu Baku</th>' +
-                    '<th rowspan="2" style="width: 90px;">Keterangan</th>' +
+                    '<th rowspan="2" style="width: 80px;">Keterangan</th>' +
                 '</tr>' +
-                '<tr>' + pelaksanaTh + '<th style="width:45px;">Kelengkapan</th><th style="width:35px;">Waktu</th><th style="width:45px;">Output</th></tr>' +
+                '<tr>' + pelaksanaTh + '<th style="width:42px;">Kelengkapan</th><th style="width:32px;">Waktu</th><th style="width:42px;">Output</th></tr>' +
             '</thead>' +
             '<tbody>';
 
@@ -309,13 +308,13 @@ function updatePreview() {
                     // Segi lima off-page connector murni tanpa anak panah
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
                         shapeHtml = '<div style="display:flex; justify-content:center; align-items:center; margin:2px auto;" id="shape-' + globalIdx + '">' +
-                            '<svg width="20" height="15" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
+                            '<svg width="18" height="13" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
                                 '<polygon points="0,0 24,0 24,12 12,18 0,12" fill="#fff" stroke="#000" stroke-width="1.5"/>' +
                             '</svg>' +
                         '</div>';
                     }
 
-                    pelaksanaCells += '<td style="text-align: center; vertical-align: middle; padding:3px 2px;" data-step-idx="' + globalIdx + '" data-pelaksana-idx="' + pc + '">' +
+                    pelaksanaCells += '<td style="text-align: center; vertical-align: middle; padding:2px 1px;" data-step-idx="' + globalIdx + '" data-pelaksana-idx="' + pc + '">' +
                         shapeHtml +
                     '</td>';
                 } else {
@@ -336,10 +335,10 @@ function updatePreview() {
                 '<td style="text-align: center;">' + (globalIdx + 1) + '</td>' +
                 '<td>' + sItem.kegiatan + '</td>' +
                 pelaksanaCells +
-                '<td style="font-size: 7.5px;">' + (sItem.kelengkapan || '-') + '</td>' +
-                '<td style="font-size: 7.5px; text-align: center;">' + (sItem.waktu || '-') + '</td>' +
-                '<td style="font-size: 7.5px;">' + (sItem.output || '-') + '</td>' +
-                '<td style="font-size: 7.5px;">' + ketText + '</td>' +
+                '<td style="font-size: 7px;">' + (sItem.kelengkapan || '-') + '</td>' +
+                '<td style="font-size: 7px; text-align: center;">' + (sItem.waktu || '-') + '</td>' +
+                '<td style="font-size: 7px;">' + (sItem.output || '-') + '</td>' +
+                '<td style="font-size: 7px;">' + ketText + '</td>' +
             '</tr>';
         }
 
@@ -376,13 +375,13 @@ function drawConnectors() {
         var defs = document.createElementNS(svgNS, "defs");
         var marker = document.createElementNS(svgNS, "marker");
         marker.setAttribute('id', 'arrowhead-' + p);
-        marker.setAttribute('markerWidth', '6');
-        marker.setAttribute('markerHeight', '6');
-        marker.setAttribute('refX', '5');
-        marker.setAttribute('refY', '3');
+        marker.setAttribute('markerWidth', '5');
+        marker.setAttribute('markerHeight', '5');
+        marker.setAttribute('refX', '4');
+        marker.setAttribute('refY', '2.5');
         marker.setAttribute('orient', 'auto');
         var markerPath = document.createElementNS(svgNS, "path");
-        markerPath.setAttribute('d', 'M0,0 L6,3 L0,6 Z');
+        markerPath.setAttribute('d', 'M0,0 L5,2.5 L0,5 Z');
         markerPath.setAttribute('fill', '#000');
         marker.appendChild(markerPath);
         defs.appendChild(marker);
@@ -410,7 +409,7 @@ function drawConnectors() {
             if (Math.abs(x1 - x2) < 3 && y2 > y1) {
                 dAttr = "M " + x1 + " " + y1 + " L " + x2 + " " + y2;
             } else if (y2 <= y1) {
-                var offset = 16 + (fromIdx % 2) * 8;
+                var offset = 14 + (fromIdx % 2) * 6;
                 var sideX = Math.max(x1, x2) + offset;
                 dAttr = "M " + x1 + " " + y1 + " L " + sideX + " " + y1 + " L " + sideX + " " + y2 + " L " + x2 + " " + y2;
             } else {
@@ -420,7 +419,7 @@ function drawConnectors() {
 
             path.setAttribute('d', dAttr);
             path.setAttribute('stroke', '#000');
-            path.setAttribute('stroke-width', '1.5');
+            path.setAttribute('stroke-width', '1.2');
             path.setAttribute('fill', 'none');
             path.setAttribute('marker-end', 'url(#arrowhead-' + p + ')');
             svg.appendChild(path);
@@ -428,9 +427,9 @@ function drawConnectors() {
             if (labelText) {
                 var text = document.createElementNS(svgNS, "text");
                 text.textContent = labelText;
-                text.setAttribute('x', x1 + 5);
-                text.setAttribute('y', y1 + 10);
-                text.setAttribute('font-size', '7px');
+                text.setAttribute('x', x1 + 4);
+                text.setAttribute('y', y1 + 9);
+                text.setAttribute('font-size', '6.5px');
                 text.setAttribute('font-family', 'Arial');
                 text.setAttribute('font-weight', 'bold');
                 text.setAttribute('fill', '#000');
@@ -448,7 +447,6 @@ function drawConnectors() {
             if (i === startIdx && p > 0) continue;
 
             if (s.jenis === 'decision') {
-                // Default logika: Ya -> langkah selanjutnya (i + 1), Tidak -> langkah sebelumnya (i - 1)
                 var t1 = (s.target1 !== undefined && s.target1 !== '' && !isNaN(s.target1)) ? parseInt(s.target1) - 1 : i + 1;
                 var lbl1 = (s.q1 ? s.q1 : 'Ya').trim();
                 if (t1 >= 0 && t1 < stepsList.length) {

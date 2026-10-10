@@ -1,1 +1,357 @@
+/* ==========================================================================
+   RESET & BASE STYLES (Astra Professional Theme Look)
+   ========================================================================== */
+:root {
+    --primary-color: #0f172a;
+    --brand-color: #2563eb;
+    --brand-hover: #1d4ed8;
+    --bg-main: #f8fafc;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+    --text-main: #334155;
+    --text-muted: #64748b;
+    --success-color: #10b981;
+}
 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* NAVBAR ELEGAN */
+.navbar {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.75rem 2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    font-size: 1.8rem;
+    color: var(--brand-color);
+}
+
+.brand-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    display: block;
+}
+
+.brand-sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.user-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.badge {
+    background: #eff6ff;
+    color: var(--brand-color);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* LAYOUT UTAMA */
+.main-layout {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* SIDEBAR & CARDS */
+.sidebar-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.card-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.card-header {
+    background: #f8fafc;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.825rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--text-main);
+}
+
+input[type="text"], select {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    transition: border-color 0.2s;
+}
+
+input[type="text"]:focus, select:focus {
+    outline: none;
+    border-color: var(--brand-color);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 1.25rem 0;
+}
+
+/* BUTTONS */
+.btn-primary-full {
+    width: 100%;
+    background: var(--brand-color);
+    color: #fff;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary-full:hover {
+    background: var(--brand-hover);
+}
+
+.btn-success {
+    width: 100%;
+    background: var(--success-color);
+    color: white;
+    border: none;
+    padding: 0.85rem;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+/* TAGS INPUT */
+.tags-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.tag-item {
+    background: #e2e8f0;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tag-item i {
+    cursor: pointer;
+    color: #ef4444;
+}
+
+.input-inline {
+    display: flex;
+    gap: 6px;
+}
+
+.btn-add {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   A4 PRINT PREVIEW LAYOUT (PERMENPAN RB FORMAT)
+   ========================================================================== */
+.preview-panel {
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+}
+
+.paper-container {
+    background: #ffffff;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+    padding: 20mm;
+    margin-bottom: 2rem;
+    color: #000;
+}
+
+/* Dimensi A4 */
+.paper-container.portrait {
+    width: 210mm;
+    min-height: 297mm;
+}
+
+.paper-container.landscape {
+    width: 297mm;
+    min-height: 210mm;
+}
+
+/* STYLE TABEL DOKUMEN SOP */
+.sop-header-table, .sop-body-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+
+.sop-header-table td, .sop-body-table th, .sop-body-table td {
+    border: 1px solid #000000;
+    padding: 6px;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    vertical-align: middle;
+}
+
+.logo-cell {
+    width: 80px;
+    text-align: center;
+}
+
+.title-cell {
+    text-align: center;
+}
+
+.title-cell h4 { font-size: 11px; font-weight: bold; }
+.title-cell h3 { font-size: 13px; font-weight: bold; margin-top: 4px; }
+
+.meta-label { font-weight: bold; width: 110px; background: #f2f2f2; }
+.meta-val { font-size: 10px; }
+
+.sop-title-box { text-align: center; background: #f9f9f9; padding: 10px; }
+.sop-title-box h2 { font-size: 13px; font-weight: bold; }
+
+.signature-cell { text-align: center; vertical-align: top; }
+.sig-space { height: 40px; }
+.sig-name { font-weight: bold; text-decoration: underline; }
+
+.sop-body-table th {
+    background-color: #e6e6e6;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* FLOWCHART SHAPES DI DALAM TABEL */
+.shape-cell {
+    text-align: center;
+    padding: 4px;
+}
+
+.flow-shape {
+    display: inline-block;
+    padding: 4px 8px;
+    border: 1.5px solid #000;
+    background: #fff;
+    font-size: 9px;
+    font-weight: bold;
+}
+
+.shape-start { border-radius: 12px; } /* Oval / Terminator */
+.shape-process { border-radius: 0; } /* Rectangle */
+.shape-decision { 
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    background: #f0f0f0;
+    padding: 10px 12px;
+}
+
+/* ==========================================================================
+   ATURAN CETAK (PRINT MEDIA) - Hanya Dokumen A4 yang Tercetak
+   ========================================================================== */
+@media print {
+    .no-print, .navbar, .sidebar-panel, .action-bar {
+        display: none !important;
+    }
+    
+    body {
+        background: #ffffff;
+    }
+
+    .main-layout {
+        display: block;
+        padding: 0;
+        margin: 0;
+    }
+
+    .paper-container {
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        width: 100% !important;
+    }
+
+    @page {
+        size: A4 landscape;
+        margin: 15mm;
+    }
+}

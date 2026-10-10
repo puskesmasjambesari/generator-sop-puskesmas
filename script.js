@@ -158,12 +158,12 @@ function renderStepsBuilder() {
 
         if(s.jenis === 'decision') {
             html += '<div class="form-row" style="margin-bottom:5px;">';
-            html += '<div><label>Pertanyaan 1 (Cabang A)</label><input type="text" value="' + (s.q1 || '') + '" oninput="stepsList[' + i + '].q1=this.value; updatePreview()" placeholder="Cth: Ya -> Lgkh 6"></div>';
-            html += '<div><label>Target Langkah 1</label><input type="text" value="' + (s.target1 || '') + '" oninput="stepsList[' + i + '].target1=this.value; updatePreview()" placeholder="Cth: 6"></div>';
+            html += '<div><label>Cabang A (Cth: Ya)</label><input type="text" value="' + (s.q1 || '') + '" oninput="stepsList[' + i + '].q1=this.value; updatePreview()" placeholder="Cth: Ya"></div>';
+            html += '<div><label>Target Langkah A (No. Urut)</label><input type="text" value="' + (s.target1 || '') + '" oninput="stepsList[' + i + '].target1=this.value; updatePreview()" placeholder="Cth: 6"></div>';
             html += '</div>';
             html += '<div class="form-row" style="margin-bottom:5px;">';
-            html += '<div><label>Pertanyaan 2 (Cabang B)</label><input type="text" value="' + (s.q2 || '') + '" oninput="stepsList[' + i + '].q2=this.value; updatePreview()" placeholder="Cth: Tidak -> Lgkh 2"></div>';
-            html += '<div><label>Target Langkah 2</label><input type="text" value="' + (s.target2 || '') + '" oninput="stepsList[' + i + '].target2=this.value; updatePreview()" placeholder="Cth: 2"></div>';
+            html += '<div><label>Cabang B (Cth: Tidak)</label><input type="text" value="' + (s.q2 || '') + '" oninput="stepsList[' + i + '].q2=this.value; updatePreview()" placeholder="Cth: Tidak"></div>';
+            html += '<div><label>Target Langkah B (No. Urut)</label><input type="text" value="' + (s.target2 || '') + '" oninput="stepsList[' + i + '].target2=this.value; updatePreview()" placeholder="Cth: 2"></div>';
             html += '</div>';
         }
         
@@ -211,7 +211,6 @@ function updatePreview() {
         
         var headerHtml = '';
         if (pageIdx === 0) {
-            // Halaman 1: Tata letak persis standar (Header Instansi -> Kotak Judul "SOP ..." -> Kotak Informasi Dasar Hukum & Kualifikasi)
             headerHtml = '<table class="sop-header-table">' +
                 '<tr>' +
                     '<td rowspan="4" class="logo-cell"><img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 55px; height: auto; display: block; margin: 0 auto;" /></td>' +
@@ -273,7 +272,6 @@ function updatePreview() {
                 '</tr>' +
             '</table>';
         } else {
-            // Halaman Selanjutnya (Page 2+): Bersih total tanpa tajuk berulang dan tanpa tulisan lanjutan halaman
             headerHtml = '';
         }
 
@@ -310,7 +308,6 @@ function updatePreview() {
                         shapeHtml = '<div class="flow-shape shape-decision" id="shape-' + globalIdx + '"></div>';
                     }
 
-                    // Jika langkah terakhir di halaman atau langkah pertama di halaman lanjutan (bukan halaman 1), gunakan off-page connector SVG segi lima murni
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
                         shapeHtml = '<div style="display:flex; justify-content:center; align-items:center; margin:4px auto;" id="shape-' + globalIdx + '">' +
                             '<svg width="24" height="18" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
@@ -329,8 +326,8 @@ function updatePreview() {
 
             var ketText = '-';
             if (sItem.jenis === 'decision') {
-                var q1Str = sItem.q1 ? (sItem.q1 + ' (Lgkh ' + (sItem.target1 || '-') + ')') : '';
-                var q2Str = sItem.q2 ? (sItem.q2 + ' (Lgkh ' + (sItem.target2 || '-') + ')') : '';
+                var q1Str = sItem.q1 ? (sItem.q1 + ' -> Lgkh ' + (sItem.target1 || '-')) : '';
+                var q2Str = sItem.q2 ? (sItem.q2 + ' -> Lgkh ' + (sItem.target2 || '-')) : '';
                 ketText = [q1Str, q2Str].filter(Boolean).join('; ') || 'Keputusan';
             }
 
@@ -354,82 +351,114 @@ function updatePreview() {
 }
 
 function drawConnectors() {
-    var oldSvgs = document.querySelectorAll('.connectorSvgOverlay');
-    for (var o = 0; o < oldSvgs.length; o++) {
-        oldSvgs[o].remove();
-    }
+    var container = document.getElementById('previewAreaContainer');
+    if (!container) return;
 
-    var tables = document.querySelectorAll('.sop-table');
-    for (var t = 0; t < tables.length; t++) {
-        var table = tables[t];
-        var pageDiv = table.closest('.a4-page');
-        if (!pageDiv) continue;
+    var oldSvg = document.getElementById('globalConnectorSvg');
+    if (oldSvg) oldSvg.remove();
 
-        var svgNS = "http://www.w3.org/2000/svg";
-        var svg = document.createElementNS(svgNS, "svg");
-        svg.className.baseVal = 'connectorSvgOverlay';
-        svg.style.position = 'absolute';
-        svg.style.top = '0';
-        svg.style.left = '0';
-        svg.style.width = '100%';
-        svg.style.height = '100%';
-        svg.style.pointerEvents = 'none';
-        svg.style.zIndex = '10';
+    var svgNS = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute('id', 'globalConnectorSvg');
+    svg.style.position = 'absolute';
+    svg.style.top = '0';
+    svg.style.left = '0';
+    svg.style.width = '100%';
+    svg.style.height = '100%';
+    svg.style.pointerEvents = 'none';
+    svg.style.zIndex = '10';
 
-        var defs = document.createElementNS(svgNS, "defs");
-        var marker = document.createElementNS(svgNS, "marker");
-        marker.setAttribute('id', 'arrowhead-' + t);
-        marker.setAttribute('markerWidth', '6');
-        marker.setAttribute('markerHeight', '6');
-        marker.setAttribute('refX', '5');
-        marker.setAttribute('refY', '3');
-        marker.setAttribute('orient', 'auto');
-        var markerPath = document.createElementNS(svgNS, "svg");
-        markerPath.setAttribute('d', 'M0,0 L6,3 L0,6 Z');
-        markerPath.setAttribute('fill', '#000');
-        marker.appendChild(markerPath);
-        defs.appendChild(marker);
-        svg.appendChild(defs);
+    var defs = document.createElementNS(svgNS, "defs");
+    var marker = document.createElementNS(svgNS, "marker");
+    marker.setAttribute('id', 'global-arrowhead');
+    marker.setAttribute('markerWidth', '6');
+    marker.setAttribute('markerHeight', '6');
+    marker.setAttribute('refX', '5');
+    marker.setAttribute('refY', '3');
+    marker.setAttribute('orient', 'auto');
+    var markerPath = document.createElementNS(svgNS, "path");
+    markerPath.setAttribute('d', 'M0,0 L6,3 L0,6 Z');
+    markerPath.setAttribute('fill', '#000');
+    marker.appendChild(markerPath);
+    defs.appendChild(marker);
+    svg.appendChild(defs);
 
-        var tableRect = table.getBoundingClientRect();
-        var rows = table.querySelectorAll('tbody tr');
+    var containerRect = container.getBoundingClientRect();
 
-        for (var r = 0; r < rows.length - 1; r++) {
-            var currTr = rows[r];
-            var nextTr = rows[r + 1];
+    function drawPath(fromIdx, toIdx, labelText) {
+        var el1 = document.getElementById('shape-' + fromIdx);
+        var el2 = document.getElementById('shape-' + toIdx);
+        if (!el1 || !el2) return;
 
-            var currShape = currTr.querySelector('.flow-shape') || currTr.querySelector('svg');
-            var nextShape = nextTr.querySelector('.flow-shape') || nextTr.querySelector('svg');
+        var r1 = el1.getBoundingClientRect();
+        var r2 = el2.getBoundingClientRect();
 
-            if (currShape && nextShape) {
-                var rect1 = currShape.getBoundingClientRect();
-                var rect2 = nextShape.getBoundingClientRect();
+        var x1 = r1.left + r1.width / 2 - containerRect.left + container.scrollLeft;
+        var y1 = r1.bottom - containerRect.top + container.scrollTop;
+        var x2 = r2.left + r2.width / 2 - containerRect.left + container.scrollLeft;
+        var y2 = r2.top - containerRect.top + container.scrollTop;
 
-                var x1 = rect1.left + rect1.width / 2 - tableRect.left;
-                var y1 = rect1.bottom - tableRect.top;
-                var x2 = rect2.left + rect2.width / 2 - tableRect.left;
-                var y2 = rect2.top - tableRect.top;
+        var path = document.createElementNS(svgNS, "path");
+        var dAttr = "";
 
-                var path = document.createElementNS(svgNS, "path");
-                var dAttr = "";
-
-                if (Math.abs(x1 - x2) < 3) {
-                    dAttr = "M " + x1 + " " + y1 + " L " + x2 + " " + y2;
-                } else {
-                    var midY = y1 + (y2 - y1) / 2;
-                    dAttr = "M " + x1 + " " + y1 + " L " + x1 + " " + midY + " L " + x2 + " " + midY + " L " + x2 + " " + y2;
-                }
-
-                path.setAttribute('d', dAttr);
-                path.setAttribute('stroke', '#000');
-                path.setAttribute('stroke-width', '1.5');
-                path.setAttribute('fill', 'none');
-                path.setAttribute('marker-end', 'url(#arrowhead-' + t + ')');
-                svg.appendChild(path);
+        if (Math.abs(x1 - x2) < 3 && y2 > y1) {
+            dAttr = "M " + x1 + " " + y1 + " L " + x2 + " " + y2;
+        } else {
+            var midY = y1 + (y2 - y1) / 2;
+            if (y2 <= y1) {
+                var offset = 35 + (fromIdx % 3) * 15;
+                var sideX = Math.max(x1, x2) + offset;
+                dAttr = "M " + x1 + " " + y1 + " L " + sideX + " " + y1 + " L " + sideX + " " + y2 + " L " + x2 + " " + y2;
+            } else {
+                dAttr = "M " + x1 + " " + y1 + " L " + x1 + " " + midY + " L " + x2 + " " + midY + " L " + x2 + " " + y2;
             }
         }
 
-        pageDiv.style.position = 'relative';
-        pageDiv.appendChild(svg);
+        path.setAttribute('d', dAttr);
+        path.setAttribute('stroke', '#000');
+        path.setAttribute('stroke-width', '1.5');
+        path.setAttribute('fill', 'none');
+        path.setAttribute('marker-end', 'url(#global-arrowhead)');
+        svg.appendChild(path);
+
+        if (labelText) {
+            var text = document.createElementNS(svgNS, "text");
+            text.textContent = labelText;
+            text.setAttribute('x', x1 + 4);
+            text.setAttribute('y', y1 + 14);
+            text.setAttribute('font-size', '8px');
+            text.setAttribute('font-family', 'Arial');
+            text.setAttribute('fill', '#000');
+            svg.appendChild(text);
+        }
     }
+
+    for (var i = 0; i < stepsList.length; i++) {
+        var s = stepsList[i];
+        if (s.jenis === 'decision') {
+            var hasTarget = false;
+            if (s.target1 !== undefined && s.target1 !== '' && !isNaN(s.target1)) {
+                var t1 = parseInt(s.target1) - 1;
+                var lbl1 = s.q1 ? s.q1.trim() : 'Ya';
+                drawPath(i, t1, lbl1);
+                hasTarget = true;
+            }
+            if (s.target2 !== undefined && s.target2 !== '' && !isNaN(s.target2)) {
+                var t2 = parseInt(s.target2) - 1;
+                var lbl2 = s.q2 ? s.q2.trim() : 'Tidak';
+                drawPath(i, t2, lbl2);
+                hasTarget = true;
+            }
+            if (!hasTarget && i + 1 < stepsList.length) {
+                drawPath(i, i + 1, null);
+            }
+        } else {
+            if (i + 1 < stepsList.length) {
+                drawPath(i, i + 1, null);
+            }
+        }
+    }
+
+    container.style.position = 'relative';
+    container.appendChild(svg);
 }

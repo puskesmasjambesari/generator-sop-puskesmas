@@ -98,8 +98,9 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .sop-header-table { width: 100%; border-collapse: collapse; margin-bottom: 0; font-family: Arial, sans-serif; table-layout: fixed; }
 .sop-header-table td { border: 1px solid #000; padding: 3px 4px; font-size: 8.5px; vertical-align: middle; }
 
+/* Tabel tinggi adaptif (tidak memaksa stretch penuh jika langkah sedikit) */
 .sop-table { 
-    flex: 1; 
+    flex: 0 1 auto; 
     width: 100%; 
     border-collapse: collapse; 
     margin-bottom: 0; 
@@ -134,6 +135,6 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
     body { background: white; }
     .main-container { display: block; padding: 0; margin: 0; }
     .preview-area { background: white; padding: 0; border-radius: 0; gap: 0; }
-    .a4-page { box-shadow: none; margin: 0; width: 100% !important; height: 100vh; max-height: none; padding: 8mm; page-break-after: always; display: flex; flex-direction: column; overflow: visible; }
+    .a4-page { box-shadow: none; margin: 0; width: 100% !important; height: 100vh; max-height: none; padding: 8mm; page-break-after: always; display: flex; flex-direction: column; position: relative !important; overflow: visible; }
     @page { size: portrait; margin: 5mm; }
 }

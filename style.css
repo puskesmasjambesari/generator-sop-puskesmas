@@ -77,12 +77,12 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 
 .preview-area { display: flex; flex-direction: column; align-items: center; overflow-x: auto; background: #e2e8f0; padding: 2rem; border-radius: 12px; gap: 2rem; }
 
-/* KUNCI UKURAN KERTAS A4 PRESISI */
+/* UKURAN KERTAS A4 PORTRAIT DEFAULT */
 .a4-page {
     background: white; 
-    width: 297mm; 
-    height: 210mm; 
-    max-height: 210mm;
+    width: 210mm; 
+    height: 297mm; 
+    max-height: 297mm;
     padding: 10mm; 
     box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
     position: relative; 
@@ -91,16 +91,15 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
     overflow: hidden;
     box-sizing: border-box;
 }
-.a4-page.portrait { 
-    width: 210mm; 
-    height: 297mm; 
-    max-height: 297mm;
+.a4-page.landscape { 
+    width: 297mm; 
+    height: 210mm; 
+    max-height: 210mm;
 }
 
 .sop-table, .sop-header-table { width: 100%; border-collapse: collapse; margin-bottom: 0; font-family: Arial, sans-serif; table-layout: fixed; }
 .sop-header-table td, .sop-table th, .sop-table td { border: 1px solid #000; padding: 3px 4px; font-size: 9px; vertical-align: middle; }
 
-.logo-cell { width: 65px; text-align: center; font-weight: bold; }
 .instansi-cell { text-align: center; font-weight: bold; font-size: 10px; }
 .meta-lbl { background: #f0f0f0; font-weight: bold; width: 95px; font-size: 8px; }
 .meta-val { font-size: 8px; }
@@ -129,5 +128,5 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
     .main-container { display: block; padding: 0; margin: 0; }
     .preview-area { background: white; padding: 0; border-radius: 0; gap: 0; }
     .a4-page { box-shadow: none; margin: 0; width: 100% !important; height: 100vh; max-height: none; padding: 8mm; page-break-after: always; overflow: visible; }
-    @page { size: landscape; margin: 5mm; }
+    @page { size: portrait; margin: 5mm; }
 }

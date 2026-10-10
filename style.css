@@ -75,16 +75,16 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .step-builder-item { background: #f8fafc; border: 1px solid var(--border); padding: 10px; border-radius: 6px; margin-bottom: 10px; }
 .step-builder-item h5 { font-size: 0.85rem; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
 
-.preview-area { display: flex; flex-direction: column; align-items: center; overflow-x: auto; background: #e2e8f0; padding: 2rem; border-radius: 12px; }
+.preview-area { display: flex; flex-direction: column; align-items: center; overflow-x: auto; background: #e2e8f0; padding: 2rem; border-radius: 12px; gap: 2rem; }
 
 .a4-page {
-    background: white; width: 297mm; min-height: 210mm; padding: 15mm; margin-bottom: 2rem;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15); position: relative; color: black;
+    background: white; width: 297mm; min-height: 210mm; padding: 15mm; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15); position: relative; color: black; page-break-after: always;
 }
 .a4-page.portrait { width: 210mm; min-height: 297mm; }
 
 .sop-table, .sop-header-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-family: Arial, sans-serif; }
-.sop-header-table td, .sop-table th, .sop-table td { border: 1px solid #000; padding: 4px; font-size: 9.5px; vertical-align: middle; }
+.sop-header-table td, .sop-table th, .sop-table td { border: 1px solid #000; padding: 4px; font-size: 9.5px; vertical-align: middle; position: relative; }
 
 .logo-cell { width: 75px; text-align: center; font-weight: bold; }
 .instansi-cell { text-align: center; font-weight: bold; font-size: 10.5px; }
@@ -96,8 +96,8 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .section-box-title { font-weight: bold; margin-bottom: 3px; text-transform: uppercase; font-size: 9px; background: #f0f0f0; padding: 2px 4px; border-bottom: 1px solid #000; }
 .sop-table th { background: #e6e6e6; text-align: center; font-weight: bold; font-size: 9.5px; }
 
-/* Bentuk Flowchart Bersih & Rotasi Belah Ketupat Sempurna */
-.flow-shape { display: flex; align-items: center; justify-content: center; margin: 4px auto; border: 1.5px solid #000; background: #fff; }
+/* Bentuk Flowchart */
+.flow-shape { display: flex; align-items: center; justify-content: center; margin: 4px auto; border: 1.5px solid #000; background: #fff; position: relative; z-index: 2; }
 .shape-start { width: 28px; height: 14px; border-radius: 7px; }
 .shape-process { width: 24px; height: 16px; border-radius: 0; }
 .shape-decision { 
@@ -109,53 +109,11 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
     margin: 8px auto; 
 }
 
-/* Konektor Panah Lurus */
-.shape-connector {
-    width: 2px;
-    height: 14px;
-    background: #000;
-    margin: 0 auto;
-    position: relative;
-}
-.shape-connector.one-way::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: -3px;
-    border-width: 4px 4px 0;
-    border-style: solid;
-    border-color: #000 transparent;
-    display: block;
-    width: 0;
-}
-.shape-connector.two-way::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: -3px;
-    border-width: 4px 4px 0;
-    border-style: solid;
-    border-color: #000 transparent;
-    display: block;
-    width: 0;
-}
-.shape-connector.two-way::before {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: -3px;
-    border-width: 0 4px 4px;
-    border-style: solid;
-    border-color: #000 transparent;
-    display: block;
-    width: 0;
-}
-
 @media print {
     .no-print, .navbar { display: none !important; }
     body { background: white; }
     .main-container { display: block; padding: 0; margin: 0; }
-    .preview-area { background: white; padding: 0; border-radius: 0; }
-    .a4-page { box-shadow: none; margin: 0; width: 100% !important; min-height: 100vh; padding: 10mm; }
+    .preview-area { background: white; padding: 0; border-radius: 0; gap: 0; }
+    .a4-page { box-shadow: none; margin: 0; width: 100% !important; min-height: 100vh; padding: 10mm; page-break-after: always; }
     @page { size: auto; margin: 10mm; }
 }

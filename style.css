@@ -109,7 +109,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
     margin: 10px auto; 
 }
 
-/* Off-page connector segilima (menghadap ke bawah sesuai referensi gambar) */
+/* Off-page connector segilima (menghadap ke bawah sesuai gambar referensi Anda) */
 .shape-offpage-down {
     width: 26px;
     height: 18px;

@@ -209,7 +209,7 @@ function updatePreview() {
         var pageDiv = document.createElement('div');
         pageDiv.className = 'a4-page ' + orientasi;
         
-        // Tabel Header & Kolom Informasi Pendukung (Disusun melintang di atas tabel flowchart)
+        // Header dan kotak informasi pendukung (posisi di atas tabel flowchart sesuai standar)
         var headerHtml = '<table class="sop-header-table">' +
             '<tr>' +
                 '<td rowspan="4" class="logo-cell"><img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 55px; height: auto; display: block; margin: 0 auto;" /></td>' +
@@ -226,13 +226,13 @@ function updatePreview() {
             '<tr><td class="meta-lbl">TGL. EFEKTIF</td><td class="meta-val">' + tglEfektif + '</td></tr>' +
             '<tr>' +
                 '<td colspan="2" class="sop-title-box">' +
-                    '<div style="font-size: 8px; color: #555;">STANDAR OPERASIONAL PROSEDUR (SOP)</div>' +
+                    '<div style="font-size: 8px; color: #555;">STANDAR OPERASIONAL PROSEDUR</div>' +
                     '<div style="font-size: 11px; font-weight: bold; margin-top: 2px;">SOP ' + judul.toUpperCase() + '</div>' +
                 '</td>' +
                 '<td class="meta-lbl">DISAHKAN OLEH</td>' +
                 '<td class="sig-cell">' +
                     '<div style="font-size: 8px;">KEPALA ' + puskesmas.toUpperCase() + '</div>' +
-                    '<div style="height: 35px;"></div>' +
+                    '<div style="height: 45px;"></div>' +
                     '<div style="font-weight: bold; text-decoration: underline; font-size: 9px;">' + kaPuskesmas + '</div>' +
                     '<div style="font-size: 8px;">NIP. ' + nipKa + '</div>' +
                 '</td>' +
@@ -301,12 +301,10 @@ function updatePreview() {
                     if (sItem.jenis === 'start') shapeClass = 'shape-start';
                     else if (sItem.jenis === 'decision') shapeClass = 'shape-decision';
 
-                    // Jika ini langkah terakhir di halaman dan ada halaman berikutnya, gunakan off-page connector segilima menghadap ke bawah
+                    // Off-page connector segilima otomatis di akhir / awal halaman
                     if (st === pageSteps.length - 1 && pageIdx < totalPages - 1) {
                         shapeClass = 'shape-offpage-end';
-                    }
-                    // Jika ini langkah pertama di halaman bukan halaman pertama, gunakan off-page connector segilima menghadap ke atas
-                    else if (st === 0 && pageIdx > 0) {
+                    } else if (st === 0 && pageIdx > 0) {
                         shapeClass = 'shape-offpage-start';
                     }
 
@@ -386,7 +384,6 @@ function drawConnectors() {
         var rows = table.querySelectorAll('tbody tr');
 
         for (var r = 0; r < rows.length - 1; r++) {
-            // Menghubungkan baris r ke baris r+1 dalam halaman yang sama
             var currTr = rows[r];
             var nextTr = rows[r + 1];
 
@@ -397,6 +394,7 @@ function drawConnectors() {
                 var rect1 = currShape.getBoundingClientRect();
                 var rect2 = nextShape.getBoundingClientRect();
 
+                // Presisi titik sambung tepat dari ujung bawah shape ke ujung atas shape berikutnya
                 var x1 = rect1.left + rect1.width / 2 - tableRect.left;
                 var y1 = rect1.bottom - tableRect.top;
                 var x2 = rect2.left + rect2.width / 2 - tableRect.left;

@@ -16,10 +16,10 @@ var pelaksanaList = [
     "Dokter Jaga"
 ];
 var stepsList = [
-    { kegiatan: "Menerima berkas persyaratan dan meneliti kelengkapan identitas dari pemohon", pelaksana: "Petugas Pendaftaran", jenis: "start", panah: "one-way", waktu: "3 Menit", kelengkapan: "KTP / Rujukan", output: "Berkas diteliti", q1: "", target1: "", q2: "", target2: "" },
-    { kegiatan: "Apakah kelengkapan persyaratan dan data rekam medis lengkap?", pelaksana: "Petugas Pendaftaran", jenis: "decision", panah: "two-way", waktu: "1 Menit", kelengkapan: "Berkas", output: "Keputusan", q1: "Lengkap?", target1: "6", q2: "Belum?", target2: "2" },
-    { kegiatan: "Menginput data rekam medis ke dalam sistem SIMPUS dan membuat kartu rawat inap", pelaksana: "Petugas Pendaftaran", jenis: "process", panah: "one-way", waktu: "5 Menit", kelengkapan: "SIMPUS", output: "Surat Masuk", q1: "", target1: "", q2: "", target2: "" },
-    { kegiatan: "Melakukan serah terima pasien dan berkas rekam medis ke ruang perawatan", pelaksana: "Perawat Rawat Inap", jenis: "start", panah: "one-way", waktu: "5 Menit", kelengkapan: "Berkas", output: "Pasien diterima", q1: "", target1: "", q2: "", target2: "" }
+    { kegiatan: "Menerima berkas persyaratan dan meneliti kelengkapan identitas dari pemohon", pelaksana: "Petugas Pendaftaran", jenis: "start", waktu: "3 Menit", kelengkapan: "KTP / Rujukan", output: "Berkas diteliti", q1: "", target1: "", q2: "", target2: "" },
+    { kegiatan: "Apakah kelengkapan persyaratan dan data rekam medis lengkap?", pelaksana: "Petugas Pendaftaran", jenis: "decision", waktu: "1 Menit", kelengkapan: "Berkas", output: "Keputusan", q1: "Ya -> Lgkh 6", target1: "6", q2: "Tidak -> Lgkh 2", target2: "2" },
+    { kegiatan: "Menginput data rekam medis ke dalam sistem SIMPUS dan membuat kartu rawat inap", pelaksana: "Petugas Pendaftaran", jenis: "process", waktu: "5 Menit", kelengkapan: "SIMPUS", output: "Surat Masuk", q1: "", target1: "", q2: "", target2: "" },
+    { kegiatan: "Melakukan serah terima pasien dan berkas rekam medis ke ruang perawatan", pelaksana: "Perawat Rawat Inap", jenis: "start", waktu: "5 Menit", kelengkapan: "Berkas", output: "Pasien diterima", q1: "", target1: "", q2: "", target2: "" }
 ];
 
 window.onload = function() {
@@ -103,7 +103,6 @@ function addStepRow() {
         kegiatan: "Uraian kegiatan baru...", 
         pelaksana: pelaksanaList[0] || "Petugas", 
         jenis: "process", 
-        panah: "one-way",
         waktu: "5 Menit", 
         kelengkapan: "Dokumen", 
         output: "Hasil",
@@ -153,27 +152,21 @@ function renderStepsBuilder() {
         html += '</div>';
         
         html += '<div class="form-row" style="margin-bottom:5px;">';
-        html += '<div><label>Konektor Panah Lurus</label><select onchange="stepsList[' + i + '].panah=this.value; updatePreview()">';
-        html += '<option value="one-way" ' + (s.panah === 'one-way' ? 'selected' : '') + '>Panah 1 Arah</option>';
-        html += '<option value="two-way" ' + (s.panah === 'two-way' ? 'selected' : '') + '>Panah 2 Arah</option>';
-        html += '</select></div>';
         html += '<div><label>Waktu</label><input type="text" value="' + s.waktu + '" oninput="stepsList[' + i + '].waktu=this.value; updatePreview()"></div>';
+        html += '<div><label>Output</label><input type="text" value="' + s.output + '" oninput="stepsList[' + i + '].output=this.value; updatePreview()"></div>';
         html += '</div>';
 
         if(s.jenis === 'decision') {
             html += '<div class="form-row" style="margin-bottom:5px;">';
-            html += '<div><label>Pertanyaan 1 (Cabang A)</label><input type="text" value="' + (s.q1 || '') + '" oninput="stepsList[' + i + '].q1=this.value; updatePreview()" placeholder="Cth: Lengkap?"></div>';
-            html += '<div><label>Target Langkah 1 (Cth: 6 / Maju)</label><input type="text" value="' + (s.target1 || '') + '" oninput="stepsList[' + i + '].target1=this.value; updatePreview()" placeholder="No Langkah"></div>';
+            html += '<div><label>Pertanyaan 1 (Cabang A)</label><input type="text" value="' + (s.q1 || '') + '" oninput="stepsList[' + i + '].q1=this.value; updatePreview()" placeholder="Cth: Ya -> Lgkh 6"></div>';
+            html += '<div><label>Target Langkah 1</label><input type="text" value="' + (s.target1 || '') + '" oninput="stepsList[' + i + '].target1=this.value; updatePreview()" placeholder="Cth: 6"></div>';
             html += '</div>';
             html += '<div class="form-row" style="margin-bottom:5px;">';
-            html += '<div><label>Pertanyaan 2 (Cabang B)</label><input type="text" value="' + (s.q2 || '') + '" oninput="stepsList[' + i + '].q2=this.value; updatePreview()" placeholder="Cth: Belum?"></div>';
-            html += '<div><label>Target Langkah 2 (Cth: 2 / Kembali)</label><input type="text" value="' + (s.target2 || '') + '" oninput="stepsList[' + i + '].target2=this.value; updatePreview()" placeholder="No Langkah"></div>';
+            html += '<div><label>Pertanyaan 2 (Cabang B)</label><input type="text" value="' + (s.q2 || '') + '" oninput="stepsList[' + i + '].q2=this.value; updatePreview()" placeholder="Cth: Tidak -> Lgkh 2"></div>';
+            html += '<div><label>Target Langkah 2</label><input type="text" value="' + (s.target2 || '') + '" oninput="stepsList[' + i + '].target2=this.value; updatePreview()" placeholder="Cth: 2"></div>';
             html += '</div>';
         }
         
-        html += '<div class="form-row">';
-        html += '<div style="grid-column: span 2;"><label>Output</label><input type="text" value="' + s.output + '" oninput="stepsList[' + i + '].output=this.value; updatePreview()"></div>';
-        html += '</div>';
         html += '</div>';
     }
     document.getElementById('stepsBuilderContainer').innerHTML = html;
@@ -196,108 +189,231 @@ function updatePreview() {
 
     var formatNoSOP = '400.7/' + noSOP + '/SOP/430.9.3.15/' + tahun;
 
-    document.getElementById('vPemda').innerText = pemda;
-    document.getElementById('vDinas').innerText = dinas;
-    document.getElementById('vPuskesmas').innerText = puskesmas;
-    document.getElementById('vNoSOP').innerText = formatNoSOP;
-    document.getElementById('vTglBuat').innerText = tglBuat;
-    document.getElementById('vTglRevisi').innerText = tglRevisi ? tglRevisi : '-';
-    document.getElementById('vTglEfektif').innerText = tglEfektif;
-    document.getElementById('vJudulSOP').innerText = judul.toUpperCase();
-    document.getElementById('vJabatanPengesah').innerText = 'KEPALA ' + puskesmas.toUpperCase();
-    document.getElementById('vNamaKa').innerText = kaPuskesmas;
-    document.getElementById('vNipKa').innerText = 'NIP. ' + nipKa;
+    // Paginasi: Maksimal 7 langkah per halaman agar pas di ukuran A4
+    var stepsPerPage = 7;
+    var totalPages = Math.ceil(stepsList.length / stepsPerPage) || 1;
+    var container = document.getElementById('previewAreaContainer');
+    container.innerHTML = '';
 
-    var htmlDasarList = '';
-    for (var d = 0; d < dasarHukumList.length; d++) {
-        htmlDasarList += '<li>' + dasarHukumList[d] + '</li>';
-    }
-    document.getElementById('vListDasar').innerHTML = htmlDasarList;
+    for (var pageIdx = 0; pageIdx < totalPages; pageIdx++) {
+        var startIdx = pageIdx * stepsPerPage;
+        var endIdx = Math.min(startIdx + stepsPerPage, stepsList.length);
+        var pageSteps = stepsList.slice(startIdx, endIdx);
 
-    var htmlKetList = '';
-    for (var k = 0; k < keterkaitanList.length; k++) {
-        htmlKetList += '<li>' + keterkaitanList[k] + '</li>';
-    }
-    document.getElementById('vListKeterkaitan').innerHTML = htmlKetList;
+        var pageDiv = document.createElement('div');
+        pageDiv.className = 'a4-page ' + orientasi;
+        
+        var headerHtml = '';
+        if (pageIdx === 0) {
+            headerHtml = '<table class="sop-header-table">' +
+                '<tr>' +
+                    '<td rowspan="4" class="logo-cell"><img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 55px; height: auto; display: block; margin: 0 auto;" /></td>' +
+                    '<td rowspan="4" class="instansi-cell">' +
+                        '<div>' + pemda + '</div>' +
+                        '<div>' + dinas + '</div>' +
+                        '<div style="font-size: 11px; margin-top:2px;">' + puskesmas + '</div>' +
+                    '</td>' +
+                    '<td class="meta-lbl">NOMOR SOP</td>' +
+                    '<td class="meta-val">' + formatNoSOP + '</td>' +
+                '</tr>' +
+                '<tr><td class="meta-lbl">TGL. PEMBUATAN</td><td class="meta-val">' + tglBuat + '</td></tr>' +
+                '<tr><td class="meta-lbl">TGL. REVISI</td><td class="meta-val">' + (tglRevisi ? tglRevisi : '-') + '</td></tr>' +
+                '<tr><td class="meta-lbl">TGL. EFEKTIF</td><td class="meta-val">' + tglEfektif + '</td></tr>' +
+                '<tr>' +
+                    '<td colspan="2" class="sop-title-box">' +
+                        '<div style="font-size: 8px; color: #555;">STANDAR OPERASIONAL PROSEDUR (SOP)</div>' +
+                        '<div style="font-size: 11px; font-weight: bold; margin-top: 2px;">' + judul.toUpperCase() + '</div>' +
+                    '</td>' +
+                    '<td class="meta-lbl">DISAHKAN OLEH</td>' +
+                    '<td class="sig-cell">' +
+                        '<div style="font-size: 8px;">KEPALA ' + puskesmas.toUpperCase() + '</div>' +
+                        '<div style="height: 35px;"></div>' +
+                        '<div style="font-weight: bold; text-decoration: underline; font-size: 9px;">' + kaPuskesmas + '</div>' +
+                        '<div style="font-size: 8px;">NIP. ' + nipKa + '</div>' +
+                    '</td>' +
+                '</tr>' +
+            '</table>' +
+            '<table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">' +
+                '<tr>' +
+                    '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                        '<div class="section-box-title">DASAR HUKUM</div>' +
+                        '<ol style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + dasarHukumList.map(function(d){return '<li>'+d+'</li>'}).join('') + '</ol>' +
+                    '</td>' +
+                    '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                        '<div class="section-box-title">KUALIFIKASI PELAKSANA</div>' +
+                        '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + document.getElementById('inpKualifikasi').value + '</div>' +
+                    '</td>' +
+                '</tr>' +
+                '<tr>' +
+                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                        '<div class="section-box-title">KETERKAITAN</div>' +
+                        '<ul style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + keterkaitanList.map(function(k){return '<li>'+k+'</li>'}).join('') + '</ul>' +
+                    '</td>' +
+                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                        '<div class="section-box-title">PERALATAN / PERLENGKAPAN</div>' +
+                        '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + document.getElementById('inpPeralatan').value + '</div>' +
+                    '</td>' +
+                '</tr>' +
+                '<tr>' +
+                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                        '<div class="section-box-title">PERINGATAN</div>' +
+                        '<div style="font-size: 8.5px; line-height: 1.3;">' + document.getElementById('inpPeringatan').value + '</div>' +
+                    '</td>' +
+                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                        '<div class="section-box-title">PENCATATAN DAN PENDATAAN</div>' +
+                        '<div style="font-size: 8.5px; line-height: 1.3;">' + document.getElementById('InpPencatatan').value + '</div>' +
+                    '</td>' +
+                '</tr>' +
+            '</table>';
+        } else {
+            headerHtml = '<div style="font-size:10px; font-weight:bold; margin-bottom:5px; text-align:right;">(Lanjutan Halaman ' + (pageIdx + 1) + ' — ' + judul.toUpperCase() + ')</div>';
+        }
 
-    document.getElementById('vPeringatan').innerText = document.getElementById('inpPeringatan').value;
-    document.getElementById('vKualifikasi').innerText = document.getElementById('inpKualifikasi').value;
-    document.getElementById('vPeralatan').innerText = document.getElementById('inpPeralatan').value;
-    document.getElementById('vPencatatan').innerText = document.getElementById('InpPencatatan').value;
+        var pelaksanaTh = '';
+        for (var h = 0; h < pelaksanaList.length; h++) {
+            pelaksanaTh += '<th style="min-width: 85px; font-size:8.5px;">' + pelaksanaList[h] + '</th>';
+        }
 
-    var pages = document.querySelectorAll('.a4-page');
-    for (var pg = 0; pg < pages.length; pg++) {
-        pages[pg].className = 'a4-page ' + orientasi;
-    }
+        var tableHtml = headerHtml +
+            '<table class="sop-table" style="position:relative;">' +
+            '<thead>' +
+                '<tr>' +
+                    '<th rowspan="2" style="width: 25px;">No</th>' +
+                    '<th rowspan="2" style="width: 200px;">Uraian Kegiatan</th>' +
+                    '<th colspan="' + (pelaksanaList.length || 1) + '">Pelaksana</th>' +
+                    '<th colspan="3">Mutu Baku</th>' +
+                    '<th rowspan="2" style="width: 90px;">Keterangan</th>' +
+                '</tr>' +
+                '<tr>' + pelaksanaTh + '<th>Kelengkapan</th><th>Waktu</th><th>Output</th></tr>' +
+            '</thead>' +
+            '<tbody>';
 
-    var thGroup = document.getElementById('thPelaksanaGroup');
-    thGroup.setAttribute('colspan', pelaksanaList.length || 1);
-    
-    var subHead = '';
-    for (var h = 0; h < pelaksanaList.length; h++) {
-        subHead += '<th style="min-width: 85px; font-size:8.5px;">' + pelaksanaList[h] + '</th>';
-    }
-    document.getElementById('trHeadRow2').innerHTML = subHead;
+        for (var st = 0; st < pageSteps.length; st++) {
+            var globalIdx = startIdx + st;
+            var sItem = pageSteps[st];
+            var pelaksanaCells = '';
+            
+            for (var pc = 0; pc < pelaksanaList.length; pc++) {
+                if (sItem.pelaksana === pelaksanaList[pc]) {
+                    var shapeClass = 'shape-process';
+                    if (sItem.jenis === 'start') shapeClass = 'shape-start';
+                    else if (sItem.jenis === 'decision') shapeClass = 'shape-decision';
 
-    var bodyHtml = '';
-    for (var st = 0; st < stepsList.length; st++) {
-        var sItem = stepsList[st];
-        var pelaksanaCells = '';
-        for (var pc = 0; pc < pelaksanaList.length; pc++) {
-            if (sItem.pelaksana === pelaksanaList[pc]) {
-                var shapeClass = 'shape-process';
-                if (sItem.jenis === 'start') shapeClass = 'shape-start';
-                else if (sItem.jenis === 'decision') shapeClass = 'shape-decision';
-
-                var shapeHtml = '<div class="flow-shape ' + shapeClass + '"></div>';
-
-                // Logika Panah: Cek apakah pindah kolom (petugas lain) atau tetap di kolom yang sama
-                if (st < stepsList.length - 1) {
-                    var currIdx = pelaksanaList.indexOf(sItem.pelaksana);
-                    var nextItem = stepsList[st + 1];
-                    var nextIdx = pelaksanaList.indexOf(nextItem.pelaksana);
-
-                    if (nextIdx === currIdx) {
-                        var arrowType = sItem.panah || 'one-way';
-                        shapeHtml += '<div class="shape-connector ' + arrowType + '"></div>';
-                    } else {
-                        // Siku panah otomatis ke petugas lain (turun, horizontal, turun)
-                        var svgDir = (nextIdx > currIdx) ? 'right' : 'left';
-                        shapeHtml += '<div style="width:100%; height:20px; position:relative;">' +
-                            '<svg width="100%" height="20" style="position:absolute; top:0; left:0; overflow:visible;">' +
-                            '<defs><marker id="arrow-' + st + '" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#000"/></marker></defs>';
-                        
-                        if (svgDir === 'right') {
-                            shapeHtml += '<path d="M 50% 0 L 50% 8 L 100% 8 L 100% 20" stroke="#000" stroke-width="1.5" fill="none" marker-end="url(#arrow-' + st + ')"/>';
-                        } else {
-                            shapeHtml += '<path d="M 50% 0 L 50% 8 L 0 8 L 0 20" stroke="#000" stroke-width="1.5" fill="none" marker-end="url(#arrow-' + st + ')"/>';
-                        }
-                        shapeHtml += '</svg></div>';
-                    }
+                    pelaksanaCells += '<td style="text-align: center; vertical-align: middle; padding:6px 2px;" data-step-idx="' + globalIdx + '" data-pelaksana-idx="' + pc + '">' +
+                        '<div class="flow-shape ' + shapeClass + '" id="shape-' + globalIdx + '"></div>' +
+                    '</td>';
+                } else {
+                    pelaksanaCells += '<td></td>';
                 }
-
-                pelaksanaCells += '<td style="text-align: center; vertical-align: middle; padding:4px 2px;">' + shapeHtml + '</td>';
-            } else {
-                pelaksanaCells += '<td></td>';
             }
+
+            var ketText = '-';
+            if (sItem.jenis === 'decision') {
+                var q1Str = sItem.q1 ? (sItem.q1 + ' (Lgkh ' + (sItem.target1 || '-') + ')') : '';
+                var q2Str = sItem.q2 ? (sItem.q2 + ' (Lgkh ' + (sItem.target2 || '-') + ')') : '';
+                ketText = [q1Str, q2Str].filter(Boolean).join('; ') || 'Keputusan';
+            }
+
+            tableHtml += '<tr>' +
+                '<td style="text-align: center;">' + (globalIdx + 1) + '</td>' +
+                '<td>' + sItem.kegiatan + '</td>' +
+                pelaksanaCells +
+                '<td style="font-size: 8px;">' + (sItem.kelengkapan || '-') + '</td>' +
+                '<td style="font-size: 8px; text-align: center;">' + (sItem.waktu || '-') + '</td>' +
+                '<td style="font-size: 8px;">' + (sItem.output || '-') + '</td>' +
+                '<td style="font-size: 8px;">' + ketText + '</td>' +
+            '</tr>';
         }
 
-        var ketText = '-';
-        if (sItem.jenis === 'decision') {
-            var q1Str = sItem.q1 ? (sItem.q1 + ' -> Lgkh ' + (sItem.target1 || '-')) : '';
-            var q2Str = sItem.q2 ? (sItem.q2 + ' -> Lgkh ' + (sItem.target2 || '-')) : '';
-            ketText = [q1Str, q2Str].filter(Boolean).join('; ') || 'Keputusan';
+        tableHtml += '</tbody></table>';
+
+        // Jika ada halaman lanjutan, tambahkan off-page connector di bagian bawah
+        if (pageIdx < totalPages - 1) {
+            tableHtml += '<div style="text-align:center; font-size:9px; font-weight:bold; margin-top:5px; border:1px dashed #000; padding:3px; background:#fafafa;">' +
+                '<i class="fa-solid fa-arrow-down"></i> BERSAMBUNG KE HALAMAN ' + (pageIdx + 2) + ' (OFF-PAGE CONNECTOR) <i class="fa-solid fa-arrow-down"></i>' +
+            '</div>';
         }
 
-        bodyHtml += '<tr>';
-        bodyHtml += '<td style="text-align: center;">' + (st+1) + '</td>';
-        bodyHtml += '<td>' + sItem.kegiatan + '</td>';
-        bodyHtml += pelaksanaCells;
-        bodyHtml += '<td style="font-size: 8px;">' + (sItem.kelengkapan || '-') + '</td>';
-        bodyHtml += '<td style="font-size: 8px; text-align: center;">' + (sItem.waktu || '-') + '</td>';
-        bodyHtml += '<td style="font-size: 8px;">' + (sItem.output || '-') + '</td>';
-        bodyHtml += '<td style="font-size: 8px;">' + ketText + '</td>';
-        bodyHtml += '</tr>';
+        pageDiv.innerHTML = tableHtml;
+        container.appendChild(pageDiv);
     }
-    document.getElementById('tbodySteps').innerHTML = bodyHtml;
+
+    // Menggambar Konektor Panah Siku (Elbow Connectors) Antar Shape
+    setTimeout(drawConnectors, 50);
+}
+
+function drawConnectors() {
+    // Menghapus SVG overlay lama jika ada
+    var oldSvg = document.getElementById('connectorSvgOverlay');
+    if (oldSvg) oldSvg.remove();
+
+    var firstTable = document.querySelector('.sop-table');
+    if (!firstTable) return;
+
+    var svgNS = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute('id', 'connectorSvgOverlay');
+    svg.style.position = 'absolute';
+    svg.style.top = '0';
+    svg.style.left = '0';
+    svg.style.width = '100%';
+    svg.style.height = '100%';
+    svg.style.pointerEvents = 'none';
+    svg.style.zIndex = '10';
+
+    var defs = document.createElementNS(svgNS, "defs");
+    var marker = document.createElementNS(svgNS, "marker");
+    marker.setAttribute('id', 'arrowhead');
+    marker.setAttribute('markerWidth', '6');
+    marker.setAttribute('markerHeight', '6');
+    marker.setAttribute('refX', '5');
+    marker.setAttribute('refY', '3');
+    marker.setAttribute('orient', 'auto');
+    var markerPath = document.createElementNS(svgNS, "path");
+    markerPath.setAttribute('d', 'M0,0 L6,3 L0,6 Z');
+    markerPath.setAttribute('fill', '#000');
+    marker.appendChild(markerPath);
+    defs.appendChild(marker);
+    svg.appendChild(defs);
+
+    for (var i = 0; i < stepsList.length - 1; i++) {
+        var currShape = document.getElementById('shape-' + i);
+        var nextShape = document.getElementById('shape-' + (i + 1));
+
+        if (currShape && nextShape) {
+            var rect1 = currShape.getBoundingClientRect();
+            var rect2 = nextShape.getBoundingClientRect();
+            var tableRect = firstTable.getBoundingClientRect();
+
+            // Koordinat relatif terhadap tabel/halaman
+            var x1 = rect1.left + rect1.width / 2 - tableRect.left;
+            var y1 = rect1.bottom - tableRect.top;
+            var x2 = rect2.left + rect2.width / 2 - tableRect.left;
+            var y2 = rect2.top - tableRect.top;
+
+            var path = document.createElementNS(svgNS, "path");
+            var dAttr = "";
+
+            if (Math.abs(x1 - x2) < 3) {
+                // Jalur lurus ke bawah jika di kolom yang sama
+                dAttr = "M " + x1 + " " + y1 + " L " + x2 + " " + y2;
+            } else {
+                // Jalur Siku (Elbow): Turun, Horizontal ke kolom lain, Turun ke shape tujuan
+                var midY = y1 + (y2 - y1) / 2;
+                dAttr = "M " + x1 + " " + y1 + " L " + x1 + " " + midY + " L " + x2 + " " + midY + " L " + x2 + " " + y2;
+            }
+
+            path.setAttribute('d', dAttr);
+            path.setAttribute('stroke', '#000');
+            path.setAttribute('stroke-width', '1.5');
+            path.setAttribute('fill', 'none');
+            path.setAttribute('marker-end', 'url(#arrowhead)');
+            svg.appendChild(path);
+        }
+    }
+
+    if (firstTable.parentElement) {
+        firstTable.parentElement.style.position = 'relative';
+        firstTable.parentElement.appendChild(svg);
+    }
 }

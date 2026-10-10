@@ -188,8 +188,14 @@ function updatePreview() {
     var orientasi = document.getElementById('inpOrientasi').value;
 
     var formatNoSOP = '400.7/' + noSOP + '/SOP/430.9.3.15/' + tahun;
+    var peringatan = document.getElementById('inpPeringatan').value;
+    var kualifikasi = document.getElementById('inpKualifikasi').value;
+    var peralatan = document.getElementById('inpPeralatan').value;
+    var pencatatan = document.getElementById('InpPencatatan').value;
 
-    // Paginasi: Maksimal 7 langkah per halaman agar pas di ukuran A4
+    var htmlDasarList = dasarHukumList.map(function(d){return '<li>'+d+'</li>'}).join('');
+    var htmlKetList = keterkaitanList.map(function(k){return '<li>'+k+'</li>'}).join('');
+
     var stepsPerPage = 7;
     var totalPages = Math.ceil(stepsList.length / stepsPerPage) || 1;
     var container = document.getElementById('previewAreaContainer');
@@ -237,31 +243,31 @@ function updatePreview() {
                 '<tr>' +
                     '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
                         '<div class="section-box-title">DASAR HUKUM</div>' +
-                        '<ol style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + dasarHukumList.map(function(d){return '<li>'+d+'</li>'}).join('') + '</ol>' +
+                        '<ol style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + htmlDasarList + '</ol>' +
                     '</td>' +
                     '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
                         '<div class="section-box-title">KUALIFIKASI PELAKSANA</div>' +
-                        '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + document.getElementById('inpKualifikasi').value + '</div>' +
+                        '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + kualifikasi + '</div>' +
                     '</td>' +
                 '</tr>' +
                 '<tr>' +
                     '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
                         '<div class="section-box-title">KETERKAITAN</div>' +
-                        '<ul style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + keterkaitanList.map(function(k){return '<li>'+k+'</li>'}).join('') + '</ul>' +
+                        '<ul style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + htmlKetList + '</ul>' +
                     '</td>' +
                     '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
                         '<div class="section-box-title">PERALATAN / PERLENGKAPAN</div>' +
-                        '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + document.getElementById('inpPeralatan').value + '</div>' +
+                        '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + peralatan + '</div>' +
                     '</td>' +
                 '</tr>' +
                 '<tr>' +
                     '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
                         '<div class="section-box-title">PERINGATAN</div>' +
-                        '<div style="font-size: 8.5px; line-height: 1.3;">' + document.getElementById('inpPeringatan').value + '</div>' +
+                        '<div style="font-size: 8.5px; line-height: 1.3;">' + peringatan + '</div>' +
                     '</td>' +
                     '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
                         '<div class="section-box-title">PENCATATAN DAN PENDATAAN</div>' +
-                        '<div style="font-size: 8.5px; line-height: 1.3;">' + document.getElementById('InpPencatatan').value + '</div>' +
+                        '<div style="font-size: 8.5px; line-height: 1.3;">' + pencatatan + '</div>' +
                     '</td>' +
                 '</tr>' +
             '</table>';
@@ -327,7 +333,6 @@ function updatePreview() {
 
         tableHtml += '</tbody></table>';
 
-        // Jika ada halaman lanjutan, tambahkan off-page connector di bagian bawah
         if (pageIdx < totalPages - 1) {
             tableHtml += '<div style="text-align:center; font-size:9px; font-weight:bold; margin-top:5px; border:1px dashed #000; padding:3px; background:#fafafa;">' +
                 '<i class="fa-solid fa-arrow-down"></i> BERSAMBUNG KE HALAMAN ' + (pageIdx + 2) + ' (OFF-PAGE CONNECTOR) <i class="fa-solid fa-arrow-down"></i>' +
@@ -338,12 +343,10 @@ function updatePreview() {
         container.appendChild(pageDiv);
     }
 
-    // Menggambar Konektor Panah Siku (Elbow Connectors) Antar Shape
     setTimeout(drawConnectors, 50);
 }
 
 function drawConnectors() {
-    // Menghapus SVG overlay lama jika ada
     var oldSvg = document.getElementById('connectorSvgOverlay');
     if (oldSvg) oldSvg.remove();
 
@@ -385,7 +388,6 @@ function drawConnectors() {
             var rect2 = nextShape.getBoundingClientRect();
             var tableRect = firstTable.getBoundingClientRect();
 
-            // Koordinat relatif terhadap tabel/halaman
             var x1 = rect1.left + rect1.width / 2 - tableRect.left;
             var y1 = rect1.bottom - tableRect.top;
             var x2 = rect2.left + rect2.width / 2 - tableRect.left;
@@ -395,10 +397,8 @@ function drawConnectors() {
             var dAttr = "";
 
             if (Math.abs(x1 - x2) < 3) {
-                // Jalur lurus ke bawah jika di kolom yang sama
                 dAttr = "M " + x1 + " " + y1 + " L " + x2 + " " + y2;
             } else {
-                // Jalur Siku (Elbow): Turun, Horizontal ke kolom lain, Turun ke shape tujuan
                 var midY = y1 + (y2 - y1) / 2;
                 dAttr = "M " + x1 + " " + y1 + " L " + x1 + " " + midY + " L " + x2 + " " + midY + " L " + x2 + " " + y2;
             }

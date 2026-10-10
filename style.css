@@ -96,7 +96,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .section-box-title { font-weight: bold; margin-bottom: 3px; text-transform: uppercase; font-size: 9px; background: #f0f0f0; padding: 2px 4px; border-bottom: 1px solid #000; }
 .sop-table th { background: #e6e6e6; text-align: center; font-weight: bold; font-size: 9.5px; }
 
-/* Bentuk Flowchart & Presisi Belah Ketupat */
+/* Bentuk Flowchart & Belah Ketupat Sempurna */
 .flow-shape { display: flex; align-items: center; justify-content: center; margin: 4px auto; border: 1.5px solid #000; background: #fff; position: relative; z-index: 2; }
 .shape-start { width: 28px; height: 14px; border-radius: 7px; }
 .shape-process { width: 24px; height: 16px; border-radius: 0; }
@@ -109,21 +109,13 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
     margin: 10px auto; 
 }
 
-/* Off-page connector segilima persis referensi gambar (flat atas, runcing bawah / flat bawah, runcing atas) */
-.shape-offpage-end {
+/* Off-page connector segilima (menghadap ke bawah sesuai referensi gambar) */
+.shape-offpage-down {
     width: 26px;
     height: 18px;
     border: 1.5px solid #000;
     background: #fff;
     clip-path: polygon(0% 0%, 100% 0%, 100% 60%, 50% 100%, 0% 60%);
-    margin: 4px auto;
-}
-.shape-offpage-start {
-    width: 26px;
-    height: 18px;
-    border: 1.5px solid #000;
-    background: #fff;
-    clip-path: polygon(50% 0%, 100% 40%, 100% 100%, 0% 100%, 0% 40%);
     margin: 4px auto;
 }
 

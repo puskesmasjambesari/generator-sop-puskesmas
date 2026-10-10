@@ -196,7 +196,7 @@ function updatePreview() {
     var htmlDasarList = dasarHukumList.map(function(d){return '<li>'+d+'</li>'}).join('');
     var htmlKetList = keterkaitanList.map(function(k){return '<li>'+k+'</li>'}).join('');
 
-    var stepsPerPage = 12;
+    var stepsPerPage = 10;
     var totalPages = Math.ceil(stepsList.length / stepsPerPage) || 1;
     var container = document.getElementById('previewAreaContainer');
     container.innerHTML = '';
@@ -211,14 +211,12 @@ function updatePreview() {
         
         var headerHtml = '';
         if (pageIdx === 0) {
-            // Kotak header menyatu tanpa garis pemisah vertikal antara logo dan teks instansi
+            // Kotak header menyatu tanpa garis pemisah vertikal maupun horizontal antara logo dan teks instansi
             headerHtml = '<table class="sop-header-table">' +
                 '<tr>' +
-                    '<td rowspan="4" class="instansi-cell" style="text-align: center; vertical-align: middle; padding: 6px;">' +
+                    '<td rowspan="4" style="border: 1px solid #000; text-align: center; vertical-align: middle; padding: 6px;">' +
                         '<img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 42px; height: auto; display: block; margin: 0 auto 3px auto;" />' +
-                        '<div>' + pemda + '</div>' +
-                        '<div>' + dinas + '</div>' +
-                        '<div style="font-size: 10px; margin-top:2px;">' + puskesmas + '</div>' +
+                        '<div style="font-weight: bold; font-size: 9px; line-height: 1.2;">' + pemda + '<br>' + dinas + '<br>' + puskesmas + '</div>' +
                     '</td>' +
                     '<td class="meta-lbl">NOMOR SOP</td>' +
                     '<td class="meta-val">' + formatNoSOP + '</td>' +
@@ -278,7 +276,7 @@ function updatePreview() {
 
         var pelaksanaTh = '';
         for (var h = 0; h < pelaksanaList.length; h++) {
-            pelaksanaTh += '<th style="min-width: 80px; font-size:8px;">' + pelaksanaList[h] + '</th>';
+            pelaksanaTh += '<th style="min-width: 75px; font-size:8px;">' + pelaksanaList[h] + '</th>';
         }
 
         var tableHtml = headerHtml +
@@ -286,12 +284,12 @@ function updatePreview() {
             '<thead>' +
                 '<tr>' +
                     '<th rowspan="2" style="width: 22px;">No</th>' +
-                    '<th rowspan="2" style="width: 170px;">Uraian Kegiatan</th>' +
+                    '<th rowspan="2" style="width: 160px;">Uraian Kegiatan</th>' +
                     '<th colspan="' + (pelaksanaList.length || 1) + '">Pelaksana</th>' +
                     '<th colspan="3">Mutu Baku</th>' +
-                    '<th rowspan="2" style="width: 95px;">Keterangan</th>' +
+                    '<th rowspan="2" style="width: 90px;">Keterangan</th>' +
                 '</tr>' +
-                '<tr>' + pelaksanaTh + '<th style="width:50px;">Kelengkapan</th><th style="width:35px;">Waktu</th><th style="width:50px;">Output</th></tr>' +
+                '<tr>' + pelaksanaTh + '<th style="width:45px;">Kelengkapan</th><th style="width:35px;">Waktu</th><th style="width:45px;">Output</th></tr>' +
             '</thead>' +
             '<tbody>';
 
@@ -309,9 +307,10 @@ function updatePreview() {
                         shapeHtml = '<div class="flow-shape shape-decision" id="shape-' + globalIdx + '"></div>';
                     }
 
+                    // Jika di batas halaman, gunakan segi lima off-page connector
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
                         shapeHtml = '<div style="display:flex; justify-content:center; align-items:center; margin:2px auto;" id="shape-' + globalIdx + '">' +
-                            '<svg width="22" height="16" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
+                            '<svg width="20" height="15" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
                                 '<polygon points="0,0 24,0 24,12 12,18 0,12" fill="#fff" stroke="#000" stroke-width="1.5"/>' +
                             '</svg>' +
                         '</div>';
@@ -407,7 +406,7 @@ function drawConnectors() {
             if (Math.abs(x1 - x2) < 3 && y2 > y1) {
                 dAttr = "M " + x1 + " " + y1 + " L " + x2 + " " + y2;
             } else if (y2 <= y1) {
-                var offset = 18 + (fromIdx % 2) * 10;
+                var offset = 16 + (fromIdx % 2) * 8;
                 var sideX = Math.max(x1, x2) + offset;
                 dAttr = "M " + x1 + " " + y1 + " L " + sideX + " " + y1 + " L " + sideX + " " + y2 + " L " + x2 + " " + y2;
             } else {
@@ -435,14 +434,18 @@ function drawConnectors() {
             }
         }
 
-        var startIdx = p * 12;
-        var endIdx = Math.min(startIdx + 12, stepsList.length);
+        var startIdx = p * 10;
+        var endIdx = Math.min(startIdx + 10, stepsList.length);
 
         for (var i = startIdx; i < endIdx; i++) {
             var s = stepsList[i];
             
-            // Jangan tarik panah jika langkah terakhir di halaman dan terhubung ke halaman berikutnya (off-page connector)
+            // Hentikan penarikan panah dari langkah terakhir halaman jika menyeberang ke halaman berikutnya (off-page connector)
             if (i === endIdx - 1 && p < totalPages - 1) {
+                continue;
+            }
+            // Hentikan penarikan panah ke langkah pertama halaman jika berasal dari halaman sebelumnya
+            if (i === startIdx && p > 0) {
                 continue;
             }
 

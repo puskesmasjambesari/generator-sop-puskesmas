@@ -210,7 +210,6 @@ function updatePreview() {
         
         var headerHtml = '';
         if (pageIdx === 0) {
-            // Kotak header instansi menggunakan rowspan="5" tanpa garis pemisah internal sama sekali
             headerHtml = '<table class="sop-header-table">' +
                 '<tr>' +
                     '<td rowspan="5" style="border: 1px solid #000; text-align: center; vertical-align: middle; padding: 6px; width: 42%;"> ' +
@@ -305,7 +304,6 @@ function updatePreview() {
                         shapeHtml = '<div class="flow-shape shape-decision" id="shape-' + globalIdx + '"></div>';
                     }
 
-                    // Segi lima off-page connector murni tanpa anak panah
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
                         shapeHtml = '<div style="display:flex; justify-content:center; align-items:center; margin:2px auto;" id="shape-' + globalIdx + '">' +
                             '<svg width="18" height="13" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
@@ -392,7 +390,6 @@ function drawConnectors() {
             var el2 = document.getElementById('shape-' + toIdx);
             if (!el1 || !el2) return;
 
-            // Jangan gambar panah jika elemen adalah off-page connector (segi lima)
             if (el1.querySelector('polygon') || el2.querySelector('polygon')) return;
 
             var r1 = el1.getBoundingClientRect();

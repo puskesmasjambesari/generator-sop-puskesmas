@@ -17,7 +17,7 @@ var pelaksanaList = [
 ];
 var stepsList = [
     { kegiatan: "Menerima berkas persyaratan dan meneliti kelengkapan identitas dari pemohon", pelaksana: "Petugas Pendaftaran", jenis: "start", panah: "one-way", waktu: "3 Menit", kelengkapan: "KTP / Rujukan", output: "Berkas diteliti" },
-    { kegiatan: "Apakah kelengkapan persyaratan dan data rekam medis lengkap?", pelaksana: "Petugas Pendaftaran", jenis: "decision", panah: "two-way", q: "Lengkap?", ya: "Lanjut", tidak: "Minta dilengkapi", waktu: "1 Menit", kelengkapan: "Berkas", output: "Keputusan" },
+    { kegiatan: "Apakah kelengkapan persyaratan dan data rekam medis lengkap?", pelaksana: "Petugas Pendaftaran", jenis: "decision", panah: "two-way", waktu: "1 Menit", kelengkapan: "Berkas", output: "Keputusan" },
     { kegiatan: "Menginput data rekam medis ke dalam sistem SIMPUS dan membuat kartu rawat inap", pelaksana: "Petugas Pendaftaran", jenis: "process", panah: "one-way", waktu: "5 Menit", kelengkapan: "SIMPUS", output: "Surat Masuk" },
     { kegiatan: "Melakukan serah terima pasien dan berkas rekam medis ke ruang perawatan", pelaksana: "Perawat Rawat Inap", jenis: "start", panah: "one-way", waktu: "5 Menit", kelengkapan: "Berkas", output: "Pasien diterima" }
 ];
@@ -118,7 +118,7 @@ function removeStep(i) {
     updatePreview();
 }
 
-// Fungsi Bersihkan Langkah
+// Fungsi Bersihkan Langkah yang dideklarasikan secara global
 function clearSteps() {
     if (confirm("Apakah Anda yakin ingin menghapus semua langkah SOP?")) {
         stepsList = [];
@@ -157,13 +157,6 @@ function renderStepsBuilder() {
         html += '<div><label>Waktu</label><input type="text" value="' + s.waktu + '" oninput="stepsList[' + i + '].waktu=this.value; updatePreview()"></div>';
         html += '</div>';
 
-        if(s.jenis === 'decision') {
-            html += '<div class="form-row" style="margin-bottom:5px;">';
-            html += '<div><label>Pertanyaan</label><input type="text" value="' + (s.q || '') + '" oninput="stepsList[' + i + '].q=this.value; updatePreview()" placeholder="Pertanyaan?"></div>';
-            html += '<div><label>Cabang Ya</label><input type="text" value="' + (s.ya || '') + '" oninput="stepsList[' + i + '].ya=this.value; updatePreview()" placeholder="Target"></div>';
-            html += '</div>';
-        }
-        
         html += '<div class="form-row">';
         html += '<div style="grid-column: span 2;"><label>Output</label><input type="text" value="' + s.output + '" oninput="stepsList[' + i + '].output=this.value; updatePreview()"></div>';
         html += '</div>';
@@ -236,16 +229,12 @@ function updatePreview() {
         var pelaksanaCells = '';
         for (var pc = 0; pc < pelaksanaList.length; pc++) {
             if (sItem.pelaksana === pelaksanaList[pc]) {
-                var shapeHtml = '';
                 var shapeClass = 'shape-process';
                 if (sItem.jenis === 'start') shapeClass = 'shape-start';
                 else if (sItem.jenis === 'decision') shapeClass = 'shape-decision';
 
-                // Shape bersih tanpa tulisan teks di dalamnya
-                shapeHtml = '<div class="flow-shape ' + shapeClass + '"></div>';
-                if (sItem.jenis === 'decision') {
-                    shapeHtml += '<div style="font-size:6.5px; margin-top:2px; font-weight:bold;">' + (sItem.q || '') + '</div>';
-                }
+                // Shape 100% bersih tanpa teks
+                var shapeHtml = '<div class="flow-shape ' + shapeClass + '"></div>';
 
                 // Render panah penghubung antar shape jika bukan langkah terakhir
                 if (st < stepsList.length - 1) {
@@ -266,7 +255,7 @@ function updatePreview() {
         bodyHtml += '<td style="font-size: 8px;">' + (sItem.kelengkapan || '-') + '</td>';
         bodyHtml += '<td style="font-size: 8px; text-align: center;">' + (sItem.waktu || '-') + '</td>';
         bodyHtml += '<td style="font-size: 8px;">' + (sItem.output || '-') + '</td>';
-        bodyHtml += '<td style="font-size: 8px;">' + (sItem.jenis === 'decision' ? 'Ya: ' + (sItem.ya || '-') : '-') + '</td>';
+        bodyHtml += '<td style="font-size: 8px;">' + (sItem.jenis === 'decision' ? 'Keputusan' : '-') + '</td>';
         bodyHtml += '</tr>';
     }
     document.getElementById('tbodySteps').innerHTML = bodyHtml;

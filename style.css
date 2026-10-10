@@ -77,7 +77,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 
 .preview-area { display: flex; flex-direction: column; align-items: center; overflow-x: auto; background: #e2e8f0; padding: 2rem; border-radius: 12px; gap: 2rem; }
 
-/* UKURAN KERTAS A4 PORTRAIT DEFAULT */
+/* KUNCI UKURAN KERTAS A4 PORTRAIT DENGAN FLEXBOX PENUH */
 .a4-page {
     background: white; 
     width: 210mm; 
@@ -88,6 +88,9 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
     position: relative; 
     color: black; 
     page-break-after: always;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     overflow: hidden;
     box-sizing: border-box;
 }
@@ -97,8 +100,18 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
     max-height: 210mm;
 }
 
-.sop-table, .sop-header-table { width: 100%; border-collapse: collapse; margin-bottom: 0; font-family: Arial, sans-serif; table-layout: fixed; }
-.sop-header-table td, .sop-table th, .sop-table td { border: 1px solid #000; padding: 3px 4px; font-size: 9px; vertical-align: middle; }
+.sop-header-table { width: 100%; border-collapse: collapse; margin-bottom: 0; font-family: Arial, sans-serif; table-layout: fixed; }
+.sop-header-table td { border: 1px solid #000; padding: 3px 4px; font-size: 9px; vertical-align: middle; }
+
+.sop-table { 
+    flex: 1; 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-bottom: 0; 
+    font-family: Arial, sans-serif; 
+    table-layout: fixed; 
+}
+.sop-table th, .sop-table td { border: 1px solid #000; padding: 3px 4px; font-size: 9px; vertical-align: middle; }
 
 .meta-lbl { background: #f0f0f0; font-weight: bold; width: 95px; font-size: 8px; }
 .meta-val { font-size: 8px; }
@@ -126,6 +139,6 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
     body { background: white; }
     .main-container { display: block; padding: 0; margin: 0; }
     .preview-area { background: white; padding: 0; border-radius: 0; gap: 0; }
-    .a4-page { box-shadow: none; margin: 0; width: 100% !important; height: 100vh; max-height: none; padding: 8mm; page-break-after: always; overflow: visible; }
+    .a4-page { box-shadow: none; margin: 0; width: 100% !important; height: 100vh; max-height: none; padding: 8mm; page-break-after: always; display: flex; flex-direction: column; overflow: visible; }
     @page { size: portrait; margin: 5mm; }
 }

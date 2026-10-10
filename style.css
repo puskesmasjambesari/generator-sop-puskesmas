@@ -24,9 +24,46 @@ body { background: var(--bg); color: var(--text); display: flex; flex-direction:
 .brand-sub { font-size: 0.75rem; color: var(--muted); display: block; }
 .badge { background: #eff6ff; color: var(--brand); padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
 
-.main-container { display: grid; grid-template-columns: 440px 1fr; gap: 2rem; padding: 2rem; max-width: 1700px; margin: 0 auto; width: 100%; }
+/* KONTAINER UTAMA (Diberi align-items: start agar sidebar terkunci tingginya) */
+.main-container { 
+    display: grid; 
+    grid-template-columns: 440px 1fr; 
+    gap: 2rem; 
+    padding: 2rem; 
+    max-width: 1700px; 
+    margin: 0 auto; 
+    width: 100%; 
+    align-items: start; 
+}
 
-.sidebar { display: flex; flex-direction: column; gap: 1.5rem; max-height: calc(100vh - 100px); overflow-y: auto; padding-right: 5px; }
+/* SIDEBAR FORM (Dibuat Sticky & Bisa Di-scroll) */
+.sidebar { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 1.5rem; 
+    height: calc(100vh - 120px); 
+    position: sticky;
+    top: 1.5rem;
+    overflow-y: auto; 
+    padding-right: 6px; 
+}
+
+/* Custom Scrollbar untuk Sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.sidebar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
 .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
 .card-header { background: #f1f5f9; padding: 0.85rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.95rem; color: var(--primary); }
 .card-body { padding: 1.25rem; }

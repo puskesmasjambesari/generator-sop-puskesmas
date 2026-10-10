@@ -17,7 +17,7 @@ var pelaksanaList = [
 ];
 var stepsList = [
     { kegiatan: "Menerima berkas persyaratan dan meneliti kelengkapan identitas dari pemohon", pelaksana: "Petugas Pendaftaran", jenis: "start", waktu: "3 Menit", kelengkapan: "KTP / Rujukan", output: "Berkas diteliti", q1: "", target1: "", q2: "", target2: "" },
-    { kegiatan: "Apakah kelengkapan persyaratan dan data rekam medis lengkap?", pelaksana: "Petugas Pendaftaran", jenis: "decision", waktu: "1 Menit", kelengkapan: "Berkas", output: "Keputusan", q1: "Ya -> Lgkh 6", target1: "6", q2: "Tidak -> Lgkh 2", target2: "2" },
+    { kegiatan: "Apakah kelengkapan persyaratan dan data rekam medis lengkap?", pelaksana: "Petugas Pendaftaran", jenis: "decision", waktu: "1 Menit", kelengkapan: "Berkas", output: "Keputusan", q1: "Ya", target1: "6", q2: "Tidak", target2: "2" },
     { kegiatan: "Menginput data rekam medis ke dalam sistem SIMPUS dan membuat kartu rawat inap", pelaksana: "Petugas Pendaftaran", jenis: "process", waktu: "5 Menit", kelengkapan: "SIMPUS", output: "Surat Masuk", q1: "", target1: "", q2: "", target2: "" },
     { kegiatan: "Melakukan serah terima pasien dan berkas rekam medis ke ruang perawatan", pelaksana: "Perawat Rawat Inap", jenis: "start", waktu: "5 Menit", kelengkapan: "Berkas", output: "Pasien diterima", q1: "", target1: "", q2: "", target2: "" }
 ];
@@ -158,12 +158,12 @@ function renderStepsBuilder() {
 
         if(s.jenis === 'decision') {
             html += '<div class="form-row" style="margin-bottom:5px;">';
-            html += '<div><label>Cabang A (Cth: Ya)</label><input type="text" value="' + (s.q1 || '') + '" oninput="stepsList[' + i + '].q1=this.value; updatePreview()" placeholder="Cth: Ya"></div>';
-            html += '<div><label>Target Langkah A (No. Urut)</label><input type="text" value="' + (s.target1 || '') + '" oninput="stepsList[' + i + '].target1=this.value; updatePreview()" placeholder="Cth: 6"></div>';
+            html += '<div><label>Label Pilihan 1 (Cth: Ya)</label><input type="text" value="' + (s.q1 || '') + '" oninput="stepsList[' + i + '].q1=this.value; updatePreview()" placeholder="Cth: Ya"></div>';
+            html += '<div><label>Target Langkah Pilihan 1 (No. Urut)</label><input type="text" value="' + (s.target1 || '') + '" oninput="stepsList[' + i + '].target1=this.value; updatePreview()" placeholder="Cth: 6"></div>';
             html += '</div>';
             html += '<div class="form-row" style="margin-bottom:5px;">';
-            html += '<div><label>Cabang B (Cth: Tidak)</label><input type="text" value="' + (s.q2 || '') + '" oninput="stepsList[' + i + '].q2=this.value; updatePreview()" placeholder="Cth: Tidak"></div>';
-            html += '<div><label>Target Langkah B (No. Urut)</label><input type="text" value="' + (s.target2 || '') + '" oninput="stepsList[' + i + '].target2=this.value; updatePreview()" placeholder="Cth: 2"></div>';
+            html += '<div><label>Label Pilihan 2 (Cth: Tidak)</label><input type="text" value="' + (s.q2 || '') + '" oninput="stepsList[' + i + '].q2=this.value; updatePreview()" placeholder="Cth: Tidak"></div>';
+            html += '<div><label>Target Langkah Pilihan 2 (No. Urut)</label><input type="text" value="' + (s.target2 || '') + '" oninput="stepsList[' + i + '].target2=this.value; updatePreview()" placeholder="Cth: 2"></div>';
             html += '</div>';
         }
         
@@ -196,7 +196,7 @@ function updatePreview() {
     var htmlDasarList = dasarHukumList.map(function(d){return '<li>'+d+'</li>'}).join('');
     var htmlKetList = keterkaitanList.map(function(k){return '<li>'+k+'</li>'}).join('');
 
-    var stepsPerPage = 7;
+    var stepsPerPage = 6;
     var totalPages = Math.ceil(stepsList.length / stepsPerPage) || 1;
     var container = document.getElementById('previewAreaContainer');
     container.innerHTML = '';
@@ -213,11 +213,11 @@ function updatePreview() {
         if (pageIdx === 0) {
             headerHtml = '<table class="sop-header-table">' +
                 '<tr>' +
-                    '<td rowspan="4" class="logo-cell"><img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 55px; height: auto; display: block; margin: 0 auto;" /></td>' +
+                    '<td rowspan="4" class="logo-cell"><img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;" /></td>' +
                     '<td rowspan="4" class="instansi-cell">' +
                         '<div>' + pemda + '</div>' +
                         '<div>' + dinas + '</div>' +
-                        '<div style="font-size: 11px; margin-top:2px;">' + puskesmas + '</div>' +
+                        '<div style="font-size: 10px; margin-top:2px;">' + puskesmas + '</div>' +
                     '</td>' +
                     '<td class="meta-lbl">NOMOR SOP</td>' +
                     '<td class="meta-val">' + formatNoSOP + '</td>' +
@@ -229,45 +229,45 @@ function updatePreview() {
                     '<td colspan="2" style="border: 1px solid #000; padding: 0;"></td>' +
                     '<td class="meta-lbl">DISAHKAN OLEH</td>' +
                     '<td class="sig-cell">' +
-                        '<div style="font-size: 8px;">KEPALA ' + puskesmas.toUpperCase() + '</div>' +
-                        '<div style="height: 35px;"></div>' +
-                        '<div style="font-weight: bold; text-decoration: underline; font-size: 9px;">' + kaPuskesmas + '</div>' +
-                        '<div style="font-size: 8px;">NIP. ' + nipKa + '</div>' +
+                        '<div style="font-size: 7.5px;">KEPALA ' + puskesmas.toUpperCase() + '</div>' +
+                        '<div style="height: 28px;"></div>' +
+                        '<div style="font-weight: bold; text-decoration: underline; font-size: 8.5px;">' + kaPuskesmas + '</div>' +
+                        '<div style="font-size: 7.5px;">NIP. ' + nipKa + '</div>' +
                     '</td>' +
                 '</tr>' +
             '</table>' +
             '<div class="sop-title-box" style="margin-top: -1px;">' +
                 'SOP ' + judul.toUpperCase() +
             '</div>' +
-            '<table style="width: 100%; border-collapse: collapse; margin-bottom: 8px; margin-top: -1px;">' +
+            '<table style="width: 100%; border-collapse: collapse; margin-bottom: 6px; margin-top: -1px;">' +
                 '<tr>' +
-                    '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                    '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 3px 4px;">' +
                         '<div class="section-box-title">DASAR HUKUM</div>' +
-                        '<ol style="padding-left: 12px; font-size: 8.5px; line-height: 1.3; margin: 0;">' + htmlDasarList + '</ol>' +
+                        '<ol style="padding-left: 12px; font-size: 8px; line-height: 1.2; margin: 0;">' + htmlDasarList + '</ol>' +
                     '</td>' +
-                    '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                    '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 3px 4px;">' +
                         '<div class="section-box-title">KUALIFIKASI PELAKSANA</div>' +
-                        '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + kualifikasi + '</div>' +
+                        '<div style="font-size: 8px; white-space: pre-line; line-height: 1.2;">' + kualifikasi + '</div>' +
                     '</td>' +
                 '</tr>' +
                 '<tr>' +
-                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                    '<td style="vertical-align: top; border: 1px solid #000; padding: 3px 4px;">' +
                         '<div class="section-box-title">KETERKAITAN</div>' +
-                        '<ul style="padding-left: 12px; font-size: 8.5px; line-height: 1.3; margin: 0;">' + htmlKetList + '</ul>' +
+                        '<ul style="padding-left: 12px; font-size: 8px; line-height: 1.2; margin: 0;">' + htmlKetList + '</ul>' +
                     '</td>' +
-                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                    '<td style="vertical-align: top; border: 1px solid #000; padding: 3px 4px;">' +
                         '<div class="section-box-title">PERALATAN / PERLENGKAPAN</div>' +
-                        '<div style="font-size: 8.5px; white-space: pre-line; line-height: 1.3;">' + peralatan + '</div>' +
+                        '<div style="font-size: 8px; white-space: pre-line; line-height: 1.2;">' + peralatan + '</div>' +
                     '</td>' +
                 '</tr>' +
                 '<tr>' +
-                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                    '<td style="vertical-align: top; border: 1px solid #000; padding: 3px 4px;">' +
                         '<div class="section-box-title">PERINGATAN</div>' +
-                        '<div style="font-size: 8.5px; line-height: 1.3;">' + peringatan + '</div>' +
+                        '<div style="font-size: 8px; line-height: 1.2;">' + peringatan + '</div>' +
                     '</td>' +
-                    '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
+                    '<td style="vertical-align: top; border: 1px solid #000; padding: 3px 4px;">' +
                         '<div class="section-box-title">PENCATATAN DAN PENDATAAN</div>' +
-                        '<div style="font-size: 8.5px; line-height: 1.3;">' + pencatatan + '</div>' +
+                        '<div style="font-size: 8px; line-height: 1.2;">' + pencatatan + '</div>' +
                     '</td>' +
                 '</tr>' +
             '</table>';
@@ -277,20 +277,20 @@ function updatePreview() {
 
         var pelaksanaTh = '';
         for (var h = 0; h < pelaksanaList.length; h++) {
-            pelaksanaTh += '<th style="min-width: 85px; font-size:8.5px;">' + pelaksanaList[h] + '</th>';
+            pelaksanaTh += '<th style="min-width: 80px; font-size:8px;">' + pelaksanaList[h] + '</th>';
         }
 
         var tableHtml = headerHtml +
             '<table class="sop-table" style="position:relative;" id="table-page-' + pageIdx + '">' +
             '<thead>' +
                 '<tr>' +
-                    '<th rowspan="2" style="width: 25px;">No</th>' +
-                    '<th rowspan="2" style="width: 200px;">Uraian Kegiatan</th>' +
+                    '<th rowspan="2" style="width: 22px;">No</th>' +
+                    '<th rowspan="2" style="width: 190px;">Uraian Kegiatan</th>' +
                     '<th colspan="' + (pelaksanaList.length || 1) + '">Pelaksana</th>' +
                     '<th colspan="3">Mutu Baku</th>' +
-                    '<th rowspan="2" style="width: 90px;">Keterangan</th>' +
+                    '<th rowspan="2" style="width: 85px;">Keterangan</th>' +
                 '</tr>' +
-                '<tr>' + pelaksanaTh + '<th>Kelengkapan</th><th>Waktu</th><th>Output</th></tr>' +
+                '<tr>' + pelaksanaTh + '<th style="width:55px;">Kelengkapan</th><th style="width:40px;">Waktu</th><th style="width:55px;">Output</th></tr>' +
             '</thead>' +
             '<tbody>';
 
@@ -309,14 +309,14 @@ function updatePreview() {
                     }
 
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
-                        shapeHtml = '<div style="display:flex; justify-content:center; align-items:center; margin:4px auto;" id="shape-' + globalIdx + '">' +
-                            '<svg width="24" height="18" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
+                        shapeHtml = '<div style="display:flex; justify-content:center; align-items:center; margin:2px auto;" id="shape-' + globalIdx + '">' +
+                            '<svg width="22" height="16" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
                                 '<polygon points="0,0 24,0 24,12 12,18 0,12" fill="#fff" stroke="#000" stroke-width="1.5"/>' +
                             '</svg>' +
                         '</div>';
                     }
 
-                    pelaksanaCells += '<td style="text-align: center; vertical-align: middle; padding:6px 2px;" data-step-idx="' + globalIdx + '" data-pelaksana-idx="' + pc + '">' +
+                    pelaksanaCells += '<td style="text-align: center; vertical-align: middle; padding:4px 2px;" data-step-idx="' + globalIdx + '" data-pelaksana-idx="' + pc + '">' +
                         shapeHtml +
                     '</td>';
                 } else {
@@ -326,8 +326,8 @@ function updatePreview() {
 
             var ketText = '-';
             if (sItem.jenis === 'decision') {
-                var q1Str = sItem.q1 ? (sItem.q1 + ' -> Lgkh ' + (sItem.target1 || '-')) : '';
-                var q2Str = sItem.q2 ? (sItem.q2 + ' -> Lgkh ' + (sItem.target2 || '-')) : '';
+                var q1Str = sItem.q1 ? (sItem.q1 + ' → Lgkh ' + (sItem.target1 || '-')) : '';
+                var q2Str = sItem.q2 ? (sItem.q2 + ' → Lgkh ' + (sItem.target2 || '-')) : '';
                 ketText = [q1Str, q2Str].filter(Boolean).join('; ') || 'Keputusan';
             }
 
@@ -335,10 +335,10 @@ function updatePreview() {
                 '<td style="text-align: center;">' + (globalIdx + 1) + '</td>' +
                 '<td>' + sItem.kegiatan + '</td>' +
                 pelaksanaCells +
-                '<td style="font-size: 8px;">' + (sItem.kelengkapan || '-') + '</td>' +
-                '<td style="font-size: 8px; text-align: center;">' + (sItem.waktu || '-') + '</td>' +
-                '<td style="font-size: 8px;">' + (sItem.output || '-') + '</td>' +
-                '<td style="font-size: 8px;">' + ketText + '</td>' +
+                '<td style="font-size: 7.5px;">' + (sItem.kelengkapan || '-') + '</td>' +
+                '<td style="font-size: 7.5px; text-align: center;">' + (sItem.waktu || '-') + '</td>' +
+                '<td style="font-size: 7.5px;">' + (sItem.output || '-') + '</td>' +
+                '<td style="font-size: 7.5px;">' + ketText + '</td>' +
             '</tr>';
         }
 
@@ -351,114 +351,118 @@ function updatePreview() {
 }
 
 function drawConnectors() {
-    var container = document.getElementById('previewAreaContainer');
-    if (!container) return;
+    var oldSvgs = document.querySelectorAll('.connectorSvgOverlay');
+    for (var o = 0; o < oldSvgs.length; o++) {
+        oldSvgs[o].remove();
+    }
 
-    var oldSvg = document.getElementById('globalConnectorSvg');
-    if (oldSvg) oldSvg.remove();
+    var pages = document.querySelectorAll('.a4-page');
+    for (var p = 0; p < pages.length; p++) {
+        var pageDiv = pages[p];
+        var pageRect = pageDiv.getBoundingClientRect();
 
-    var svgNS = "http://www.w3.org/2000/svg";
-    var svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute('id', 'globalConnectorSvg');
-    svg.style.position = 'absolute';
-    svg.style.top = '0';
-    svg.style.left = '0';
-    svg.style.width = '100%';
-    svg.style.height = '100%';
-    svg.style.pointerEvents = 'none';
-    svg.style.zIndex = '10';
+        var svgNS = "http://www.w3.org/2000/svg";
+        var svg = document.createElementNS(svgNS, "svg");
+        svg.className.baseVal = 'connectorSvgOverlay';
+        svg.style.position = 'absolute';
+        svg.style.top = '0';
+        svg.style.left = '0';
+        svg.style.width = '100%';
+        svg.style.height = '100%';
+        svg.style.pointerEvents = 'none';
+        svg.style.zIndex = '10';
 
-    var defs = document.createElementNS(svgNS, "defs");
-    var marker = document.createElementNS(svgNS, "marker");
-    marker.setAttribute('id', 'global-arrowhead');
-    marker.setAttribute('markerWidth', '6');
-    marker.setAttribute('markerHeight', '6');
-    marker.setAttribute('refX', '5');
-    marker.setAttribute('refY', '3');
-    marker.setAttribute('orient', 'auto');
-    var markerPath = document.createElementNS(svgNS, "path");
-    markerPath.setAttribute('d', 'M0,0 L6,3 L0,6 Z');
-    markerPath.setAttribute('fill', '#000');
-    marker.appendChild(markerPath);
-    defs.appendChild(marker);
-    svg.appendChild(defs);
+        var defs = document.createElementNS(svgNS, "defs");
+        var marker = document.createElementNS(svgNS, "marker");
+        marker.setAttribute('id', 'arrowhead-' + p);
+        marker.setAttribute('markerWidth', '6');
+        marker.setAttribute('markerHeight', '6');
+        marker.setAttribute('refX', '5');
+        marker.setAttribute('refY', '3');
+        marker.setAttribute('orient', 'auto');
+        var markerPath = document.createElementNS(svgNS, "path");
+        markerPath.setAttribute('d', 'M0,0 L6,3 L0,6 Z');
+        markerPath.setAttribute('fill', '#000');
+        marker.appendChild(markerPath);
+        defs.appendChild(marker);
+        svg.appendChild(defs);
 
-    var containerRect = container.getBoundingClientRect();
+        function drawSinglePath(fromIdx, toIdx, labelText) {
+            var el1 = document.getElementById('shape-' + fromIdx);
+            var el2 = document.getElementById('shape-' + toIdx);
+            if (!el1 || !el2) return;
 
-    function drawPath(fromIdx, toIdx, labelText) {
-        var el1 = document.getElementById('shape-' + fromIdx);
-        var el2 = document.getElementById('shape-' + toIdx);
-        if (!el1 || !el2) return;
+            var r1 = el1.getBoundingClientRect();
+            var r2 = el2.getBoundingClientRect();
 
-        var r1 = el1.getBoundingClientRect();
-        var r2 = el2.getBoundingClientRect();
+            var x1 = r1.left + r1.width / 2 - pageRect.left;
+            var y1 = r1.bottom - pageRect.top;
+            var x2 = r2.left + r2.width / 2 - pageRect.left;
+            var y2 = r2.top - pageRect.top;
 
-        var x1 = r1.left + r1.width / 2 - containerRect.left + container.scrollLeft;
-        var y1 = r1.bottom - containerRect.top + container.scrollTop;
-        var x2 = r2.left + r2.width / 2 - containerRect.left + container.scrollLeft;
-        var y2 = r2.top - containerRect.top + container.scrollTop;
+            var path = document.createElementNS(svgNS, "path");
+            var dAttr = "";
 
-        var path = document.createElementNS(svgNS, "path");
-        var dAttr = "";
-
-        if (Math.abs(x1 - x2) < 3 && y2 > y1) {
-            dAttr = "M " + x1 + " " + y1 + " L " + x2 + " " + y2;
-        } else {
-            var midY = y1 + (y2 - y1) / 2;
-            if (y2 <= y1) {
-                var offset = 35 + (fromIdx % 3) * 15;
+            if (Math.abs(x1 - x2) < 3 && y2 > y1) {
+                dAttr = "M " + x1 + " " + y1 + " L " + x2 + " " + y2;
+            } else if (y2 <= y1) {
+                var offset = 22 + (fromIdx % 2) * 12;
                 var sideX = Math.max(x1, x2) + offset;
                 dAttr = "M " + x1 + " " + y1 + " L " + sideX + " " + y1 + " L " + sideX + " " + y2 + " L " + x2 + " " + y2;
             } else {
+                var midY = y1 + (y2 - y1) / 2;
                 dAttr = "M " + x1 + " " + y1 + " L " + x1 + " " + midY + " L " + x2 + " " + midY + " L " + x2 + " " + y2;
             }
+
+            path.setAttribute('d', dAttr);
+            path.setAttribute('stroke', '#000');
+            path.setAttribute('stroke-width', '1.5');
+            path.setAttribute('fill', 'none');
+            path.setAttribute('marker-end', 'url(#arrowhead-' + p + ')');
+            svg.appendChild(path);
+
+            if (labelText) {
+                var text = document.createElementNS(svgNS, "text");
+                text.textContent = labelText;
+                text.setAttribute('x', x1 + 4);
+                text.setAttribute('y', y1 + 10);
+                text.setAttribute('font-size', '7px');
+                text.setAttribute('font-family', 'Arial');
+                text.setAttribute('fill', '#000');
+                svg.appendChild(text);
+            }
         }
 
-        path.setAttribute('d', dAttr);
-        path.setAttribute('stroke', '#000');
-        path.setAttribute('stroke-width', '1.5');
-        path.setAttribute('fill', 'none');
-        path.setAttribute('marker-end', 'url(#global-arrowhead)');
-        svg.appendChild(path);
+        var startIdx = p * 6;
+        var endIdx = Math.min(startIdx + 6, stepsList.length);
 
-        if (labelText) {
-            var text = document.createElementNS(svgNS, "text");
-            text.textContent = labelText;
-            text.setAttribute('x', x1 + 4);
-            text.setAttribute('y', y1 + 14);
-            text.setAttribute('font-size', '8px');
-            text.setAttribute('font-family', 'Arial');
-            text.setAttribute('fill', '#000');
-            svg.appendChild(text);
+        for (var i = startIdx; i < endIdx; i++) {
+            var s = stepsList[i];
+            if (s.jenis === 'decision') {
+                var hasExplicitTarget = false;
+                if (s.target1 !== undefined && s.target1 !== '' && !isNaN(s.target1)) {
+                    var t1 = parseInt(s.target1) - 1;
+                    var lbl1 = s.q1 ? s.q1.trim() : 'Ya';
+                    drawSinglePath(i, t1, lbl1);
+                    hasExplicitTarget = true;
+                }
+                if (s.target2 !== undefined && s.target2 !== '' && !isNaN(s.target2)) {
+                    var t2 = parseInt(s.target2) - 1;
+                    var lbl2 = s.q2 ? s.q2.trim() : 'Tidak';
+                    drawSinglePath(i, t2, lbl2);
+                    hasExplicitTarget = true;
+                }
+                if (!hasExplicitTarget && i + 1 < stepsList.length) {
+                    drawSinglePath(i, i + 1, null);
+                }
+            } else {
+                if (i + 1 < stepsList.length) {
+                    drawSinglePath(i, i + 1, null);
+                }
+            }
         }
+
+        pageDiv.style.position = 'relative';
+        pageDiv.appendChild(svg);
     }
-
-    for (var i = 0; i < stepsList.length; i++) {
-        var s = stepsList[i];
-        if (s.jenis === 'decision') {
-            var hasTarget = false;
-            if (s.target1 !== undefined && s.target1 !== '' && !isNaN(s.target1)) {
-                var t1 = parseInt(s.target1) - 1;
-                var lbl1 = s.q1 ? s.q1.trim() : 'Ya';
-                drawPath(i, t1, lbl1);
-                hasTarget = true;
-            }
-            if (s.target2 !== undefined && s.target2 !== '' && !isNaN(s.target2)) {
-                var t2 = parseInt(s.target2) - 1;
-                var lbl2 = s.q2 ? s.q2.trim() : 'Tidak';
-                drawPath(i, t2, lbl2);
-                hasTarget = true;
-            }
-            if (!hasTarget && i + 1 < stepsList.length) {
-                drawPath(i, i + 1, null);
-            }
-        } else {
-            if (i + 1 < stepsList.length) {
-                drawPath(i, i + 1, null);
-            }
-        }
-    }
-
-    container.style.position = 'relative';
-    container.appendChild(svg);
 }

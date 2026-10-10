@@ -3,77 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOP Generator - UPTD Puskesmas Jambesari</title>
+    <title>SOP AP Generator - UPTD Puskesmas Jambesari</title>
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Hubungkan ke File CSS Eksternal -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <!-- MODAL LOGIN AKSES (ADMIN / USER) -->
-    <div class="modal-overlay" id="authModal">
-        <div class="modal-box">
-            <h3><i class="fa-solid fa-lock"></i> Login Akses SOP Builder</h3>
-            <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem;">Pilih hak akses untuk masuk ke aplikasi generator SOP.</p>
-            <div class="form-group">
-                <label>Pilih Peran (Role)</label>
-                <select id="loginRole" onchange="switchLoginForm()">
-                    <option value="user">User / Pembuat SOP</option>
-                    <option value="admin">Admin Instansi (Puskesmas)</option>
-                </select>
-            </div>
-            <div class="form-group" id="userPassGroup" style="display:none;">
-                <label>Password Admin</label>
-                <input type="password" id="loginPass" placeholder="Default: admin123">
-            </div>
-            <button class="btn btn-primary" onclick="processLogin()"><i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi</button>
-        </div>
-    </div>
 
     <!-- NAVBAR HEADER -->
     <header class="navbar">
         <div class="brand">
             <i class="fa-solid fa-notes-medical"></i>
             <div>
-                <span class="brand-title">SOP Puskesmas Pro</span>
-                <span class="brand-sub">PermenPANRB No. 35/2012 - UPTD Puskesmas Jambesari</span>
+                <span class="brand-title">SOP AP Builder Pro</span>
+                <span class="brand-sub">PermenPANRB No. 35/2012 — UPTD Puskesmas Jambesari</span>
             </div>
         </div>
         <div class="user-info">
-            <span id="activeRoleBadge" class="tag-badge" style="background:#dbeafe; color:#1e40af; font-weight:600;">Mode: User</span>
-            <button class="btn btn-sm btn-danger" onclick="openLoginModal()"><i class="fa-solid fa-right-from-bracket"></i> Ganti Akses</button>
+            <span class="badge"><i class="fa-solid fa-circle-check" style="color:var(--success);"></i> Mode Aktif: User Builder</span>
         </div>
     </header>
 
     <!-- KONTEN UTAMA -->
     <main class="main-container">
-        <!-- SIDEBAR FORM INPUT -->
+        
+        <!-- SIDEBAR PANEL INPUT -->
         <aside class="sidebar no-print">
             
-            <!-- PANEL ADMIN (Statis) -->
-            <div class="card" id="adminCard" style="display:none;">
-                <div class="card-header"><i class="fa-solid fa-shield-halved"></i> Pengaturan Statis Admin</div>
+            <!-- IDENTITAS INSTANSI -->
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-building-columns"></i> Identitas Instansi (Statis)</div>
                 <div class="card-body">
                     <div class="form-group"><label>Pemerintah Daerah</label><input type="text" id="cfgPemda" value="PEMERINTAH KABUPATEN BONDOWOSO" oninput="updatePreview()"></div>
                     <div class="form-group"><label>Dinas Kesehatan</label><input type="text" id="cfgDinas" value="DINAS KESEHATAN KABUPATEN BONDOWOSO" oninput="updatePreview()"></div>
                     <div class="form-group"><label>Nama Puskesmas</label><input type="text" id="cfgPuskesmas" value="UPTD PUSKESMAS JAMBESARI" oninput="updatePreview()"></div>
-                    <div class="form-group"><label>Alamat Puskesmas</label><input type="text" id="cfgAlamat" value="Jl. Raya Jambesari No. 01 Telp. (0332) 551100" oninput="updatePreview()"></div>
                     <div class="form-group"><label>Nama Kepala Puskesmas</label><input type="text" id="cfgKaPuskesmas" value="drg.Noeri Rustianti" oninput="updatePreview()"></div>
                     <div class="form-group"><label>NIP Kepala Puskesmas</label><input type="text" id="cfgNipKa" value="19761018 200604 2 015" oninput="updatePreview()"></div>
                 </div>
             </div>
 
-            <!-- PANEL USER (Dinamis SOP) -->
+            <!-- FORM KONTEN SOP DINAMIS -->
             <div class="card">
-                <div class="card-header"><i class="fa-solid fa-pen-nib"></i> Penyusunan Data SOP (Dinamis)</div>
+                <div class="card-header"><i class="fa-solid fa-pen-to-square"></i> Konten SOP (Dinamis)</div>
                 <div class="card-body">
                     <div class="form-group"><label>Judul SOP</label><input type="text" id="inpJudul" value="Pendaftaran Pasien Rawat Inap" oninput="updatePreview()"></div>
                     
                     <div class="form-row">
                         <div class="form-group"><label>Nomor Urut SOP</label><input type="text" id="inpNoSOP" value="001" oninput="updatePreview()"></div>
-                        <div class="form-group"><label>Tahun Pembuatan</label><input type="text" id="inpTahun" value="2026" oninput="updatePreview()"></div>
+                        <div class="form-group"><label>Tahun</label><input type="text" id="inpTahun" value="2026" oninput="updatePreview()"></div>
                     </div>
 
                     <div class="form-row">
@@ -89,32 +67,32 @@
                     </div>
 
                     <hr class="divider">
-                    <label style="font-weight:700; margin-bottom:5px; display:block;">1. Dasar Hukum</label>
+                    <label class="section-label">1. Dasar Hukum (Regulasi Terbaru)</label>
                     <div class="tag-list" id="listDasarHukum"></div>
-                    <div class="inline-add"><input type="text" id="inpDasarHukum" placeholder="Contoh: UU No. 36 Tahun 2009"><button class="btn btn-sm btn-primary" onclick="addDasarHukum()"><i class="fa-solid fa-plus"></i></button></div>
+                    <div class="inline-add"><input type="text" id="inpDasarHukum" placeholder="Undang-Undang / Permenkes"><button class="btn btn-sm btn-primary" onclick="addDasarHukum()"><i class="fa-solid fa-plus"></i></button></div>
 
                     <hr class="divider">
-                    <label style="font-weight:700; margin-bottom:5px; display:block;">2. Keterkaitan</label>
+                    <label class="section-label">2. Keterkaitan</label>
                     <div class="tag-list" id="listKeterkaitan"></div>
-                    <div class="inline-add"><input type="text" id="inpKeterkaitan" placeholder="Contoh: SOP Pendaftaran Rawat Jalan"><button class="btn btn-sm btn-primary" onclick="addKeterkaitan()"><i class="fa-solid fa-plus"></i></button></div>
+                    <div class="inline-add"><input type="text" id="inpKeterkaitan" placeholder="SOP lain yang terkait"><button class="btn btn-sm btn-primary" onclick="addKeterkaitan()"><i class="fa-solid fa-plus"></i></button></div>
 
                     <hr class="divider">
-                    <div class="form-group"><label>3. Peringatan</label><textarea id="inpPeringatan" rows="2" oninput="updatePreview()">Apabila prosedur pendaftaran tidak dilakukan dengan teliti, maka rekam medis pasien tertukar dan pelayanan terhambat.</textarea></div>
+                    <div class="form-group"><label>3. Peringatan</label><textarea id="inpPeringatan" rows="2" oninput="updatePreview()">Apabila prosedur tidak dilakukan dengan teliti, maka pelayanan rawat inap terhambat.</textarea></div>
                     
-                    <div class="form-group"><label>4. Kualifikasi Pelaksana</label><textarea id="inpKualifikasi" rows="2" oninput="updatePreview()">1. Memiliki kemampuan komunikasi yang baik&#10;2. Menguasai sistem pendaftaran rekam medis</textarea></div>
+                    <div class="form-group"><label>4. Kualifikasi Pelaksana</label><textarea id="inpKualifikasi" rows="2" oninput="updatePreview()">1. Memiliki kemampuan komunikasi yang baik&#10;2. Menguasai sistem pelayanan pendaftaran</textarea></div>
 
-                    <div class="form-group"><label>5. Peralatan dan Perlengkapan</label><textarea id="inpPeralatan" rows="2" oninput="updatePreview()">1. Komputer & Printer&#10;2. Kartu Berobat & Berkas Rekam Medis</textarea></div>
+                    <div class="form-group"><label>5. Peralatan dan Perlengkapan</label><textarea id="inpPeralatan" rows="2" oninput="updatePreview()">1. Komputer & Printer&#10;2. Berkas Rekam Medis</textarea></div>
 
-                    <div class="form-group"><label>6. Pencatatan dan Pendataan</label><textarea id="InpPencatatan" rows="2" oninput="updatePreview()">Dicatat dalam buku register pendaftaran dan diinput ke dalam database SIMPUS.</textarea></div>
+                    <div class="form-group"><label>6. Pencatatan dan Pendataan</label><textarea id="InpPencatatan" rows="2" oninput="updatePreview()">Dicatat dalam buku register dan diinput ke dalam database SIMPUS.</textarea></div>
 
                     <hr class="divider">
-                    <label style="font-weight:700; margin-bottom:5px; display:block;">7. Pelaksana / Subjek Terlibat (Aktor)</label>
+                    <label class="section-label">7. Pelaksana / Subjek Terlibat (Aktor)</label>
                     <div class="tag-list" id="listPelaksana"></div>
-                    <div class="inline-add"><input type="text" id="inpNamaPelaksana" placeholder="Misal: Perawat, Dokter"><button class="btn btn-sm btn-primary" onclick="addPelaksana()"><i class="fa-solid fa-plus"></i></button></div>
+                    <div class="inline-add"><input type="text" id="inpNamaPelaksana" placeholder="Nama Pelaksana/Subjek"><button class="btn btn-sm btn-primary" onclick="addPelaksana()"><i class="fa-solid fa-plus"></i></button></div>
 
                     <hr class="divider">
-                    <label style="font-weight:700; margin-bottom:5px; display:block;">8. Langkah-Langkah & Flowchart</label>
-                    <button class="btn btn-sm btn-primary" style="width:100%; margin-bottom:10px;" onclick="addStepRow()"><i class="fa-solid fa-plus-circle"></i> Tambah Langkah</button>
+                    <label class="section-label">8. Langkah-Langkah & Bagan Alir (Flowchart)</label>
+                    <button class="btn btn-sm btn-primary" style="width:100%; margin-bottom:10px;" onclick="addStepRow()"><i class="fa-solid fa-plus-circle"></i> Tambah Langkah SOP</button>
                     <div id="stepsBuilderContainer"></div>
 
                     <button class="btn btn-success" onclick="window.print()"><i class="fa-solid fa-print"></i> Cetak / Ekspor PDF A4</button>
@@ -122,68 +100,16 @@
             </div>
         </aside>
 
-        <!-- AREA PREVIEW DOKUMEN A4 -->
-        <section class="preview-area" id="previewArea">
-            <!-- Halaman 1: Cover -->
-            <div class="a4-page landscape" id="coverSheet">
-                <div class="cover-page">
-                    <div>
-                        <div style="font-weight:bold; font-size:15px; margin-bottom:8px;" id="cvrPemda">PEMERINTAH KABUPATEN BONDOWOSO</div>
-                        <div style="font-weight:bold; font-size:13px; margin-bottom:30px;" id="cvrDinas">DINAS KESEHATAN KABUPATEN BONDOWOSO</div>
-                    </div>
-                    <div>
-                        <div class="cover-logo" style="margin: 0 auto;">LOGO</div>
-                        <div class="cover-title">STANDAR OPERASIONAL PROSEDUR (SOP)<br><span id="cvrJudulSOP">Pendaftaran Pasien Rawat Inap</span></div>
-                        <div class="cover-sub" id="cvrPuskesmas">UPTD PUSKESMAS JAMBESARI</div>
-                    </div>
-                    <div>
-                        <div class="cover-year" id="cvrTahun">2026</div>
-                        <div class="cover-footer" id="cvrAlamat">
-                            Jl. Raya Jambesari No. 01 Telp. (0332) 551100<br>BONDOWOSO
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Halaman 2: Keputusan Pimpinan / SK -->
-            <div class="a4-page landscape" id="skSheet">
-                <div class="sk-page">
-                    <h3 id="skPemda">PEMERINTAH KABUPATEN BONDOWOSO</h3>
-                    <h4 id="skPuskesmasTitle">KEPALA UPTD PUSKESMAS JAMBESARI</h4>
-                    <div class="sk-number">KEPUTUSAN KEPALA UPTD PUSKESMAS JAMBESARI<br>Nomor : 400.7 / 001 / SK / 430.9.3.15 / 2026</div>
-                    <div class="sk-about">TENTANG<br>PENETAPAN STANDAR OPERASIONAL PROSEDUR (SOP) <span id="skJudulText">Pendaftaran Pasien Rawat Inap</span><br>DI LINGKUNGAN UPTD PUSKESMAS JAMBESARI</div>
-                    
-                    <div class="sk-content">
-                        <b>MENIMBANG:</b><br>
-                        a. Bahwa dalam rangka meningkatkan mutu pelayanan publik dan kelancaran penyelenggaraan tugas serta fungsi di lingkungan UPTD Puskesmas Jambesari, perlu ditetapkan Standar Operasional Prosedur (SOP);<br>
-                        b. Bahwa berdasarkan pertimbangan sebagaimana dimaksud dalam huruf a, perlu menetapkan Keputusan Kepala UPTD Puskesmas Jambesari tentang Standar Operasional Prosedur <span id="skJudulText2">Pendaftaran Pasien Rawat Inap</span>.
-                    </div>
-                    <div class="sk-content">
-                        <b>MEMUTUSKAN:</b><br>
-                        <b>MENETAPKAN:</b><br>
-                        KESATU : Memberlakukan Standar Operasional Prosedur (SOP) <span id="skJudulText3">Pendaftaran Pasien Rawat Inap</span> di lingkungan UPTD Puskesmas Jambesari sebagaimana tercantum dalam lampiran keputusan ini.<br>
-                        KEDUA : SOP ini wajib dipedomani dan dilaksanakan oleh seluruh pegawai/petugas terkait dalam menjalankan tugas operasional sehari-hari.<br>
-                        KETIGA : Keputusan ini mulai berlaku sejak tanggal ditetapkan.
-                    </div>
-
-                    <div class="sk-signature-area">
-                        <div class="sk-sig-box">
-                            Ditetapkan di : Jambesari<br>
-                            Pada tanggal : <span id="skTglDitetapkan">01 Oktober 2026</span><br>
-                            <b>Kepala UPTD Puskesmas Jambesari,</b>
-                            <div style="height: 35px;"></div>
-                            <u id="skNamaKa">drg.Noeri Rustianti</u><br>
-                            NIP. <span id="skNipKa">19761018 200604 2 015</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Halaman 3: Dokumen Utama SOP AP -->
+        <!-- AREA PREVIEW A4 (SOP AP SESUAI PERMENPANRB) -->
+        <section class="preview-area">
             <div class="a4-page landscape" id="mainSopSheet">
+                
+                <!-- KOP TABEL IDENTITAS -->
                 <table class="sop-header-table">
                     <tr>
-                        <td rowspan="4" class="logo-cell"><div style="border:1px solid #000; height:55px; display:flex; align-items:center; justify-content:center; font-size:9px;">LOGO</div></td>
+                        <td rowspan="4" class="logo-cell">
+                            <div class="logo-box">PEMKAB<br>BONDOWOSO</div>
+                        </td>
                         <td rowspan="4" class="instansi-cell">
                             <div id="vPemda">PEMERINTAH KABUPATEN BONDOWOSO</div>
                             <div id="vDinas">DINAS KESEHATAN KABUPATEN BONDOWOSO</div>
@@ -206,7 +132,7 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="sop-title-box">
-                            <div style="font-size: 8px; color: #555;">STANDAR OPERASIONAL PROSEDUR</div>
+                            <div style="font-size: 8px; color: #555;">STANDAR OPERASIONAL PROSEDUR (SOP)</div>
                             <div id="vJudulSOP" style="font-size: 11px; font-weight: bold; margin-top: 2px;">PENDAFTARAN PASIEN RAWAT INAP</div>
                         </td>
                         <td class="meta-lbl">DISAHKAN OLEH</td>
@@ -219,6 +145,7 @@
                     </tr>
                 </table>
 
+                <!-- KOTAK INFORMASI PENDUKUNG -->
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">
                     <tr>
                         <td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">
@@ -252,6 +179,7 @@
                     </tr>
                 </table>
 
+                <!-- TABEL UTAMA BAGAN ALIR (BRANCHING FLOWCHART) -->
                 <table class="sop-table" id="mainFlowTable">
                     <thead>
                         <tr id="trHeadRow1">
@@ -269,7 +197,6 @@
         </section>
     </main>
 
-    <!-- Hubungkan ke File JavaScript Eksternal -->
     <script src="script.js"></script>
 </body>
 </html>

@@ -206,6 +206,15 @@ function getPageRanges(totalSteps) {
     return ranges;
 }
 
+function getPageIdxForStep(stepIdx, pageRanges) {
+    for (var pr = 0; pr < pageRanges.length; pr++) {
+        if (stepIdx >= pageRanges[pr].start && stepIdx < pageRanges[pr].start + pageRanges[pr].count) {
+            return pr;
+        }
+    }
+    return 0;
+}
+
 function updatePreview() {
     enforceTerminatorShapes();
     var pemda = document.getElementById('cfgPemda').value;
@@ -244,9 +253,6 @@ function updatePreview() {
 
         var pageDiv = document.createElement('div');
         pageDiv.className = 'a4-page';
-        if (pageSteps.length <= 3) {
-            pageDiv.classList.add('short-page');
-        }
         
         var headerHtml = '';
         if (pageIdx === 0) {
@@ -427,7 +433,12 @@ function drawConnectors() {
         defs.appendChild(marker);
         svg.appendChild(defs);
 
-        function drawSinglePath(fromIdx, toIdx, labelText, isSecondBranch) {
+        function drawSinglePath(fromIdx, toIdx, labelText, isSecondBranch, currentPageIdx) {
+            // Validasi ketat: pastikan fromIdx dan toIdx berada di halaman yang sama (mencegah panah antar segi lima lintas halaman)
+            if (getPageIdxForStep(fromIdx, pageRanges) !== currentPageIdx || getPageIdxForStep(toIdx, pageRanges) !== currentPageIdx) {
+                return;
+            }
+
             var el1 = document.getElementById('shape-' + fromIdx);
             var el2 = document.getElementById('shape-' + toIdx);
             if (!el1 || !el2) return;
@@ -486,22 +497,22 @@ function drawConnectors() {
         for (var i = startIdx; i < endIdx; i++) {
             var s = stepsList[i];
 
-            // Hubungkan langkah berurutan HANYA di dalam halaman yang sama (mencegah panah lintas halaman / antar segi lima)
+            // Hubungkan langkah berurutan hanya jika berada di dalam halaman yang sama
             if (i + 1 < endIdx) {
-                drawSinglePath(i, i + 1, null, false);
+                drawSinglePath(i, i + 1, null, false, p);
             }
 
             if (s.jenis === 'decision') {
                 var t1 = (s.target1 !== undefined && s.target1 !== '' && !isNaN(s.target1)) ? parseInt(s.target1) - 1 : i + 1;
                 var lbl1 = (s.q1 ? s.q1 : 'Ya').trim();
                 if (t1 >= startIdx && t1 < endIdx) {
-                    drawSinglePath(i, t1, lbl1, false);
+                    drawSinglePath(i, t1, lbl1, false, p);
                 }
 
                 var t2 = (s.target2 !== undefined && s.target2 !== '' && !isNaN(s.target2)) ? parseInt(s.target2) - 1 : Math.max(0, i - 1);
                 var lbl2 = (s.q2 ? s.q2 : 'Tidak').trim();
                 if (t2 >= startIdx && t2 < endIdx) {
-                    drawSinglePath(i, t2, lbl2, true);
+                    drawSinglePath(i, t2, lbl2, true, p);
                 }
             }
         }

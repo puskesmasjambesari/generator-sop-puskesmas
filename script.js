@@ -31,11 +31,11 @@ window.onload = function() {
 };
 
 window.onbeforeprint = function() {
-    setTimeout(drawConnectors, 100);
+    setTimeout(drawConnectors, 150);
 };
 
 window.onafterprint = function() {
-    setTimeout(drawConnectors, 100);
+    setTimeout(drawConnectors, 150);
 };
 
 function addDasarHukum() {
@@ -86,26 +86,6 @@ function removePelaksana(i) {
     renderTags();
     renderStepsBuilder();
     updatePreview();
-}
-
-function renderTags() {
-    var htmlDasar = '';
-    for (var i = 0; i < dasarHukumList.length; i++) {
-        htmlDasar += '<div class="tag-badge">' + dasarHukumList[i] + ' <i class="fa-solid fa-xmark" onclick="removeDasar(' + i + ')"></i></div>';
-    }
-    document.getElementById('listDasarHukum').innerHTML = htmlDasar;
-    
-    var htmlKet = '';
-    for (var j = 0; j < keterkaitanList.length; j++) {
-        htmlKet += '<div class="tag-badge">' + keterkaitanList[j] + ' <i class="fa-solid fa-xmark" onclick="removeKeterkaitan(' + j + ')"></i></div>';
-    }
-    document.getElementById('listKeterkaitan').innerHTML = htmlKet;
-    
-    var htmlPel = '';
-    for (var k = 0; k < pelaksanaList.length; k++) {
-        htmlPel += '<div class="tag-badge">' + pelaksanaList[k] + ' <i class="fa-solid fa-xmark" onclick="removePelaksana(' + k + ')"></i></div>';
-    }
-    document.getElementById('listPelaksana').innerHTML = htmlPel;
 }
 
 function enforceTerminatorShapes() {
@@ -264,6 +244,9 @@ function updatePreview() {
 
         var pageDiv = document.createElement('div');
         pageDiv.className = 'a4-page';
+        if (pageSteps.length <= 3) {
+            pageDiv.classList.add('short-page');
+        }
         
         var headerHtml = '';
         if (pageIdx === 0) {
@@ -361,7 +344,7 @@ function updatePreview() {
                         shapeHtml = '<div class="flow-shape shape-decision" id="shape-' + globalIdx + '"></div>';
                     }
 
-                    // Segi lima off-page connector pada batas halaman
+                    // Segi lima off-page connector pada batas halaman (tanpa panah antar segi lima)
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
                         shapeHtml = '<div style="display:flex; justify-content:center; align-items:center; margin:2px auto;" id="shape-' + globalIdx + '">' +
                             '<svg width="18" height="13" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
@@ -503,21 +486,21 @@ function drawConnectors() {
         for (var i = startIdx; i < endIdx; i++) {
             var s = stepsList[i];
 
-            // Hubungkan langkah berurutan
-            if (i + 1 < stepsList.length) {
+            // Hubungkan langkah berurutan HANYA di dalam halaman yang sama (mencegah panah lintas halaman / antar segi lima)
+            if (i + 1 < endIdx) {
                 drawSinglePath(i, i + 1, null, false);
             }
 
             if (s.jenis === 'decision') {
                 var t1 = (s.target1 !== undefined && s.target1 !== '' && !isNaN(s.target1)) ? parseInt(s.target1) - 1 : i + 1;
                 var lbl1 = (s.q1 ? s.q1 : 'Ya').trim();
-                if (t1 >= 0 && t1 < stepsList.length) {
+                if (t1 >= startIdx && t1 < endIdx) {
                     drawSinglePath(i, t1, lbl1, false);
                 }
 
                 var t2 = (s.target2 !== undefined && s.target2 !== '' && !isNaN(s.target2)) ? parseInt(s.target2) - 1 : Math.max(0, i - 1);
                 var lbl2 = (s.q2 ? s.q2 : 'Tidak').trim();
-                if (t2 >= 0 && t2 < stepsList.length) {
+                if (t2 >= startIdx && t2 < endIdx) {
                     drawSinglePath(i, t2, lbl2, true);
                 }
             }

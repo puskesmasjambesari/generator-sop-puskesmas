@@ -24,49 +24,33 @@ body { background: var(--bg); color: var(--text); display: flex; flex-direction:
 .brand-sub { font-size: 0.75rem; color: var(--muted); display: block; }
 .badge { background: #eff6ff; color: var(--brand); padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
 
-/* KONTAINER UTAMA (Diberi align-items: start agar sidebar terkunci tingginya) */
-.main-container { 
-    display: grid; 
-    grid-template-columns: 440px 1fr; 
-    gap: 2rem; 
-    padding: 2rem; 
-    max-width: 1700px; 
-    margin: 0 auto; 
-    width: 100%; 
-    align-items: start; 
-}
+.main-container { display: grid; grid-template-columns: 440px 1fr; gap: 2rem; padding: 2rem; max-width: 1700px; margin: 0 auto; width: 100%; align-items: start; }
 
-/* SIDEBAR FORM (Diperbarui agar kontainer dinamis bisa di-scroll dengan sempurna) */
 .sidebar { 
     display: flex; 
     flex-direction: column; 
     gap: 1.5rem; 
-    max-height: calc(100vh - 100px); 
+    height: calc(100vh - 100px); 
     position: sticky;
     top: 1rem;
     overflow-y: auto; 
-    padding-right: 8px; 
-    scroll-behavior: smooth;
+    padding-right: 6px; 
 }
 
-/* Custom Scrollbar agar terlihat rapi dan profesional */
-.sidebar::-webkit-scrollbar {
-    width: 8px;
-}
-.sidebar::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 4px;
-}
-.sidebar::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
-}
-.sidebar::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-}
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-.card-header { background: #f1f5f9; padding: 0.85rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.95rem; color: var(--primary); }
+/* Container card diset agar bisa scroll dengan leluasa */
+.card { 
+    background: var(--card); 
+    border: 1px solid var(--border); 
+    border-radius: 10px; 
+    overflow-y: auto; 
+    max-height: calc(100vh - 150px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02); 
+}
+.card-header { background: #f1f5f9; padding: 0.85rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.95rem; color: var(--primary); position: sticky; top: 0; z-index: 10; }
 .card-body { padding: 1.25rem; }
 
 .form-group { margin-bottom: 1rem; }
@@ -104,7 +88,6 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .sop-header-table td, .sop-table th, .sop-table td { border: 1px solid #000; padding: 4px; font-size: 9.5px; vertical-align: middle; }
 
 .logo-cell { width: 75px; text-align: center; font-weight: bold; }
-.logo-box { border: 1px dashed #000; font-size: 8px; padding: 4px; text-align: center; line-height: 1.2; font-weight: bold; background: #fafafa; }
 .instansi-cell { text-align: center; font-weight: bold; font-size: 10.5px; }
 .meta-lbl { background: #f0f0f0; font-weight: bold; width: 105px; font-size: 8.5px; }
 .meta-val { font-size: 8.5px; }
@@ -114,10 +97,53 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .section-box-title { font-weight: bold; margin-bottom: 3px; text-transform: uppercase; font-size: 9px; background: #f0f0f0; padding: 2px 4px; border-bottom: 1px solid #000; }
 .sop-table th { background: #e6e6e6; text-align: center; font-weight: bold; font-size: 9.5px; }
 
-.flow-shape { display: inline-block; padding: 2px 5px; border: 1.5px solid #000; background: #fff; font-size: 8.5px; font-weight: bold; text-align: center; }
-.shape-start { border-radius: 8px; background: #f0fdf4; }
-.shape-process { border-radius: 0; background: #fff; }
-.shape-decision { clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); background: #fefce8; padding: 6px 8px; font-size: 7.5px; }
+/* Bentuk Flowchart bersih tanpa teks di dalamnya */
+.flow-shape { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto; border: 1.5px solid #000; background: #fff; }
+.shape-start { width: 34px; height: 16px; border-radius: 8px; }
+.shape-process { width: 30px; height: 18px; border-radius: 0; }
+.shape-decision { width: 26px; height: 26px; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
+
+/* Panah Penghubung antar Shape (Satu arah atau Dua arah) */
+.shape-connector {
+    width: 2px;
+    height: 12px;
+    background: #000;
+    margin: 0 auto;
+    position: relative;
+}
+.shape-connector.one-way::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: -3px;
+    border-width: 4px 4px 0;
+    border-style: solid;
+    border-color: #000 transparent;
+    display: block;
+    width: 0;
+}
+.shape-connector.two-way::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: -3px;
+    border-width: 4px 4px 0;
+    border-style: solid;
+    border-color: #000 transparent;
+    display: block;
+    width: 0;
+}
+.shape-connector.two-way::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -3px;
+    border-width: 0 4px 4px;
+    border-style: solid;
+    border-color: #000 transparent;
+    display: block;
+    width: 0;
+}
 
 @media print {
     .no-print, .navbar { display: none !important; }

@@ -211,7 +211,7 @@ function updatePreview() {
         
         var headerHtml = '';
         if (pageIdx === 0) {
-            // Halaman 1: Header Instansi lengkap + Kotak Informasi (Dasar Hukum, Kualifikasi, dll)
+            // Halaman 1: Tata letak sesuai standar (Header Instansi -> Kotak Judul SOP -> Kotak Informasi Dasar Hukum & Kualifikasi)
             headerHtml = '<table class="sop-header-table">' +
                 '<tr>' +
                     '<td rowspan="4" class="logo-cell"><img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 55px; height: auto; display: block; margin: 0 auto;" /></td>' +
@@ -227,24 +227,24 @@ function updatePreview() {
                 '<tr><td class="meta-lbl">TGL. REVISI</td><td class="meta-val">' + (tglRevisi ? tglRevisi : '-') + '</td></tr>' +
                 '<tr><td class="meta-lbl">TGL. EFEKTIF</td><td class="meta-val">' + tglEfektif + '</td></tr>' +
                 '<tr>' +
-                    '<td colspan="2" class="sop-title-box">' +
-                        '<div style="font-size: 8px; color: #555;">STANDAR OPERASIONAL PROSEDUR</div>' +
-                        '<div style="font-size: 11px; font-weight: bold; margin-top: 2px;">SOP ' + judul.toUpperCase() + '</div>' +
-                    '</td>' +
+                    '<td colspan="2" style="border: 1px solid #000; padding: 0;"></td>' +
                     '<td class="meta-lbl">DISAHKAN OLEH</td>' +
                     '<td class="sig-cell">' +
                         '<div style="font-size: 8px;">KEPALA ' + puskesmas.toUpperCase() + '</div>' +
-                        '<div style="height: 45px;"></div>' +
+                        '<div style="height: 35px;"></div>' +
                         '<div style="font-weight: bold; text-decoration: underline; font-size: 9px;">' + kaPuskesmas + '</div>' +
                         '<div style="font-size: 8px;">NIP. ' + nipKa + '</div>' +
                     '</td>' +
                 '</tr>' +
             '</table>' +
-            '<table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">' +
+            '<div class="sop-title-box" style="margin-top: -1px;">' +
+                'SOP ' + judul.toUpperCase() +
+            '</div>' +
+            '<table style="width: 100%; border-collapse: collapse; margin-bottom: 8px; margin-top: -1px;">' +
                 '<tr>' +
                     '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
                         '<div class="section-box-title">DASAR HUKUM</div>' +
-                        '<ol style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + htmlDasarList + '</ol>' +
+                        '<ol style="padding-left: 12px; font-size: 8.5px; line-height: 1.3; margin: 0;">' + htmlDasarList + '</ol>' +
                     '</td>' +
                     '<td style="width: 50%; vertical-align: top; border: 1px solid #000; padding: 4px;">' +
                         '<div class="section-box-title">KUALIFIKASI PELAKSANA</div>' +
@@ -254,7 +254,7 @@ function updatePreview() {
                 '<tr>' +
                     '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
                         '<div class="section-box-title">KETERKAITAN</div>' +
-                        '<ul style="padding-left: 12px; font-size: 8.5px; line-height: 1.3;">' + htmlKetList + '</ul>' +
+                        '<ul style="padding-left: 12px; font-size: 8.5px; line-height: 1.3; margin: 0;">' + htmlKetList + '</ul>' +
                     '</td>' +
                     '<td style="vertical-align: top; border: 1px solid #000; padding: 4px;">' +
                         '<div class="section-box-title">PERALATAN / PERLENGKAPAN</div>' +
@@ -273,8 +273,8 @@ function updatePreview() {
                 '</tr>' +
             '</table>';
         } else {
-            // Halaman Selanjutnya (Page 2+): TANPA header, TANPA kotak informasi, langsung ke tabel langkah lanjutan
-            headerHtml = '<div style="font-size:9.5px; font-weight:bold; margin-bottom:8px; text-align:right;">SOP ' + judul.toUpperCase() + ' (Lanjutan Halaman ' + (pageIdx + 1) + ')</div>';
+            // Halaman Selanjutnya (Page 2+): Bersih tanpa teks lanjutan dan tanpa header berulang
+            headerHtml = '';
         }
 
         var pelaksanaTh = '';
@@ -303,17 +303,24 @@ function updatePreview() {
             
             for (var pc = 0; pc < pelaksanaList.length; pc++) {
                 if (sItem.pelaksana === pelaksanaList[pc]) {
-                    var shapeClass = 'shape-process';
-                    if (sItem.jenis === 'start') shapeClass = 'shape-start';
-                    else if (sItem.jenis === 'decision') shapeClass = 'shape-decision';
+                    var shapeHtml = '<div class="flow-shape shape-process" id="shape-' + globalIdx + '"></div>';
+                    if (sItem.jenis === 'start') {
+                        shapeHtml = '<div class="flow-shape shape-start" id="shape-' + globalIdx + '"></div>';
+                    } else if (sItem.jenis === 'decision') {
+                        shapeHtml = '<div class="flow-shape shape-decision" id="shape-' + globalIdx + '"></div>';
+                    }
 
-                    // Otomatis ubah shape menjadi off-page connector segilima menghadap ke bawah pada batas halaman
+                    // Render off-page connector SVG segi lima persis di batas perpindahan halaman
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
-                        shapeClass = 'shape-offpage';
+                        shapeHtml = '<div style="display:flex; justify-content:center; align-items:center; margin:4px auto;" id="shape-' + globalIdx + '">' +
+                            '<svg width="24" height="18" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
+                                '<polygon points="0,0 24,0 24,12 12,18 0,12" fill="#fff" stroke="#000" stroke-width="1.5"/>' +
+                            '</svg>' +
+                        '</div>';
                     }
 
                     pelaksanaCells += '<td style="text-align: center; vertical-align: middle; padding:6px 2px;" data-step-idx="' + globalIdx + '" data-pelaksana-idx="' + pc + '">' +
-                        '<div class="flow-shape ' + shapeClass + '" id="shape-' + globalIdx + '"></div>' +
+                        shapeHtml +
                     '</td>';
                 } else {
                     pelaksanaCells += '<td></td>';
@@ -391,14 +398,14 @@ function drawConnectors() {
             var currTr = rows[r];
             var nextTr = rows[r + 1];
 
-            var currShape = currTr.querySelector('.flow-shape');
-            var nextShape = nextTr.querySelector('.flow-shape');
+            var currShape = currTr.querySelector('.flow-shape') || currTr.querySelector('svg');
+            var nextShape = nextTr.querySelector('.flow-shape') || nextTr.querySelector('svg');
 
             if (currShape && nextShape) {
                 var rect1 = currShape.getBoundingClientRect();
                 var rect2 = nextShape.getBoundingClientRect();
 
-                // Koordinat SVG persis dari titik bawah shape ke titik atas shape berikutnya
+                // Koordinat SVG akurat tepat dari ujung bawah shape ke ujung atas shape berikutnya
                 var x1 = rect1.left + rect1.width / 2 - tableRect.left;
                 var y1 = rect1.bottom - tableRect.top;
                 var x2 = rect2.left + rect2.width / 2 - tableRect.left;

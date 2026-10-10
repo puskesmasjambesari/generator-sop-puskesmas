@@ -30,6 +30,14 @@ window.onload = function() {
     updatePreview();
 };
 
+window.onbeforeprint = function() {
+    setTimeout(drawConnectors, 100);
+};
+
+window.onafterprint = function() {
+    setTimeout(drawConnectors, 100);
+};
+
 function addDasarHukum() {
     var inputEl = document.getElementById('inpDasarHukum');
     var val = inputEl.value.trim();
@@ -100,6 +108,18 @@ function renderTags() {
     document.getElementById('listPelaksana').innerHTML = htmlPel;
 }
 
+function enforceTerminatorShapes() {
+    if (stepsList.length > 0) {
+        stepsList[0].jenis = 'start';
+        stepsList[stepsList.length - 1].jenis = 'start';
+        for (var i = 1; i < stepsList.length - 1; i++) {
+            if (stepsList[i].jenis === 'start') {
+                stepsList[i].jenis = 'process';
+            }
+        }
+    }
+}
+
 function addStepRow() {
     stepsList.push({ 
         kegiatan: "Uraian kegiatan baru...", 
@@ -113,12 +133,14 @@ function addStepRow() {
         q2: "",
         target2: ""
     });
+    enforceTerminatorShapes();
     renderStepsBuilder();
     updatePreview();
 }
 
 function removeStep(i) {
     stepsList.splice(i, 1);
+    enforceTerminatorShapes();
     renderStepsBuilder();
     updatePreview();
 }
@@ -132,17 +154,10 @@ function clearSteps() {
 }
 
 function renderStepsBuilder() {
+    enforceTerminatorShapes();
     var html = '';
     for (var i = 0; i < stepsList.length; i++) {
         var s = stepsList[i];
-        
-        // Otomatis update baris pertama dan terakhir menjadi terminator (start)
-        if (i === 0 || i === stepsList.length - 1) {
-            s.jenis = 'start';
-        } else if (s.jenis === 'start') {
-            s.jenis = 'process';
-        }
-
         var options = '';
         for (var p = 0; p < pelaksanaList.length; p++) {
             var selected = (s.pelaksana === pelaksanaList[p]) ? 'selected' : '';
@@ -212,6 +227,7 @@ function getPageRanges(totalSteps) {
 }
 
 function updatePreview() {
+    enforceTerminatorShapes();
     var pemda = document.getElementById('cfgPemda').value;
     var dinas = document.getElementById('cfgDinas').value;
     var puskesmas = document.getElementById('cfgPuskesmas').value;
@@ -335,10 +351,6 @@ function updatePreview() {
             var globalIdx = startIdx + st;
             var sItem = pageSteps[st];
             var pelaksanaCells = '';
-            
-            if (globalIdx === 0 || globalIdx === stepsList.length - 1) {
-                sItem.jenis = 'start';
-            }
 
             for (var pc = 0; pc < pelaksanaList.length; pc++) {
                 if (sItem.pelaksana === pelaksanaList[pc]) {
@@ -349,7 +361,7 @@ function updatePreview() {
                         shapeHtml = '<div class="flow-shape shape-decision" id="shape-' + globalIdx + '"></div>';
                     }
 
-                    // Render segi lima off-page connector pada batas halaman
+                    // Segi lima off-page connector pada batas halaman
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
                         shapeHtml = '<div style="display:flex; justify-content:center; align-items:center; margin:2px auto;" id="shape-' + globalIdx + '">' +
                             '<svg width="18" height="13" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
@@ -432,7 +444,7 @@ function drawConnectors() {
         defs.appendChild(marker);
         svg.appendChild(defs);
 
-        function drawSinglePath(fromIdx, toIdx, labelText) {
+        function drawSinglePath(fromIdx, toIdx, labelText, isSecondBranch) {
             var el1 = document.getElementById('shape-' + fromIdx);
             var el2 = document.getElementById('shape-' + toIdx);
             if (!el1 || !el2) return;
@@ -469,8 +481,13 @@ function drawConnectors() {
             if (labelText) {
                 var text = document.createElementNS(svgNS, "text");
                 text.textContent = labelText;
-                text.setAttribute('x', x1 + 4);
-                text.setAttribute('y', y1 + 9);
+                if (isSecondBranch) {
+                    text.setAttribute('x', x1 - 32);
+                    text.setAttribute('y', y1 + 16);
+                } else {
+                    text.setAttribute('x', x1 + 5);
+                    text.setAttribute('y', y1 + 10);
+                }
                 text.setAttribute('font-size', '6.5px');
                 text.setAttribute('font-family', 'Arial');
                 text.setAttribute('font-weight', 'bold');
@@ -486,22 +503,22 @@ function drawConnectors() {
         for (var i = startIdx; i < endIdx; i++) {
             var s = stepsList[i];
 
-            // Hubungkan langkah berurutan, termasuk ke/dari segi lima (off-page connector)
+            // Hubungkan langkah berurutan
             if (i + 1 < stepsList.length) {
-                drawSinglePath(i, i + 1, null);
+                drawSinglePath(i, i + 1, null, false);
             }
 
             if (s.jenis === 'decision') {
                 var t1 = (s.target1 !== undefined && s.target1 !== '' && !isNaN(s.target1)) ? parseInt(s.target1) - 1 : i + 1;
                 var lbl1 = (s.q1 ? s.q1 : 'Ya').trim();
                 if (t1 >= 0 && t1 < stepsList.length) {
-                    drawSinglePath(i, t1, lbl1);
+                    drawSinglePath(i, t1, lbl1, false);
                 }
 
                 var t2 = (s.target2 !== undefined && s.target2 !== '' && !isNaN(s.target2)) ? parseInt(s.target2) - 1 : Math.max(0, i - 1);
                 var lbl2 = (s.q2 ? s.q2 : 'Tidak').trim();
                 if (t2 >= 0 && t2 < stepsList.length) {
-                    drawSinglePath(i, t2, lbl2);
+                    drawSinglePath(i, t2, lbl2, true);
                 }
             }
         }

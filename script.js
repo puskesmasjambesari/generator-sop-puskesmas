@@ -11,17 +11,15 @@ var keterkaitanList = [
     "SOP Rekam Medis Pasien"
 ];
 var pelaksanaList = [
-    "Pasien", 
     "Petugas Pendaftaran", 
     "Perawat Rawat Inap", 
     "Dokter Jaga"
 ];
 var stepsList = [
-    { kegiatan: "Pasien datang membawa kartu identitas dan rujukan", pelaksana: "Pasien", jenis: "start", waktu: "2 Menit", kelengkapan: "KTP / Kartu Berobat", output: "Pasien tiba di loket" },
-    { kegiatan: "Menerima berkas persyaratan dan meneliti kelengkapan identitas", pelaksana: "Petugas Pendaftaran", jenis: "process", waktu: "3 Menit", kelengkapan: "KTP / Rujukan", output: "Berkas diteliti" },
-    { kegiatan: "Apakah kelengkapan persyaratan dan data rekam medis lengkap?", pelaksana: "Petugas Pendaftaran", jenis: "decision", q: "Apakah berkas lengkap?", ya: "Lanjut input", tidak: "Minta dilengkapi", waktu: "1 Menit", kelengkapan: "Berkas Pasien", output: "Keputusan Validasi" },
-    { kegiatan: "Menginput data pasien ke sistem SIMPUS dan membuat kartu rawat inap", pelaksana: "Petugas Pendaftaran", jenis: "process", waktu: "5 Menit", kelengkapan: "Komputer / SIMPUS", output: "Surat Masuk Rawat Inap" },
-    { kegiatan: "Menyerahkan pasien beserta berkas rekam medis kepada Perawat", pelaksana: "Perawat Rawat Inap", jenis: "start", waktu: "5 Menit", kelengkapan: "Berkas & Pasien", output: "Pasien diterima di bangsal" }
+    { kegiatan: "Menerima berkas persyaratan dan meneliti kelengkapan identitas dari pemohon", pelaksana: "Petugas Pendaftaran", jenis: "start", panah: "one-way", waktu: "3 Menit", kelengkapan: "KTP / Rujukan", output: "Berkas diteliti" },
+    { kegiatan: "Apakah kelengkapan persyaratan dan data rekam medis lengkap?", pelaksana: "Petugas Pendaftaran", jenis: "decision", panah: "two-way", q: "Lengkap?", ya: "Lanjut", tidak: "Minta dilengkapi", waktu: "1 Menit", kelengkapan: "Berkas", output: "Keputusan" },
+    { kegiatan: "Menginput data rekam medis ke dalam sistem SIMPUS dan membuat kartu rawat inap", pelaksana: "Petugas Pendaftaran", jenis: "process", panah: "one-way", waktu: "5 Menit", kelengkapan: "SIMPUS", output: "Surat Masuk" },
+    { kegiatan: "Melakukan serah terima pasien dan berkas rekam medis ke ruang perawatan", pelaksana: "Perawat Rawat Inap", jenis: "start", panah: "one-way", waktu: "5 Menit", kelengkapan: "Berkas", output: "Pasien diterima" }
 ];
 
 window.onload = function() {
@@ -105,6 +103,7 @@ function addStepRow() {
         kegiatan: "Uraian kegiatan baru...", 
         pelaksana: pelaksanaList[0] || "Petugas", 
         jenis: "process", 
+        panah: "one-way",
         waktu: "5 Menit", 
         kelengkapan: "Dokumen", 
         output: "Hasil" 
@@ -117,6 +116,14 @@ function removeStep(i) {
     stepsList.splice(i, 1);
     renderStepsBuilder();
     updatePreview();
+}
+
+function clearSteps() {
+    if (confirm("Apakah Anda yakin ingin menghapus semua langkah SOP?")) {
+        stepsList = [];
+        renderStepsBuilder();
+        updatePreview();
+    }
 }
 
 function renderStepsBuilder() {
@@ -141,6 +148,14 @@ function renderStepsBuilder() {
         html += '</select></div>';
         html += '</div>';
         
+        html += '<div class="form-row" style="margin-bottom:5px;">';
+        html += '<div><label>Konektor Panah</label><select onchange="stepsList[' + i + '].panah=this.value; updatePreview()">';
+        html += '<option value="one-way" ' + (s.panah === 'one-way' ? 'selected' : '') + '>Panah 1 Arah (Kebawah)</option>';
+        html += '<option value="two-way" ' + (s.panah === 'two-way' ? 'selected' : '') + '>Panah 2 Arah (Timbal Balik)</option>';
+        html += '</select></div>';
+        html += '<div><label>Waktu</label><input type="text" value="' + s.waktu + '" oninput="stepsList[' + i + '].waktu=this.value; updatePreview()"></div>';
+        html += '</div>';
+
         if(s.jenis === 'decision') {
             html += '<div class="form-row" style="margin-bottom:5px;">';
             html += '<div><label>Pertanyaan</label><input type="text" value="' + (s.q || '') + '" oninput="stepsList[' + i + '].q=this.value; updatePreview()" placeholder="Pertanyaan?"></div>';
@@ -149,8 +164,7 @@ function renderStepsBuilder() {
         }
         
         html += '<div class="form-row">';
-        html += '<div><label>Waktu</label><input type="text" value="' + s.waktu + '" oninput="stepsList[' + i + '].waktu=this.value; updatePreview()"></div>';
-        html += '<div><label>Output</label><input type="text" value="' + s.output + '" oninput="stepsList[' + i + '].output=this.value; updatePreview()"></div>';
+        html += '<div style="grid-column: span 2;"><label>Output</label><input type="text" value="' + s.output + '" oninput="stepsList[' + i + '].output=this.value; updatePreview()"></div>';
         html += '</div>';
         html += '</div>';
     }
@@ -222,14 +236,24 @@ function updatePreview() {
         for (var pc = 0; pc < pelaksanaList.length; pc++) {
             if (sItem.pelaksana === pelaksanaList[pc]) {
                 var shapeHtml = '';
-                if (sItem.jenis === 'start') {
-                    shapeHtml = '<div class="flow-shape shape-start"><i class="fa-solid fa-circle-stop"></i> Mulai/Selesai</div>';
-                } else if (sItem.jenis === 'process') {
-                    shapeHtml = '<div class="flow-shape shape-process"><i class="fa-solid fa-square"></i> Proses</div>';
-                } else if (sItem.jenis === 'decision') {
-                    shapeHtml = '<div class="flow-shape shape-decision">?<br><b>' + (sItem.q || 'Keputusan') + '</b><br><span style="font-size:6.5px; color:#444;">[Ya / Tidak]</span></div>';
+                var shapeClass = 'shape-process';
+                if (sItem.jenis === 'start') shapeClass = 'shape-start';
+                else if (sItem.jenis === 'decision') shapeClass = 'shape-decision';
+
+                if (sItem.jenis === 'decision') {
+                    shapeHtml = '<div class="flow-shape ' + shapeClass + '"></div>';
+                    shapeHtml += '<div style="font-size:7px; margin-top:2px; font-weight:bold;">' + (sItem.q || '') + '</div>';
+                } else {
+                    shapeHtml = '<div class="flow-shape ' + shapeClass + '"></div>';
                 }
-                pelaksanaCells += '<td style="text-align: center; vertical-align: middle;">' + shapeHtml + '</td>';
+
+                // Render panah penghubung jika bukan langkah terakhir
+                if (st < stepsList.length - 1) {
+                    var arrowType = sItem.panah || 'one-way';
+                    shapeHtml += '<div class="shape-connector ' + arrowType + '"></div>';
+                }
+
+                pelaksanaCells += '<td style="text-align: center; vertical-align: middle; padding:6px 2px;">' + shapeHtml + '</td>';
             } else {
                 pelaksanaCells += '<td></td>';
             }

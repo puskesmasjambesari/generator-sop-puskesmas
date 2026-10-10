@@ -1,10 +1,10 @@
 // ==========================================================================
-// SCRIPT LOGIKA APLIKASI SOP GENERATOR - UPTD PUSKESMAS JAMBESARI
+// SCRIPT LOGIKA APLIKASI SOP AP GENERATOR - UPTD PUSKESMAS JAMBESARI
 // ==========================================================================
 
 var dasarHukumList = [
-    "Undang-Undang Nomor 36 Tahun 2009 tentang Kesehatan",
-    "Peraturan Menteri Kesehatan Nomor 43 Tahun 2019 tentang Puskesmas"
+    "Undang-Undang Nomor 17 Tahun 2023 tentang Kesehatan",
+    "Peraturan Menteri Kesehatan Nomor 43 Tahun 2019 tentang Pusat Kesehatan Masyarakat"
 ];
 var keterkaitanList = [
     "SOP Pendaftaran Pasien Rawat Jalan",
@@ -24,58 +24,11 @@ var stepsList = [
     { kegiatan: "Menyerahkan pasien beserta berkas rekam medis kepada Perawat", pelaksana: "Perawat Rawat Inap", jenis: "start", waktu: "5 Menit", kelengkapan: "Berkas & Pasien", output: "Pasien diterima di bangsal" }
 ];
 
-var currentRole = 'user';
-
 window.onload = function() {
     renderTags();
     renderStepsBuilder();
     updatePreview();
 };
-
-function openLoginModal() {
-    document.getElementById('authModal').style.display = 'flex';
-}
-
-function switchLoginForm() {
-    var role = document.getElementById('loginRole').value;
-    var group = document.getElementById('userPassGroup');
-    if (role === 'admin') {
-        group.style.display = 'block';
-    } else {
-        group.style.display = 'none';
-    }
-}
-
-function processLogin() {
-    var role = document.getElementById('loginRole').value;
-    if (role === 'admin') {
-        var pass = document.getElementById('loginPass').value;
-        if (pass !== 'admin123') {
-            alert('Password Admin salah! (Gunakan password default: admin123)');
-            return;
-        }
-    }
-    currentRole = role;
-    document.getElementById('authModal').style.display = 'none';
-    
-    var adminCard = document.getElementById('adminCard');
-    if (currentRole === 'admin') {
-        adminCard.style.display = 'block';
-    } else {
-        adminCard.style.display = 'none';
-    }
-    
-    var badge = document.getElementById('activeRoleBadge');
-    if (currentRole === 'admin') {
-        badge.innerText = 'Mode: Admin Instansi';
-        badge.style.background = '#fee2e2';
-        badge.style.color = '#991b1b';
-    } else {
-        badge.innerText = 'Mode: User Pembuat';
-        badge.style.background = '#dbeafe';
-        badge.style.color = '#1e40af';
-    }
-}
 
 function addDasarHukum() {
     var inputEl = document.getElementById('inpDasarHukum');
@@ -87,7 +40,6 @@ function addDasarHukum() {
         updatePreview();
     }
 }
-
 function removeDasar(i) {
     dasarHukumList.splice(i, 1);
     renderTags();
@@ -104,7 +56,6 @@ function addKeterkaitan() {
         updatePreview();
     }
 }
-
 function removeKeterkaitan(i) {
     keterkaitanList.splice(i, 1);
     renderTags();
@@ -122,7 +73,6 @@ function addPelaksana() {
         updatePreview();
     }
 }
-
 function removePelaksana(i) {
     pelaksanaList.splice(i, 1);
     renderTags();
@@ -211,7 +161,6 @@ function updatePreview() {
     var pemda = document.getElementById('cfgPemda').value;
     var dinas = document.getElementById('cfgDinas').value;
     var puskesmas = document.getElementById('cfgPuskesmas').value;
-    var alamat = document.getElementById('cfgAlamat').value;
     var kaPuskesmas = document.getElementById('cfgKaPuskesmas').value;
     var nipKa = document.getElementById('cfgNipKa').value;
 
@@ -223,22 +172,6 @@ function updatePreview() {
     var orientasi = document.getElementById('inpOrientasi').value;
 
     var formatNoSOP = '400.7/' + noSOP + '/SOP/430.9.3.15/' + tahun;
-
-    document.getElementById('cvrPemda').innerText = pemda;
-    document.getElementById('cvrDinas').innerText = dinas;
-    document.getElementById('cvrJudulSOP').innerText = judul;
-    document.getElementById('cvrPuskesmas').innerText = puskesmas;
-    document.getElementById('cvrTahun').innerText = tahun;
-    document.getElementById('cvrAlamat').innerHTML = alamat + '<br>BONDOWOSO';
-
-    document.getElementById('skPemda').innerText = pemda;
-    document.getElementById('skPuskesmasTitle').innerText = 'KEPALA ' + puskesmas;
-    document.getElementById('skJudulText').innerText = judul;
-    document.getElementById('skJudulText2').innerText = judul;
-    document.getElementById('skJudulText3').innerText = judul;
-    document.getElementById('skTglDitetapkan').innerText = tglBuat;
-    document.getElementById('skNamaKa').innerText = kaPuskesmas;
-    document.getElementById('skNipKa').innerText = nipKa;
 
     document.getElementById('vPemda').innerText = pemda;
     document.getElementById('vDinas').innerText = dinas;

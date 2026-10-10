@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOP AP Generator - UPTD Puskesmas Jambesari</title>
-    <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -86,13 +85,16 @@
                     <div class="form-group"><label>6. Pencatatan dan Pendataan</label><textarea id="InpPencatatan" rows="2" oninput="updatePreview()">Dicatat dalam buku register dan diinput ke dalam database SIMPUS.</textarea></div>
 
                     <hr class="divider">
-                    <label class="section-label">7. Pelaksana / Subjek Terlibat (Aktor)</label>
+                    <label class="section-label">7. Pelaksana / Subjek Terlibat (Aktor Internal)</label>
                     <div class="tag-list" id="listPelaksana"></div>
-                    <div class="inline-add"><input type="text" id="inpNamaPelaksana" placeholder="Nama Pelaksana/Subjek"><button class="btn btn-sm btn-primary" onclick="addPelaksana()"><i class="fa-solid fa-plus"></i></button></div>
+                    <div class="inline-add"><input type="text" id="inpNamaPelaksana" placeholder="Nama Pelaksana / Staf"><button class="btn btn-sm btn-primary" onclick="addPelaksana()"><i class="fa-solid fa-plus"></i></button></div>
 
                     <hr class="divider">
                     <label class="section-label">8. Langkah-Langkah & Bagan Alir (Flowchart)</label>
-                    <button class="btn btn-sm btn-primary" style="width:100%; margin-bottom:10px;" onclick="addStepRow()"><i class="fa-solid fa-plus-circle"></i> Tambah Langkah SOP</button>
+                    <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+                        <button class="btn btn-sm btn-primary" style="flex: 2;" onclick="addStepRow()"><i class="fa-solid fa-plus-circle"></i> Tambah Langkah</button>
+                        <button class="btn btn-sm btn-danger" style="flex: 1;" onclick="clearSteps()"><i class="fa-solid fa-trash-can"></i> Bersihkan</button>
+                    </div>
                     <div id="stepsBuilderContainer"></div>
 
                     <button class="btn btn-success" onclick="window.print()"><i class="fa-solid fa-print"></i> Cetak / Ekspor PDF A4</button>
@@ -100,7 +102,7 @@
             </div>
         </aside>
 
-        <!-- AREA PREVIEW A4 (SOP AP SESUAI PERMENPANRB) -->
+        <!-- AREA PREVIEW A4 -->
         <section class="preview-area">
             <div class="a4-page landscape" id="mainSopSheet">
                 
@@ -108,7 +110,7 @@
                 <table class="sop-header-table">
                     <tr>
                         <td rowspan="4" class="logo-cell">
-                            <div class="logo-box">PEMKAB<br>BONDOWOSO</div>
+                            <img src="Lambang_Bondowoso.jpg" alt="Logo Bondowoso" style="width: 55px; height: auto; display: block; margin: 0 auto;" />
                         </td>
                         <td rowspan="4" class="instansi-cell">
                             <div id="vPemda">PEMERINTAH KABUPATEN BONDOWOSO</div>
@@ -179,7 +181,7 @@
                     </tr>
                 </table>
 
-                <!-- TABEL UTAMA BAGAN ALIR (BRANCHING FLOWCHART) -->
+                <!-- TABEL UTAMA BAGAN ALIR -->
                 <table class="sop-table" id="mainFlowTable">
                     <thead>
                         <tr id="trHeadRow1">

@@ -136,7 +136,7 @@ function renderStepsBuilder() {
     for (var i = 0; i < stepsList.length; i++) {
         var s = stepsList[i];
         
-        // Paksa langkah pertama dan langkah terakhir menjadi terminator (start)
+        // Paksa langkah pertama dan langkah terakhir menjadi terminator
         if (i === 0 || i === stepsList.length - 1) {
             s.jenis = 'start';
         }
@@ -158,7 +158,7 @@ function renderStepsBuilder() {
         } else {
             html += '<div><label>Simbol</label><select onchange="stepsList[' + i + '].jenis=this.value; renderStepsBuilder(); updatePreview()">';
             html += '<option value="process" ' + (s.jenis === 'process' ? 'selected' : '') + '>Proses (Kotak)</option>';
-            html += '<option value="decision" ' + (s.decision || s.jenis === 'decision' ? 'selected' : '') + '>Keputusan (Belah Ketupat)</option>';
+            html += '<option value="decision" ' + (s.jenis === 'decision' ? 'selected' : '') + '>Keputusan (Belah Ketupat)</option>';
             html += '</select></div>';
         }
         html += '</div>';
@@ -184,17 +184,25 @@ function renderStepsBuilder() {
     document.getElementById('stepsBuilderContainer').innerHTML = html;
 }
 
-// Algoritma Smart Pagination: Memastikan halaman terakhir tidak hanya berisi 1 langkah (minimal 2 langkah)
+// Smart Pagination: Memastikan halaman terakhir minimal berisi 2 langkah (tidak pernah sisa 1 langkah)
 function getPageRanges(totalSteps) {
     if (totalSteps <= 10) return [{ start: 0, count: totalSteps }];
-    var numPages = Math.ceil(totalSteps / 10);
-    var baseCount = Math.floor(totalSteps / numPages);
-    var remainder = totalSteps % numPages;
-    
     var ranges = [];
     var currentIndex = 0;
-    for (var p = 0; p < numPages; p++) {
-        var count = baseCount + (p < remainder ? 1 : 0);
+    while (currentIndex < totalSteps) {
+        var remaining = totalSteps - currentIndex;
+        var count = 10;
+        if (remaining <= 10) {
+            count = remaining;
+        }
+        if (remaining === 1 && ranges.length > 0) {
+            var lastRange = ranges[ranges.length - 1];
+            if (lastRange.count > 2) {
+                lastRange.count -= 1;
+                count = 2;
+                currentIndex = lastRange.start + lastRange.count;
+            }
+        }
         ranges.push({ start: currentIndex, count: count });
         currentIndex += count;
     }
@@ -326,7 +334,6 @@ function updatePreview() {
             var sItem = pageSteps[st];
             var pelaksanaCells = '';
             
-            // Otomatis set indeks 0 dan terakhir jadi start
             if (globalIdx === 0 || globalIdx === stepsList.length - 1) {
                 sItem.jenis = 'start';
             }
@@ -340,7 +347,7 @@ function updatePreview() {
                         shapeHtml = '<div class="flow-shape shape-decision" id="shape-' + globalIdx + '"></div>';
                     }
 
-                    // Segi lima off-page connector murni tanpa anak panah
+                    // Segi lima off-page connector
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
                         shapeHtml = '<div style="display:flex; justify-content:center; align-items:center; margin:2px auto;" id="shape-' + globalIdx + '">' +
                             '<svg width="18" height="13" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
@@ -411,13 +418,13 @@ function drawConnectors() {
         var defs = document.createElementNS(svgNS, "defs");
         var marker = document.createElementNS(svgNS, "marker");
         marker.setAttribute('id', 'arrowhead-' + p);
-        marker.setAttribute('markerWidth', '5');
-        marker.setAttribute('markerHeight', '5');
-        marker.setAttribute('refX', '4');
-        marker.setAttribute('refY', '2.5');
+        marker.setAttribute('markerWidth', '6');
+        marker.setAttribute('markerHeight', '6');
+        marker.setAttribute('refX', '5');
+        marker.setAttribute('refY', '3');
         marker.setAttribute('orient', 'auto');
         var markerPath = document.createElementNS(svgNS, "path");
-        markerPath.setAttribute('d', 'M0,0 L5,2.5 L0,5 Z');
+        markerPath.setAttribute('d', 'M0,0 L6,3 L0,6 Z');
         markerPath.setAttribute('fill', '#000');
         marker.appendChild(markerPath);
         defs.appendChild(marker);
@@ -427,8 +434,6 @@ function drawConnectors() {
             var el1 = document.getElementById('shape-' + fromIdx);
             var el2 = document.getElementById('shape-' + toIdx);
             if (!el1 || !el2) return;
-
-            if (el1.querySelector('polygon') || el2.querySelector('polygon')) return;
 
             var r1 = el1.getBoundingClientRect();
             var r2 = el2.getBoundingClientRect();
@@ -478,25 +483,22 @@ function drawConnectors() {
 
         for (var i = startIdx; i < endIdx; i++) {
             var s = stepsList[i];
-            
-            if (i === endIdx - 1 && p < totalPages - 1) continue;
-            if (i === startIdx && p > 0) continue;
+
+            if (i + 1 < endIdx) {
+                drawSinglePath(i, i + 1, null);
+            }
 
             if (s.jenis === 'decision') {
                 var t1 = (s.target1 !== undefined && s.target1 !== '' && !isNaN(s.target1)) ? parseInt(s.target1) - 1 : i + 1;
                 var lbl1 = (s.q1 ? s.q1 : 'Ya').trim();
-                if (t1 >= 0 && t1 < stepsList.length) {
+                if (t1 >= startIdx && t1 < endIdx) {
                     drawSinglePath(i, t1, lbl1);
                 }
 
                 var t2 = (s.target2 !== undefined && s.target2 !== '' && !isNaN(s.target2)) ? parseInt(s.target2) - 1 : Math.max(0, i - 1);
                 var lbl2 = (s.q2 ? s.q2 : 'Tidak').trim();
-                if (t2 >= 0 && t2 < stepsList.length) {
+                if (t2 >= startIdx && t2 < endIdx) {
                     drawSinglePath(i, t2, lbl2);
-                }
-            } else {
-                if (i + 1 < stepsList.length) {
-                    drawSinglePath(i, i + 1, null);
                 }
             }
         }

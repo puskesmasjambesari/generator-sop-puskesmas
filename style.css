@@ -41,13 +41,13 @@ body { background: var(--bg); color: var(--text); display: flex; flex-direction:
 .sidebar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
 .sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
-/* Container card diset dengan overflow: scroll sesuai permintaan */
+/* Diterapkan overflow: scroll sesuai permintaan */
 .card { 
     background: var(--card); 
     border: 1px solid var(--border); 
     border-radius: 10px; 
-    overflow: scroll; 
-    max-height: calc(100vh - 150px);
+    overflow: scroll !important; 
+    max-height: 480px; 
     box-shadow: 0 2px 4px rgba(0,0,0,0.02); 
 }
 .card-header { background: #f1f5f9; padding: 0.85rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.95rem; color: var(--primary); position: sticky; top: 0; z-index: 10; }
@@ -97,7 +97,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .section-box-title { font-weight: bold; margin-bottom: 3px; text-transform: uppercase; font-size: 9px; background: #f0f0f0; padding: 2px 4px; border-bottom: 1px solid #000; }
 .sop-table th { background: #e6e6e6; text-align: center; font-weight: bold; font-size: 9.5px; }
 
-/* Bentuk Flowchart Murni Tanpa Teks di Dalamnya */
+/* Bentuk Flowchart 100% Bersih Tanpa Teks */
 .flow-shape { display: flex; align-items: center; justify-content: center; margin: 0 auto; border: 1.5px solid #000; background: #fff; }
 .shape-start { width: 28px; height: 14px; border-radius: 7px; }
 .shape-process { width: 24px; height: 16px; border-radius: 0; }

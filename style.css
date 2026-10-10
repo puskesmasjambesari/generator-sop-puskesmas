@@ -77,36 +77,50 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 
 .preview-area { display: flex; flex-direction: column; align-items: center; overflow-x: auto; background: #e2e8f0; padding: 2rem; border-radius: 12px; gap: 2rem; }
 
+/* KUNCI UKURAN KERTAS A4 PRESISI */
 .a4-page {
-    background: white; width: 297mm; min-height: 210mm; padding: 15mm; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15); position: relative; color: black; page-break-after: always;
+    background: white; 
+    width: 297mm; 
+    height: 210mm; 
+    max-height: 210mm;
+    padding: 10mm; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
+    position: relative; 
+    color: black; 
+    page-break-after: always;
+    overflow: hidden;
+    box-sizing: border-box;
 }
-.a4-page.portrait { width: 210mm; min-height: 297mm; }
+.a4-page.portrait { 
+    width: 210mm; 
+    height: 297mm; 
+    max-height: 297mm;
+}
 
-.sop-table, .sop-header-table { width: 100%; border-collapse: collapse; margin-bottom: 0; font-family: Arial, sans-serif; }
-.sop-header-table td, .sop-table th, .sop-table td { border: 1px solid #000; padding: 4px; font-size: 9.5px; vertical-align: middle; }
+.sop-table, .sop-header-table { width: 100%; border-collapse: collapse; margin-bottom: 0; font-family: Arial, sans-serif; table-layout: fixed; }
+.sop-header-table td, .sop-table th, .sop-table td { border: 1px solid #000; padding: 3px 4px; font-size: 9px; vertical-align: middle; }
 
-.logo-cell { width: 75px; text-align: center; font-weight: bold; }
-.instansi-cell { text-align: center; font-weight: bold; font-size: 10.5px; }
-.meta-lbl { background: #f0f0f0; font-weight: bold; width: 105px; font-size: 8.5px; }
-.meta-val { font-size: 8.5px; }
-.sop-title-box { text-align: center; background: #fafafa; font-weight: bold; font-size: 11px; padding: 6px; border: 1px solid #000; }
-.sig-cell { text-align: center; vertical-align: top; font-size: 9px; }
+.logo-cell { width: 65px; text-align: center; font-weight: bold; }
+.instansi-cell { text-align: center; font-weight: bold; font-size: 10px; }
+.meta-lbl { background: #f0f0f0; font-weight: bold; width: 95px; font-size: 8px; }
+.meta-val { font-size: 8px; }
+.sop-title-box { text-align: center; background: #fafafa; font-weight: bold; font-size: 10.5px; padding: 4px; border: 1px solid #000; }
+.sig-cell { text-align: center; vertical-align: top; font-size: 8.5px; }
 
-.section-box-title { font-weight: bold; margin-bottom: 3px; text-transform: uppercase; font-size: 9px; background: #f0f0f0; padding: 2px 4px; border-bottom: 1px solid #000; }
-.sop-table th { background: #e6e6e6; text-align: center; font-weight: bold; font-size: 9.5px; }
+.section-box-title { font-weight: bold; margin-bottom: 2px; text-transform: uppercase; font-size: 8px; background: #f0f0f0; padding: 2px 4px; border-bottom: 1px solid #000; }
+.sop-table th { background: #e6e6e6; text-align: center; font-weight: bold; font-size: 9px; }
 
 /* Flowchart shapes */
-.flow-shape { display: flex; align-items: center; justify-content: center; margin: 4px auto; border: 1.5px solid #000; background: #fff; position: relative; z-index: 2; }
-.shape-start { width: 28px; height: 14px; border-radius: 7px; }
-.shape-process { width: 24px; height: 16px; border-radius: 0; }
+.flow-shape { display: flex; align-items: center; justify-content: center; margin: 2px auto; border: 1.5px solid #000; background: #fff; position: relative; z-index: 2; }
+.shape-start { width: 24px; height: 12px; border-radius: 6px; }
+.shape-process { width: 20px; height: 14px; border-radius: 0; }
 .shape-decision { 
-    width: 20px; 
-    height: 20px; 
+    width: 18px; 
+    height: 18px; 
     border: 1.5px solid #000; 
     background: #fff; 
     transform: rotate(45deg); 
-    margin: 10px auto; 
+    margin: 8px auto; 
 }
 
 @media print {
@@ -114,6 +128,6 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
     body { background: white; }
     .main-container { display: block; padding: 0; margin: 0; }
     .preview-area { background: white; padding: 0; border-radius: 0; gap: 0; }
-    .a4-page { box-shadow: none; margin: 0; width: 100% !important; min-height: 100vh; padding: 10mm; page-break-after: always; }
-    @page { size: auto; margin: 10mm; }
+    .a4-page { box-shadow: none; margin: 0; width: 100% !important; height: 100vh; max-height: none; padding: 8mm; page-break-after: always; overflow: visible; }
+    @page { size: landscape; margin: 5mm; }
 }

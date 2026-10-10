@@ -2,21 +2,21 @@
 // SCRIPT LOGIKA APLIKASI SOP GENERATOR - UPTD PUSKESMAS JAMBESARI
 // ==========================================================================
 
-let dasarHukumList = [
+var dasarHukumList = [
     "Undang-Undang Nomor 36 Tahun 2009 tentang Kesehatan",
     "Peraturan Menteri Kesehatan Nomor 43 Tahun 2019 tentang Puskesmas"
 ];
-let keterkaitanList = [
+var keterkaitanList = [
     "SOP Pendaftaran Pasien Rawat Jalan",
     "SOP Rekam Medis Pasien"
 ];
-let pelaksanaList = [
+var pelaksanaList = [
     "Pasien", 
     "Petugas Pendaftaran", 
     "Perawat Rawat Inap", 
     "Dokter Jaga"
 ];
-let stepsList = [
+var stepsList = [
     { kegiatan: "Pasien datang membawa kartu identitas dan rujukan", pelaksana: "Pasien", jenis: "start", waktu: "2 Menit", kelengkapan: "KTP / Kartu Berobat", output: "Pasien tiba di loket" },
     { kegiatan: "Menerima berkas persyaratan dan meneliti kelengkapan identitas", pelaksana: "Petugas Pendaftaran", jenis: "process", waktu: "3 Menit", kelengkapan: "KTP / Rujukan", output: "Berkas diteliti" },
     { kegiatan: "Apakah kelengkapan persyaratan dan data rekam medis lengkap?", pelaksana: "Petugas Pendaftaran", jenis: "decision", q: "Apakah berkas lengkap?", ya: "Lanjut input", tidak: "Minta dilengkapi", waktu: "1 Menit", kelengkapan: "Berkas Pasien", output: "Keputusan Validasi" },
@@ -24,7 +24,7 @@ let stepsList = [
     { kegiatan: "Menyerahkan pasien beserta berkas rekam medis kepada Perawat", pelaksana: "Perawat Rawat Inap", jenis: "start", waktu: "5 Menit", kelengkapan: "Berkas & Pasien", output: "Pasien diterima di bangsal" }
 ];
 
-let currentRole = 'user';
+var currentRole = 'user';
 
 window.onload = function() {
     renderTags();
@@ -37,15 +37,19 @@ function openLoginModal() {
 }
 
 function switchLoginForm() {
-    let role = document.getElementById('loginRole').value;
-    let group = document.getElementById('userPassGroup');
-    group.style.display = (role === 'admin') ? 'block' : 'none';
+    var role = document.getElementById('loginRole').value;
+    var group = document.getElementById('userPassGroup');
+    if (role === 'admin') {
+        group.style.display = 'block';
+    } else {
+        group.style.display = 'none';
+    }
 }
 
 function processLogin() {
-    let role = document.getElementById('loginRole').value;
+    var role = document.getElementById('loginRole').value;
     if (role === 'admin') {
-        let pass = document.getElementById('loginPass').value;
+        var pass = document.getElementById('loginPass').value;
         if (pass !== 'admin123') {
             alert('Password Admin salah! (Gunakan password default: admin123)');
             return;
@@ -53,23 +57,37 @@ function processLogin() {
     }
     currentRole = role;
     document.getElementById('authModal').style.display = 'none';
-    document.getElementById('adminCard').style.display = (currentRole === 'admin') ? 'block' : 'none';
     
-    let badge = document.getElementById('activeRoleBadge');
-    badge.innerText = (currentRole === 'admin') ? 'Mode: Admin Instansi' : 'Mode: User Pembuat';
-    badge.style.background = (currentRole === 'admin') ? '#fee2e2' : '#dbeafe';
-    badge.style.color = (currentRole === 'admin') ? '#991b1b' : '#1e40af';
+    var adminCard = document.getElementById('adminCard');
+    if (currentRole === 'admin') {
+        adminCard.style.display = 'block';
+    } else {
+        adminCard.style.display = 'none';
+    }
+    
+    var badge = document.getElementById('activeRoleBadge');
+    if (currentRole === 'admin') {
+        badge.innerText = 'Mode: Admin Instansi';
+        badge.style.background = '#fee2e2';
+        badge.style.color = '#991b1b';
+    } else {
+        badge.innerText = 'Mode: User Pembuat';
+        badge.style.background = '#dbeafe';
+        badge.style.color = '#1e40af';
+    }
 }
 
 function addDasarHukum() {
-    let val = document.getElementById('inpDasarHukum').value.trim();
-    if(val) {
+    var inputEl = document.getElementById('inpDasarHukum');
+    var val = inputEl.value.trim();
+    if(val !== '') {
         dasarHukumList.push(val);
-        document.getElementById('inpDasarHukum').value = '';
+        inputEl.value = '';
         renderTags();
         updatePreview();
     }
 }
+
 function removeDasar(i) {
     dasarHukumList.splice(i, 1);
     renderTags();
@@ -77,14 +95,16 @@ function removeDasar(i) {
 }
 
 function addKeterkaitan() {
-    let val = document.getElementById('inpKeterkaitan').value.trim();
-    if(val) {
+    var inputEl = document.getElementById('inpKeterkaitan');
+    var val = inputEl.value.trim();
+    if(val !== '') {
         keterkaitanList.push(val);
-        document.getElementById('inpKeterkaitan').value = '';
+        inputEl.value = '';
         renderTags();
         updatePreview();
     }
 }
+
 function removeKeterkaitan(i) {
     keterkaitanList.splice(i, 1);
     renderTags();
@@ -92,15 +112,17 @@ function removeKeterkaitan(i) {
 }
 
 function addPelaksana() {
-    let val = document.getElementById('inpNamaPelaksana').value.trim();
-    if(val) {
+    var inputEl = document.getElementById('inpNamaPelaksana');
+    var val = inputEl.value.trim();
+    if(val !== '') {
         pelaksanaList.push(val);
-        document.getElementById('inpNamaPelaksana').value = '';
+        inputEl.value = '';
         renderTags();
         renderStepsBuilder();
         updatePreview();
     }
 }
+
 function removePelaksana(i) {
     pelaksanaList.splice(i, 1);
     renderTags();
@@ -109,17 +131,23 @@ function removePelaksana(i) {
 }
 
 function renderTags() {
-    document.getElementById('listDasarHukum').innerHTML = dasarHukumList.map((x,i)=>
-        '<div class="tag-badge">' + x + ' <i class="fa-solid fa-xmark" onclick="removeDasar(' + i + ')"></i></div>'
-    ).join('');
+    var htmlDasar = '';
+    for (var i = 0; i < dasarHukumList.length; i++) {
+        htmlDasar += '<div class="tag-badge">' + dasarHukumList[i] + ' <i class="fa-solid fa-xmark" onclick="removeDasar(' + i + ')"></i></div>';
+    }
+    document.getElementById('listDasarHukum').innerHTML = htmlDasar;
     
-    document.getElementById('listKeterkaitan').innerHTML = keterkaitanList.map((x,i)=>
-        '<div class="tag-badge">' + x + ' <i class="fa-solid fa-xmark" onclick="removeKeterkaitan(' + i + ')"></i></div>'
-    ).join('');
+    var htmlKet = '';
+    for (var j = 0; j < keterkaitanList.length; j++) {
+        htmlKet += '<div class="tag-badge">' + keterkaitanList[j] + ' <i class="fa-solid fa-xmark" onclick="removeKeterkaitan(' + j + ')"></i></div>';
+    }
+    document.getElementById('listKeterkaitan').innerHTML = htmlKet;
     
-    document.getElementById('listPelaksana').innerHTML = pelaksanaList.map((x,i)=>
-        '<div class="tag-badge">' + x + ' <i class="fa-solid fa-xmark" onclick="removePelaksana(' + i + ')"></i></div>'
-    ).join('');
+    var htmlPel = '';
+    for (var k = 0; k < pelaksanaList.length; k++) {
+        htmlPel += '<div class="tag-badge">' + pelaksanaList[k] + ' <i class="fa-solid fa-xmark" onclick="removePelaksana(' + k + ')"></i></div>';
+    }
+    document.getElementById('listPelaksana').innerHTML = htmlPel;
 }
 
 function addStepRow() {
@@ -142,51 +170,59 @@ function removeStep(i) {
 }
 
 function renderStepsBuilder() {
-    let html = '';
-    stepsList.forEach((s, i) => {
-        let options = pelaksanaList.map(p => '<option value="' + p + '" ' + (s.pelaksana===p?'selected':'') + '>' + p + '</option>').join('');
-        html += '<div class="step-builder-item">' +
-            '<h5>Langkah #' + (i+1) + ' <button class="btn btn-sm btn-danger" onclick="removeStep(' + i + ')"><i class="fa-solid fa-trash"></i></button></h5>' +
-            '<div class="form-group" style="margin-bottom:5px;"><label>Uraian Kegiatan (Kata Kerja Aktif)</label><input type="text" value="' + s.kegiatan + '" oninput="stepsList[' + i + '].kegiatan=this.value; updatePreview()"></div>' +
-            '<div class="form-row" style="margin-bottom:5px;">' +
-                '<div><label>Pelaksana</label><select onchange="stepsList[' + i + '].pelaksana=this.value; updatePreview()">' + options + '</select></div>' +
-                '<div><label>Bentuk Simbol</label><select onchange="stepsList[' + i + '].jenis=this.value; renderStepsBuilder(); updatePreview()">' +
-                    '<option value="start" ' + (s.jenis==='start'?'selected':'') + '>Terminator (Mulai/Selesai)</option>' +
-                    '<option value="process" ' + (s.jenis==='process'?'selected':'') + '>Proses (Kotak Eksekusi)</option>' +
-                    '<option value="decision" ' + (s.jenis==='decision'?'selected':'') + '>Keputusan (Belah Ketupat)</option>' +
-                '</select></div>' +
-            '</div>';
-        if(s.jenis === 'decision') {
-            html += '<div class="form-row" style="margin-bottom:5px;">' +
-                '<div><label>Pertanyaan Keputusan</label><input type="text" value="' + (s.q||'') + '" oninput="stepsList[' + i + '].q=this.value; updatePreview()" placeholder="Misal: Apakah lengkap?"></div>' +
-                '<div><label>Cabang Ya / Tidak</label><input type="text" value="' + (s.ya||'') + '" oninput="stepsList[' + i + '].ya=this.value; updatePreview()" placeholder="Target/Keterangan"></div>' +
-            '</div>';
+    var html = '';
+    for (var i = 0; i < stepsList.length; i++) {
+        var s = stepsList[i];
+        var options = '';
+        for (var p = 0; p < pelaksanaList.length; p++) {
+            var selected = (s.pelaksana === pelaksanaList[p]) ? 'selected' : '';
+            options += '<option value="' + pelaksanaList[p] + '" ' + selected + '>' + pelaksanaList[p] + '</option>';
         }
-        html += '<div class="form-row">' +
-                '<div><label>Waktu</label><input type="text" value="' + s.waktu + '" oninput="stepsList[' + i + '].waktu=this.value; updatePreview()"></div>' +
-                '<div><label>Output</label><input type="text" value="' + s.output + '" oninput="stepsList[' + i + '].output=this.value; updatePreview()"></div>' +
-            '</div>' +
-        '</div>';
-    });
+        
+        html += '<div class="step-builder-item">';
+        html += '<h5>Langkah #' + (i+1) + ' <button class="btn btn-sm btn-danger" onclick="removeStep(' + i + ')"><i class="fa-solid fa-trash"></i></button></h5>';
+        html += '<div class="form-group" style="margin-bottom:5px;"><label>Uraian Kegiatan</label><input type="text" value="' + s.kegiatan + '" oninput="stepsList[' + i + '].kegiatan=this.value; updatePreview()"></div>';
+        html += '<div class="form-row" style="margin-bottom:5px;">';
+        html += '<div><label>Pelaksana</label><select onchange="stepsList[' + i + '].pelaksana=this.value; updatePreview()">' + options + '</select></div>';
+        html += '<div><label>Simbol</label><select onchange="stepsList[' + i + '].jenis=this.value; renderStepsBuilder(); updatePreview()">';
+        html += '<option value="start" ' + (s.jenis === 'start' ? 'selected' : '') + '>Terminator (Mulai/Selesai)</option>';
+        html += '<option value="process" ' + (s.jenis === 'process' ? 'selected' : '') + '>Proses (Kotak)</option>';
+        html += '<option value="decision" ' + (s.jenis === 'decision' ? 'selected' : '') + '>Keputusan (Belah Ketupat)</option>';
+        html += '</select></div>';
+        html += '</div>';
+        
+        if(s.jenis === 'decision') {
+            html += '<div class="form-row" style="margin-bottom:5px;">';
+            html += '<div><label>Pertanyaan</label><input type="text" value="' + (s.q || '') + '" oninput="stepsList[' + i + '].q=this.value; updatePreview()" placeholder="Pertanyaan?"></div>';
+            html += '<div><label>Cabang Ya</label><input type="text" value="' + (s.ya || '') + '" oninput="stepsList[' + i + '].ya=this.value; updatePreview()" placeholder="Target"></div>';
+            html += '</div>';
+        }
+        
+        html += '<div class="form-row">';
+        html += '<div><label>Waktu</label><input type="text" value="' + s.waktu + '" oninput="stepsList[' + i + '].waktu=this.value; updatePreview()"></div>';
+        html += '<div><label>Output</label><input type="text" value="' + s.output + '" oninput="stepsList[' + i + '].output=this.value; updatePreview()"></div>';
+        html += '</div>';
+        html += '</div>';
+    }
     document.getElementById('stepsBuilderContainer').innerHTML = html;
 }
 
 function updatePreview() {
-    let pemda = document.getElementById('cfgPemda').value;
-    let dinas = document.getElementById('cfgDinas').value;
-    let puskesmas = document.getElementById('cfgPuskesmas').value;
-    let alamat = document.getElementById('cfgAlamat').value;
-    let kaPuskesmas = document.getElementById('cfgKaPuskesmas').value;
-    let nipKa = document.getElementById('cfgNipKa').value;
+    var pemda = document.getElementById('cfgPemda').value;
+    var dinas = document.getElementById('cfgDinas').value;
+    var puskesmas = document.getElementById('cfgPuskesmas').value;
+    var alamat = document.getElementById('cfgAlamat').value;
+    var kaPuskesmas = document.getElementById('cfgKaPuskesmas').value;
+    var nipKa = document.getElementById('cfgNipKa').value;
 
-    let judul = document.getElementById('inpJudul').value;
-    let noSOP = document.getElementById('inpNoSOP').value;
-    let tahun = document.getElementById('inpTahun').value;
-    let tglBuat = document.getElementById('inpTglBuat').value;
-    let tglEfektif = document.getElementById('inpTglEfektif').value;
-    let orientasi = document.getElementById('inpOrientasi').value;
+    var judul = document.getElementById('inpJudul').value;
+    var noSOP = document.getElementById('inpNoSOP').value;
+    var tahun = document.getElementById('inpTahun').value;
+    var tglBuat = document.getElementById('inpTglBuat').value;
+    var tglEfektif = document.getElementById('inpTglEfektif').value;
+    var orientasi = document.getElementById('inpOrientasi').value;
 
-    let formatNoSOP = '400.7/' + noSOP + '/SOP/430.9.3.15/' + tahun;
+    var formatNoSOP = '400.7/' + noSOP + '/SOP/430.9.3.15/' + tahun;
 
     document.getElementById('cvrPemda').innerText = pemda;
     document.getElementById('cvrDinas').innerText = dinas;
@@ -215,55 +251,66 @@ function updatePreview() {
     document.getElementById('vNamaKa').innerText = kaPuskesmas;
     document.getElementById('vNipKa').innerText = 'NIP. ' + nipKa;
 
-    document.getElementById('vListDasar').innerHTML = dasarHukumList.map(d => '<li>' + d + '</li>').join('');
-    document.getElementById('vListKeterkaitan').innerHTML = keterkaitanList.map(k => '<li>' + k + '</li>').join('');
+    var htmlDasarList = '';
+    for (var d = 0; d < dasarHukumList.length; d++) {
+        htmlDasarList += '<li>' + dasarHukumList[d] + '</li>';
+    }
+    document.getElementById('vListDasar').innerHTML = htmlDasarList;
+
+    var htmlKetList = '';
+    for (var k = 0; k < keterkaitanList.length; k++) {
+        htmlKetList += '<li>' + keterkaitanList[k] + '</li>';
+    }
+    document.getElementById('vListKeterkaitan').innerHTML = htmlKetList;
+
     document.getElementById('vPeringatan').innerText = document.getElementById('inpPeringatan').value;
     document.getElementById('vKualifikasi').innerText = document.getElementById('inpKualifikasi').value;
     document.getElementById('vPeralatan').innerText = document.getElementById('inpPeralatan').value;
     document.getElementById('vPencatatan').innerText = document.getElementById('InpPencatatan').value;
 
-    let pages = document.querySelectorAll('.a4-page');
-    pages.forEach(p => {
-        p.className = 'a4-page ' + orientasi;
-    });
+    var pages = document.querySelectorAll('.a4-page');
+    for (var pg = 0; pg < pages.length; pg++) {
+        pages[pg].className = 'a4-page ' + orientasi;
+    }
 
-    let thGroup = document.getElementById('thPelaksanaGroup');
+    var thGroup = document.getElementById('thPelaksanaGroup');
     thGroup.setAttribute('colspan', pelaksanaList.length || 1);
     
-    let subHead = '';
-    pelaksanaList.forEach(p => {
-        subHead += '<th style="min-width: 85px; font-size:8.5px;">' + p + '</th>';
-    });
+    var subHead = '';
+    for (var h = 0; h < pelaksanaList.length; h++) {
+        subHead += '<th style="min-width: 85px; font-size:8.5px;">' + pelaksanaList[h] + '</th>';
+    }
     document.getElementById('trHeadRow2').innerHTML = subHead;
 
-    let bodyHtml = '';
-    stepsList.forEach((s, idx) => {
-        let pelaksanaCells = '';
-        pelaksanaList.forEach(p => {
-            if (s.pelaksana === p) {
-                let shapeHtml = '';
-                if (s.jenis === 'start') {
+    var bodyHtml = '';
+    for (var st = 0; st < stepsList.length; st++) {
+        var sItem = stepsList[st];
+        var pelaksanaCells = '';
+        for (var pc = 0; pc < pelaksanaList.length; pc++) {
+            if (sItem.pelaksana === pelaksanaList[pc]) {
+                var shapeHtml = '';
+                if (sItem.jenis === 'start') {
                     shapeHtml = '<div class="flow-shape shape-start"><i class="fa-solid fa-circle-stop"></i> Mulai/Selesai</div>';
-                } else if (s.jenis === 'process') {
+                } else if (sItem.jenis === 'process') {
                     shapeHtml = '<div class="flow-shape shape-process"><i class="fa-solid fa-square"></i> Proses</div>';
-                } else if (s.jenis === 'decision') {
-                    shapeHtml = '<div class="flow-shape shape-decision">?<br><b>' + (s.q || 'Keputusan') + '</b><br><span style="font-size:6.5px; color:#444;">[Ya / Tidak]</span></div>';
+                } else if (sItem.jenis === 'decision') {
+                    shapeHtml = '<div class="flow-shape shape-decision">?<br><b>' + (sItem.q || 'Keputusan') + '</b><br><span style="font-size:6.5px; color:#444;">[Ya / Tidak]</span></div>';
                 }
                 pelaksanaCells += '<td style="text-align: center; vertical-align: middle;">' + shapeHtml + '</td>';
             } else {
                 pelaksanaCells += '<td></td>';
             }
-        });
+        }
 
-        bodyHtml += '<tr>' +
-            '<td style="text-align: center;">' + (idx+1) + '</td>' +
-            '<td>' + s.kegiatan + '</td>' +
-            pelaksanaCells +
-            '<td style="font-size: 8px;">' + (s.kelengkapan || '-') + '</td>' +
-            '<td style="font-size: 8px; text-align: center;">' + (s.waktu || '-') + '</td>' +
-            '<td style="font-size: 8px;">' + (s.output || '-') + '</td>' +
-            '<td style="font-size: 8px;">' + (s.jenis==='decision' ? 'Ya: '+(s.ya||'-') : '-') + '</td>' +
-        '</tr>';
-    });
+        bodyHtml += '<tr>';
+        bodyHtml += '<td style="text-align: center;">' + (st+1) + '</td>';
+        bodyHtml += '<td>' + sItem.kegiatan + '</td>';
+        bodyHtml += pelaksanaCells;
+        bodyHtml += '<td style="font-size: 8px;">' + (sItem.kelengkapan || '-') + '</td>';
+        bodyHtml += '<td style="font-size: 8px; text-align: center;">' + (sItem.waktu || '-') + '</td>';
+        bodyHtml += '<td style="font-size: 8px;">' + (sItem.output || '-') + '</td>';
+        bodyHtml += '<td style="font-size: 8px;">' + (sItem.jenis === 'decision' ? 'Ya: ' + (sItem.ya || '-') : '-') + '</td>';
+        bodyHtml += '</tr>';
+    }
     document.getElementById('tbodySteps').innerHTML = bodyHtml;
 }

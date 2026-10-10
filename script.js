@@ -211,7 +211,7 @@ function updatePreview() {
         
         var headerHtml = '';
         if (pageIdx === 0) {
-            // Halaman 1: Tata letak sesuai standar (Header Instansi -> Kotak Judul SOP -> Kotak Informasi Dasar Hukum & Kualifikasi)
+            // Halaman 1: Tata letak persis standar (Header Instansi -> Kotak Judul "SOP ..." -> Kotak Informasi Dasar Hukum & Kualifikasi)
             headerHtml = '<table class="sop-header-table">' +
                 '<tr>' +
                     '<td rowspan="4" class="logo-cell"><img src="Lambang_Bondowoso.jpg" alt="Logo" style="width: 55px; height: auto; display: block; margin: 0 auto;" /></td>' +
@@ -273,7 +273,7 @@ function updatePreview() {
                 '</tr>' +
             '</table>';
         } else {
-            // Halaman Selanjutnya (Page 2+): Bersih tanpa teks lanjutan dan tanpa header berulang
+            // Halaman Selanjutnya (Page 2+): Bersih total tanpa tajuk berulang dan tanpa tulisan lanjutan halaman
             headerHtml = '';
         }
 
@@ -310,7 +310,7 @@ function updatePreview() {
                         shapeHtml = '<div class="flow-shape shape-decision" id="shape-' + globalIdx + '"></div>';
                     }
 
-                    // Render off-page connector SVG segi lima persis di batas perpindahan halaman
+                    // Jika langkah terakhir di halaman atau langkah pertama di halaman lanjutan (bukan halaman 1), gunakan off-page connector SVG segi lima murni
                     if ((st === pageSteps.length - 1 && pageIdx < totalPages - 1) || (st === 0 && pageIdx > 0)) {
                         shapeHtml = '<div style="display:flex; justify-content:center; align-items:center; margin:4px auto;" id="shape-' + globalIdx + '">' +
                             '<svg width="24" height="18" viewBox="0 0 24 18" style="display:block; background:#fff;">' +
@@ -384,7 +384,7 @@ function drawConnectors() {
         marker.setAttribute('refX', '5');
         marker.setAttribute('refY', '3');
         marker.setAttribute('orient', 'auto');
-        var markerPath = document.createElementNS(svgNS, "path");
+        var markerPath = document.createElementNS(svgNS, "svg");
         markerPath.setAttribute('d', 'M0,0 L6,3 L0,6 Z');
         markerPath.setAttribute('fill', '#000');
         marker.appendChild(markerPath);
@@ -405,7 +405,6 @@ function drawConnectors() {
                 var rect1 = currShape.getBoundingClientRect();
                 var rect2 = nextShape.getBoundingClientRect();
 
-                // Koordinat SVG akurat tepat dari ujung bawah shape ke ujung atas shape berikutnya
                 var x1 = rect1.left + rect1.width / 2 - tableRect.left;
                 var y1 = rect1.bottom - tableRect.top;
                 var x2 = rect2.left + rect2.width / 2 - tableRect.left;
